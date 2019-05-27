@@ -3271,18 +3271,18 @@ class MAVLink_drone_status_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_DRONE_STATUS
         name = 'DRONE_STATUS'
-        fieldnames = ['flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'bat_vol']
-        ordered_fieldnames = ['flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'bat_vol']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t']
-        format = '<BBBBBBB'
-        native_format = bytearray('<BBBBBBB', 'ascii')
-        orders = [0, 1, 2, 3, 4, 5, 6]
-        lengths = [1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 191
-        unpacker = struct.Struct('<BBBBBBB')
+        fieldnames = ['flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid', 'bat_vol', 'x', 'y', 'z']
+        ordered_fieldnames = ['bat_vol', 'x', 'y', 'z', 'flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float']
+        format = '<ffffBBBBBBB'
+        native_format = bytearray('<ffffBBBBBBB', 'ascii')
+        orders = [4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 59
+        unpacker = struct.Struct('<ffffBBBBBBB')
 
-        def __init__(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, bat_vol):
+        def __init__(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
                 MAVLink_message.__init__(self, MAVLink_drone_status_message.id, MAVLink_drone_status_message.name)
                 self._fieldnames = MAVLink_drone_status_message.fieldnames
                 self.flight_status = flight_status
@@ -3291,10 +3291,14 @@ class MAVLink_drone_status_message(MAVLink_message):
                 self.rc_valid = rc_valid
                 self.onboard_cmd_valid = onboard_cmd_valid
                 self.sdk_valid = sdk_valid
+                self.vo_valid = vo_valid
                 self.bat_vol = bat_vol
+                self.x = x
+                self.y = y
+                self.z = z
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 191, struct.pack('<BBBBBBB', self.flight_status, self.control_auth, self.commander_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.bat_vol), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 59, struct.pack('<ffffBBBBBBB', self.bat_vol, self.x, self.y, self.z, self.flight_status, self.control_auth, self.commander_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.vo_valid), force_mavlink1=force_mavlink1)
 
 class MAVLink_drone_odom_gt_message(MAVLink_message):
         '''
@@ -9569,7 +9573,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.node_detected_encode(target_id, x, y, z, corx, cory, corz, q0, q1, q2, q3), force_mavlink1=force_mavlink1)
 
-        def drone_status_encode(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, bat_vol):
+        def drone_status_encode(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
                 '''
                 
 
@@ -9579,12 +9583,16 @@ class MAVLink(object):
                 rc_valid                  : RC VAILD (type:uint8_t)
                 onboard_cmd_valid         : ONBOARD CMD VALID (type:uint8_t)
                 sdk_valid                 : SDK VALID (type:uint8_t)
-                bat_vol                   : BATTERY_VOL*10 (type:uint8_t)
+                vo_valid                  : VOO VALID (type:uint8_t)
+                bat_vol                   : BATTERY_VOL (type:float)
+                x                         : X Position [m] (type:float)
+                y                         : Y Position [m] (type:float)
+                z                         : Z Position [m] (type:float)
 
                 '''
-                return MAVLink_drone_status_message(flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, bat_vol)
+                return MAVLink_drone_status_message(flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z)
 
-        def drone_status_send(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, bat_vol, force_mavlink1=False):
+        def drone_status_send(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, force_mavlink1=False):
                 '''
                 
 
@@ -9594,10 +9602,14 @@ class MAVLink(object):
                 rc_valid                  : RC VAILD (type:uint8_t)
                 onboard_cmd_valid         : ONBOARD CMD VALID (type:uint8_t)
                 sdk_valid                 : SDK VALID (type:uint8_t)
-                bat_vol                   : BATTERY_VOL*10 (type:uint8_t)
+                vo_valid                  : VOO VALID (type:uint8_t)
+                bat_vol                   : BATTERY_VOL (type:float)
+                x                         : X Position [m] (type:float)
+                y                         : Y Position [m] (type:float)
+                z                         : Z Position [m] (type:float)
 
                 '''
-                return self.send(self.drone_status_encode(flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, bat_vol), force_mavlink1=force_mavlink1)
+                return self.send(self.drone_status_encode(flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z), force_mavlink1=force_mavlink1)
 
         def drone_odom_gt_encode(self, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz):
                 '''

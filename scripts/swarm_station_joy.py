@@ -14,7 +14,7 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 import threading
 from sensor_msgs.msg import Joy
 from swarmtal_msgs.msg import  drone_onboard_command
-
+import math
 
 class fifo(object):
     def __init__(self):
@@ -39,36 +39,63 @@ class SwarmCommander():
 
         self.remote_node_vo_pose_pubs = {}
 
-        self.vicon_pose = Pose()
-        self.vicon_pose_sub = rospy.Subscriber("/SwarmNode7/pose", PoseStamped, self.on_vicon_pose_recv, queue_size=1);
-
-        self.self_vo_pose = Pose()
-        self.self_vo_yaw = 0
         self.uwb_recv_data = rospy.Subscriber("/uwb_node/remote_nodes", remote_uwb_info, self.on_remote_node_info, queue_size=1)
 
         self.joysub = rospy.Subscriber("/joy", Joy, self.on_joy_message, queue_size=1, tcp_nodelay=True)
 
         self.target_id = -1
 
-    def on_joy_message(self, joy):
-        self.joy = joy
+        self.joy = None
 
+        self.in_mission = None
+
+        self.simple_mission_timer = rospy.Timer(rospy.Duration(0.03), self.simple_mission_callbck)
+        self.start_misssion_time = rospy.get_rostime()
+
+    def on_joy_message(self, joy):
+
+        if self.joy is None:
+            rospy.loginfo("DETECTED JOY!")
+            rospy.loginfo(joy)
+
+        self.joy = joy
 
         # Start key for takeoff
         if joy.buttons[7] == 1:
             self.takeoff_cmd(self.target_id)
+            return
 
         #Back for landing
         if joy.buttons[6] == 1:
             self.landing_cmd(self.target_id)
+            return
 
         #Two fire button, toggle takeoff
         if joy.axes[2] < -0.99 and joy.axes[5] < -0.99:
             self.toggle_arm_disarm(self.target_id, arm=False)
+            return
 
         #LB and RB for arm
         if joy.buttons[5] == 1 and joy.buttons[4] == 1:
             self.toggle_arm_disarm(self.target_id, arm=True)
+            return
+
+        if joy.buttons[0] == 1:
+            self.start_simple_mission("A")
+            return
+
+        if joy.buttons[1] == 1:
+            self.start_simple_mission("B")
+            return
+
+        if joy.buttons[3] == 1:
+            self.start_simple_mission("Y")
+            return
+
+        if joy.buttons[2] == 1:
+            rospy.loginfo("Abort Simple Mission")
+            self.abort_simple_mission()
+            return
 
     def drone_onboard_cmd_tomav(self, target, cmd):
         msg = self.mav.swarm_remote_command_encode(target, cmd.command_type,
@@ -77,14 +104,103 @@ class SwarmCommander():
         return msg
 
 
+    def start_simple_mission(self, mission="A"):
+        rospy.loginfo("Will start simple mission {} by UWB command".format(mission))
+        self.in_mission = mission
+        self.start_misssion_time = rospy.get_rostime()
+
+
+    def abort_simple_mission(self):
+        self.in_mission = None
+
+
+    def simple_mission_callbck(self, e):
+        if self.in_mission is None:
+            return
+        dt = 0
+        if e.last_real is not None:
+            dt = (e.current_real - e.last_real).to_sec()
+
+        t = (e.current_real - self.start_misssion_time).to_sec()
+        rospy.loginfo_throttle(1.0, "Act mission {} with {:5.3f}s".format(self.in_mission, t))
+
+        def mission_A(t):
+            ox = 0
+            oy = 0
+            r = 0.5
+            T = 15
+
+            x = ox + math.sin(t*math.pi*2/T)*r
+            y = oy + math.cos(t*math.pi*2/T)*r
+            vx = math.cos(t*math.pi*2/T) * r * math.pi*2/T
+            vy = -math.sin(t*math.pi*2/T) * r * math.pi*2/T
+
+            return x, y, 1, vx, vy, 0
+
+        def mission_B(t):
+            ox = 0
+            oy = 0
+            r = 0.5
+            T = 15
+
+            x = ox + math.sin(t*math.pi*2/T)*r
+            y = oy + math.sin(2*t*math.pi*2/T)*r
+            vx = math.cos(t*math.pi*2/T) * r * math.pi*2/T
+            vy = 2*math.cos(2*t*math.pi*2/T) * r * math.pi*2/T
+            return x, y, 1, vx, vy, 0
+
+        def mission_Y(t):
+            ox = 0
+            oy = 0
+            oz = 1
+            r = 0.5
+            T = 15
+
+            x = ox + math.sin(t*math.pi*2/T)*r
+            y = oy + math.sin(2*t*math.pi*2/T)*r
+            z = oz  + math.sin(2*t*math.pi*2/T+math.pi)*0.3
+            vx = math.cos(t*math.pi*2/T) * r * math.pi*2/T
+            vy = 2*math.cos(2*t*math.pi*2/T) * r * math.pi*2/T
+            vz = 2*math.cos(2*t*math.pi*2/T + math.pi) * 0.3 * math.pi*2/T
+            return x, y, z, vx, vy, vz
+
+
+        x, y, z, vx, vy, vz = 0, 0, 0, 0, 0, 0
+
+        if self.in_mission == "A":
+            x, y, z, vx, vy, vz = mission_A(t)
+
+        if self.in_mission == "B":
+            x, y, z, vx, vy, vz = mission_B(t)
+
+        if self.in_mission == "Y":
+            x, y, z, vx, vy, vz = mission_Y(t)
+
+
+
+        cmd = drone_onboard_command()
+        cmd.command_type = drone_onboard_command.CTRL_POS_COMMAND
+
+        cmd.param1 = int(x*10000)
+        cmd.param2 = int(y*10000)
+        cmd.param3 = int(z*10000)
+        cmd.param4 = 666666
+        cmd.param5 = int(vx*10000)
+        cmd.param6 = int(vy*10000)
+        cmd.param7 = int(vz*10000)
+        cmd.param8 = 0
+        cmd.param9 = 0
+        cmd.param10 = 0
+
+
+        msg = self.drone_onboard_cmd_tomav(self.target_id, cmd)
+
+        print(msg)
+        
+        self.send_mavlink_msg(msg)
+
 
     def on_remote_node_info(self, info):
-        return
-        ptr = 0
-        for i in range(len(info.node_ids)):
-            if info.node_ids[i] == self.reference_node:
-                ptr = i
-                break
         for i in range(len(info.node_ids)):
             _id = info.node_ids[i]
             if info.data_available[i]:
@@ -107,6 +223,9 @@ class SwarmCommander():
 
         msg = self.drone_onboard_cmd_tomav(target, cmd)
         self.send_mavlink_msg(msg)
+
+    def vel_ctrl_cmd(self, target):
+        pass
 
     def takeoff_cmd(self, target):
         rospy.loginfo("Sending takeoff")
@@ -144,56 +263,17 @@ class SwarmCommander():
         _buf.data = buf
         self.uwb_pub.publish(_buf)
         #print(buf)
-    
-    def swarm_relative_fused_recv(self, msg):
-        # print(msg)
-        source_id = msg.source_id
-        target_id = msg.target_id
-        if source_id == 7 and target_id !=7:
-            self.remote_node_list.append(target_id)
-            if target_id not in self.remote_node_pub:
-                self.remote_node_pub[target_id] = rospy.Publisher("/swarm_drone/estimate_pose_{}".format(target_id), PoseStamped);
 
-            _pose = PoseStamped()
-            remote_pose = _pose.pose
-            _pose.header.frame_id = "world"
-            _pose.header.stamp = rospy.Time.now()
-            remote_pose.position.x = self.vicon_pose.position.x + msg.rel_x
-            remote_pose.position.y = self.vicon_pose.position.y + msg.rel_y
-            remote_pose.position.z = self.vicon_pose.position.z + msg.rel_z
-
-            remote_pose.orientation.w = 1
-            self.remote_node_pub[target_id].publish(_pose)
-    
-    def swarm_vo_info_recv(self, msg, is_self_node=False):
-        if is_self_node:
-            self.self_vo_pose.position.x = msg.x
-            self.self_vo_pose.position.y = msg.y
-            self.self_vo_pose.position.z = msg.z
-
-            self.self_vo_pose.orientation.w = msg.q0
-            self.self_vo_pose.orientation.x = msg.q1
-            self.self_vo_pose.orientation.y = msg.q2
-            self.self_vo_pose.orientation.z = msg.q3
-
-            quaternion = (msg.q1, msg.q2, msg.q3, msg.q0)
-            roll, pitch, yaw = euler_from_quaternion(quaternion)
-            self.self_vo_yaw = yaw
-        # print(self.self_vo_pose)
-
-
+    def on_drone_status(self, node_id, msg):
+        rospy.loginfo("ID {}".format(node_id))
+        rospy.loginfo(msg)
+    #
     def parse_data(self, s, _id):
         try:
-            is_ref_node = _id == self.reference_node
             msg = self.mav.parse_char(s)
             if msg is not None:
-                if msg.get_type() == "SWARM_RELATIVE_FUSED":
-                    print("Rel",msg)
-                    if is_ref_node:
-                        self.swarm_relative_fused_recv(msg)
-                if msg.get_type() == "SWARM_INFO":
-                    # print(" {}: {:3.2f} {:3.2f} {:3.2f}".format(_id, msg.x, msg.y, msg.z))
-                    self.swarm_vo_info_recv(msg, is_ref_node)
+                if msg.get_type() == "DRONE_STATUS":
+                    self.on_drone_status(_id, msg)
 
         except Exception as inst:
             print(inst)
