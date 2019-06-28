@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import rospy
-import pymavlink
 import sys
 from pymavlink4swarm import MAVLink
 import pymavlink4swarm as pymavlink
@@ -39,7 +38,7 @@ class SwarmCommander():
 
         self.remote_node_vo_pose_pubs = {}
 
-        self.uwb_recv_data = rospy.Subscriber("/uwb_node/remote_nodes", remote_uwb_info, self.on_remote_node_info, queue_size=1)
+        self.incoming_data_sub = rospy.Subscriber("/uwb_node/incoming_broadcast_data", incoming_broadcast_data, self.on_remote_data, queue_size=1)
 
         self.joysub = rospy.Subscriber("/joy", Joy, self.on_joy_message, queue_size=1, tcp_nodelay=True)
 
@@ -49,7 +48,7 @@ class SwarmCommander():
 
         self.in_mission = None
 
-        self.simple_mission_timer = rospy.Timer(rospy.Duration(0.03), self.simple_mission_callbck)
+        self.simple_mission_timer = rospy.Timer(rospy.Duration(0.02), self.simple_mission_callbck)
         self.start_misssion_time = rospy.get_rostime()
 
     def on_joy_message(self, joy):
@@ -67,12 +66,13 @@ class SwarmCommander():
 
         #Back for landing
         if joy.buttons[6] == 1:
-            self.landing_cmd(self.target_id)
+            self.landing_cmd(self.target_id, True)
             return
 
-        #Two fire button, toggle takeoff
+        #Two fire button, toggle att landing
         if joy.axes[2] < -0.99 and joy.axes[5] < -0.99:
-            self.toggle_arm_disarm(self.target_id, arm=False)
+            # self.toggle_arm_disarm(self.target_id, arm=False)
+            self.landing_cmd(self.target_id, True)
             return
 
         #LB and RB for arm
@@ -98,7 +98,7 @@ class SwarmCommander():
             return
 
     def drone_onboard_cmd_tomav(self, target, cmd):
-        msg = self.mav.swarm_remote_command_encode(target, cmd.command_type,
+        msg = self.mav.swarm_remote_command_encode(0, target, cmd.command_type,
                                                    cmd.param1, cmd.param2, cmd.param3, cmd.param4, cmd.param5,
                                                    cmd.param6, cmd.param7, cmd.param8, cmd.param9, cmd.param10)
         return msg
@@ -200,12 +200,16 @@ class SwarmCommander():
         self.send_mavlink_msg(msg)
 
 
-    def on_remote_node_info(self, info):
-        for i in range(len(info.node_ids)):
-            _id = info.node_ids[i]
-            if info.data_available[i]:
-                self.parse_data(info.datas[i].data, _id)
-            # print("Finish parse data")
+
+    
+    def on_remote_data(self, data):
+        """
+        Header header
+        uint32 remote_id
+        uint32 remote_recv_time
+        uint32 lps_time
+        uint8[] data """
+        self.parse_data(data.data, data.remote_id, data.lps_time)
 
     def on_vicon_pose_recv(self, pose):
         self.vicon_pose = pose.pose
@@ -235,10 +239,14 @@ class SwarmCommander():
         msg = self.drone_onboard_cmd_tomav(target, cmd)
         self.send_mavlink_msg(msg)
 
-    def landing_cmd(self, target):
+    def landing_cmd(self, target, att_landing=True):
         rospy.loginfo("Sending landing")
         cmd = drone_onboard_command()
         cmd.command_type = drone_onboard_command.CTRL_LANDING_COMMAND
+        if att_landing:
+            cmd.param1 = 1
+        else:
+            cmd.param1 = 0
         msg = self.drone_onboard_cmd_tomav(target, cmd)
         self.send_mavlink_msg(msg)
 
@@ -264,17 +272,27 @@ class SwarmCommander():
         self.uwb_pub.publish(_buf)
         #print(buf)
 
-    def on_drone_status(self, node_id, msg):
-        rospy.loginfo("ID {}".format(node_id))
+    def on_drone_status(self, node_id, msg, nowlps):
+        rospy.loginfo("ID {} DT {}ms".format(node_id, nowlps - msg.lps_time))
         rospy.loginfo(msg)
-    #
-    def parse_data(self, s, _id):
-        try:
-            msg = self.mav.parse_char(s)
-            if msg is not None:
-                if msg.get_type() == "DRONE_STATUS":
-                    self.on_drone_status(_id, msg)
+        if math.fabs(msg.x) > 5 or math.fabs(msg.y) > 5 or  math.fabs(msg.z) > 5:
+            rospy.logwarn("ID {} VO invaild {:4.3f} {:4.3f} {:4.3f}".format(node_id, msg.x, msg.y, msg.z))
+        if math.fabs(msg.bat_vol) < 14.8:
+            rospy.logwarn("ID {} BAT invaild {:3.2f}".format(node_id, msg.bat_vol))
 
+    #
+    def parse_data(self, s, _id, now_lps):
+        t1 = rospy.get_rostime()
+        try:
+            msgs = self.mav.parse_buffer(s)
+            # print(len(s))
+            if msgs is None:
+                return
+            for msg in msgs:
+                if msg is not None:
+                    if msg.get_type() == "DRONE_STATUS":
+                        self.on_drone_status(_id, msg, now_lps)
+                    # return
         except Exception as inst:
             print(inst)
             pass

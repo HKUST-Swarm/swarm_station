@@ -39,7 +39,7 @@ class x25crc(object):
 
 import hashlib
 
-WIRE_PROTOCOL_VERSION = '2.0'
+WIRE_PROTOCOL_VERSION = '1.0'
 DIALECT = 'pymavlink4swarm'
 
 PROTOCOL_MARKER_V1 = 0xFE
@@ -92,7 +92,7 @@ class MAVLink_header(object):
 
     def pack(self, force_mavlink1=False):
         if WIRE_PROTOCOL_VERSION == '2.0' and not force_mavlink1:
-            return struct.pack('<BBBBBBBHB', 253, self.mlen,
+            return struct.pack('<BBBBBBBHB', 254, self.mlen,
                                self.incompat_flags, self.compat_flags,
                                self.seq, self.srcSystem, self.srcComponent,
                                self.msgId&0xFFFF, self.msgId>>16)
@@ -2957,12 +2957,12 @@ enums['RC_TYPE'][2] = EnumEntry('RC_TYPE_ENUM_END', '''''')
 
 # message IDs
 MAVLINK_MSG_ID_BAD_DATA = -1
-MAVLINK_MSG_ID_NODE_REALTIME_INFO = 400
-MAVLINK_MSG_ID_NODE_RELATIVE_FUSED = 401
-MAVLINK_MSG_ID_SWARM_REMOTE_COMMAND = 402
-MAVLINK_MSG_ID_NODE_DETECTED = 403
-MAVLINK_MSG_ID_DRONE_STATUS = 404
-MAVLINK_MSG_ID_DRONE_ODOM_GT = 405
+MAVLINK_MSG_ID_NODE_REALTIME_INFO = 200
+MAVLINK_MSG_ID_NODE_RELATIVE_FUSED = 201
+MAVLINK_MSG_ID_SWARM_REMOTE_COMMAND = 202
+MAVLINK_MSG_ID_NODE_DETECTED = 203
+MAVLINK_MSG_ID_DRONE_STATUS = 204
+MAVLINK_MSG_ID_DRONE_ODOM_GT = 205
 MAVLINK_MSG_ID_HEARTBEAT = 0
 MAVLINK_MSG_ID_SYS_STATUS = 1
 MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -3100,34 +3100,6 @@ MAVLINK_MSG_ID_NAMED_VALUE_FLOAT = 251
 MAVLINK_MSG_ID_NAMED_VALUE_INT = 252
 MAVLINK_MSG_ID_STATUSTEXT = 253
 MAVLINK_MSG_ID_DEBUG = 254
-MAVLINK_MSG_ID_SETUP_SIGNING = 256
-MAVLINK_MSG_ID_BUTTON_CHANGE = 257
-MAVLINK_MSG_ID_PLAY_TUNE = 258
-MAVLINK_MSG_ID_CAMERA_INFORMATION = 259
-MAVLINK_MSG_ID_CAMERA_SETTINGS = 260
-MAVLINK_MSG_ID_STORAGE_INFORMATION = 261
-MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS = 262
-MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED = 263
-MAVLINK_MSG_ID_FLIGHT_INFORMATION = 264
-MAVLINK_MSG_ID_MOUNT_ORIENTATION = 265
-MAVLINK_MSG_ID_LOGGING_DATA = 266
-MAVLINK_MSG_ID_LOGGING_DATA_ACKED = 267
-MAVLINK_MSG_ID_LOGGING_ACK = 268
-MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION = 269
-MAVLINK_MSG_ID_SET_VIDEO_STREAM_SETTINGS = 270
-MAVLINK_MSG_ID_WIFI_CONFIG_AP = 299
-MAVLINK_MSG_ID_PROTOCOL_VERSION = 300
-MAVLINK_MSG_ID_UAVCAN_NODE_STATUS = 310
-MAVLINK_MSG_ID_UAVCAN_NODE_INFO = 311
-MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ = 320
-MAVLINK_MSG_ID_PARAM_EXT_REQUEST_LIST = 321
-MAVLINK_MSG_ID_PARAM_EXT_VALUE = 322
-MAVLINK_MSG_ID_PARAM_EXT_SET = 323
-MAVLINK_MSG_ID_PARAM_EXT_ACK = 324
-MAVLINK_MSG_ID_OBSTACLE_DISTANCE = 330
-MAVLINK_MSG_ID_ODOMETRY = 331
-MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS = 332
-MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER = 333
 
 class MAVLink_node_realtime_info_message(MAVLink_message):
         '''
@@ -3135,35 +3107,30 @@ class MAVLink_node_realtime_info_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_NODE_REALTIME_INFO
         name = 'NODE_REALTIME_INFO'
-        fieldnames = ['odom_vaild', 'x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz', 'remote_distance']
-        ordered_fieldnames = ['x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz', 'remote_distance', 'odom_vaild']
-        fieldtypes = ['uint8_t', 'float', 'float', 'float', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
-        format = '<fffhhhhhhh10hB'
-        native_format = bytearray('<fffhhhhhhhhB', 'ascii')
-        orders = [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
-        crc_extra = 62
-        unpacker = struct.Struct('<fffhhhhhhh10hB')
+        fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'yaw', 'remote_distance']
+        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'remote_distance', 'odom_vaild']
+        fieldtypes = ['int32_t', 'uint8_t', 'float', 'float', 'float', 'int16_t', 'uint16_t']
+        format = '<ifffh10HB'
+        native_format = bytearray('<ifffhHB', 'ascii')
+        orders = [0, 6, 1, 2, 3, 4, 5]
+        lengths = [1, 1, 1, 1, 1, 10, 1]
+        array_lengths = [0, 0, 0, 0, 0, 10, 0]
+        crc_extra = 163
+        unpacker = struct.Struct('<ifffh10HB')
 
-        def __init__(self, odom_vaild, x, y, z, q0, q1, q2, q3, vx, vy, vz, remote_distance):
+        def __init__(self, lps_time, odom_vaild, x, y, z, yaw, remote_distance):
                 MAVLink_message.__init__(self, MAVLink_node_realtime_info_message.id, MAVLink_node_realtime_info_message.name)
                 self._fieldnames = MAVLink_node_realtime_info_message.fieldnames
+                self.lps_time = lps_time
                 self.odom_vaild = odom_vaild
                 self.x = x
                 self.y = y
                 self.z = z
-                self.q0 = q0
-                self.q1 = q1
-                self.q2 = q2
-                self.q3 = q3
-                self.vx = vx
-                self.vy = vy
-                self.vz = vz
+                self.yaw = yaw
                 self.remote_distance = remote_distance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 62, struct.pack('<fffhhhhhhh10hB', self.x, self.y, self.z, self.q0, self.q1, self.q2, self.q3, self.vx, self.vy, self.vz, self.remote_distance[0], self.remote_distance[1], self.remote_distance[2], self.remote_distance[3], self.remote_distance[4], self.remote_distance[5], self.remote_distance[6], self.remote_distance[7], self.remote_distance[8], self.remote_distance[9], self.odom_vaild), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 163, struct.pack('<ifffh10HB', self.lps_time, self.x, self.y, self.z, self.yaw, self.remote_distance[0], self.remote_distance[1], self.remote_distance[2], self.remote_distance[3], self.remote_distance[4], self.remote_distance[5], self.remote_distance[6], self.remote_distance[7], self.remote_distance[8], self.remote_distance[9], self.odom_vaild), force_mavlink1=force_mavlink1)
 
 class MAVLink_node_relative_fused_message(MAVLink_message):
         '''
@@ -3171,20 +3138,21 @@ class MAVLink_node_relative_fused_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_NODE_RELATIVE_FUSED
         name = 'NODE_RELATIVE_FUSED'
-        fieldnames = ['target_id', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset']
-        ordered_fieldnames = ['rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset', 'target_id']
-        fieldtypes = ['uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
-        format = '<hhhhB'
-        native_format = bytearray('<hhhhB', 'ascii')
-        orders = [4, 0, 1, 2, 3]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0]
-        crc_extra = 210
-        unpacker = struct.Struct('<hhhhB')
+        fieldnames = ['lps_time', 'target_id', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset']
+        ordered_fieldnames = ['lps_time', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset', 'target_id']
+        fieldtypes = ['int32_t', 'uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        format = '<ihhhhB'
+        native_format = bytearray('<ihhhhB', 'ascii')
+        orders = [0, 5, 1, 2, 3, 4]
+        lengths = [1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0]
+        crc_extra = 164
+        unpacker = struct.Struct('<ihhhhB')
 
-        def __init__(self, target_id, rel_x, rel_y, rel_z, rel_yaw_offset):
+        def __init__(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset):
                 MAVLink_message.__init__(self, MAVLink_node_relative_fused_message.id, MAVLink_node_relative_fused_message.name)
                 self._fieldnames = MAVLink_node_relative_fused_message.fieldnames
+                self.lps_time = lps_time
                 self.target_id = target_id
                 self.rel_x = rel_x
                 self.rel_y = rel_y
@@ -3192,7 +3160,7 @@ class MAVLink_node_relative_fused_message(MAVLink_message):
                 self.rel_yaw_offset = rel_yaw_offset
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 210, struct.pack('<hhhhB', self.rel_x, self.rel_y, self.rel_z, self.rel_yaw_offset, self.target_id), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 164, struct.pack('<ihhhhB', self.lps_time, self.rel_x, self.rel_y, self.rel_z, self.rel_yaw_offset, self.target_id), force_mavlink1=force_mavlink1)
 
 class MAVLink_swarm_remote_command_message(MAVLink_message):
         '''
@@ -3200,20 +3168,21 @@ class MAVLink_swarm_remote_command_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_SWARM_REMOTE_COMMAND
         name = 'SWARM_REMOTE_COMMAND'
-        fieldnames = ['target_id', 'command_type', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10']
-        ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10', 'target_id', 'command_type']
-        fieldtypes = ['int8_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t']
-        format = '<iiiiiiiiiibB'
-        native_format = bytearray('<iiiiiiiiiibB', 'ascii')
-        orders = [10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 38
-        unpacker = struct.Struct('<iiiiiiiiiibB')
+        fieldnames = ['lps_time', 'target_id', 'command_type', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10']
+        ordered_fieldnames = ['lps_time', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10', 'target_id', 'command_type']
+        fieldtypes = ['int32_t', 'int8_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t']
+        format = '<iiiiiiiiiiibB'
+        native_format = bytearray('<iiiiiiiiiiibB', 'ascii')
+        orders = [0, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 125
+        unpacker = struct.Struct('<iiiiiiiiiiibB')
 
-        def __init__(self, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10):
+        def __init__(self, lps_time, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10):
                 MAVLink_message.__init__(self, MAVLink_swarm_remote_command_message.id, MAVLink_swarm_remote_command_message.name)
                 self._fieldnames = MAVLink_swarm_remote_command_message.fieldnames
+                self.lps_time = lps_time
                 self.target_id = target_id
                 self.command_type = command_type
                 self.param1 = param1
@@ -3228,7 +3197,7 @@ class MAVLink_swarm_remote_command_message(MAVLink_message):
                 self.param10 = param10
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 38, struct.pack('<iiiiiiiiiibB', self.param1, self.param2, self.param3, self.param4, self.param5, self.param6, self.param7, self.param8, self.param9, self.param10, self.target_id, self.command_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 125, struct.pack('<iiiiiiiiiiibB', self.lps_time, self.param1, self.param2, self.param3, self.param4, self.param5, self.param6, self.param7, self.param8, self.param9, self.param10, self.target_id, self.command_type), force_mavlink1=force_mavlink1)
 
 class MAVLink_node_detected_message(MAVLink_message):
         '''
@@ -3236,34 +3205,29 @@ class MAVLink_node_detected_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_NODE_DETECTED
         name = 'NODE_DETECTED'
-        fieldnames = ['target_id', 'x', 'y', 'z', 'corx', 'cory', 'corz', 'q0', 'q1', 'q2', 'q3']
-        ordered_fieldnames = ['x', 'y', 'z', 'corx', 'cory', 'corz', 'q0', 'q1', 'q2', 'q3', 'target_id']
-        fieldtypes = ['int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
-        format = '<hhhhhhhhhhb'
-        native_format = bytearray('<hhhhhhhhhhb', 'ascii')
-        orders = [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 60
-        unpacker = struct.Struct('<hhhhhhhhhhb')
+        fieldnames = ['lps_time', 'target_id', 'x', 'y', 'z', 'yaw']
+        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'target_id']
+        fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        format = '<ihhhhb'
+        native_format = bytearray('<ihhhhb', 'ascii')
+        orders = [0, 5, 1, 2, 3, 4]
+        lengths = [1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0]
+        crc_extra = 94
+        unpacker = struct.Struct('<ihhhhb')
 
-        def __init__(self, target_id, x, y, z, corx, cory, corz, q0, q1, q2, q3):
+        def __init__(self, lps_time, target_id, x, y, z, yaw):
                 MAVLink_message.__init__(self, MAVLink_node_detected_message.id, MAVLink_node_detected_message.name)
                 self._fieldnames = MAVLink_node_detected_message.fieldnames
+                self.lps_time = lps_time
                 self.target_id = target_id
                 self.x = x
                 self.y = y
                 self.z = z
-                self.corx = corx
-                self.cory = cory
-                self.corz = corz
-                self.q0 = q0
-                self.q1 = q1
-                self.q2 = q2
-                self.q3 = q3
+                self.yaw = yaw
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 60, struct.pack('<hhhhhhhhhhb', self.x, self.y, self.z, self.corx, self.cory, self.corz, self.q0, self.q1, self.q2, self.q3, self.target_id), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 94, struct.pack('<ihhhhb', self.lps_time, self.x, self.y, self.z, self.yaw, self.target_id), force_mavlink1=force_mavlink1)
 
 class MAVLink_drone_status_message(MAVLink_message):
         '''
@@ -3271,20 +3235,21 @@ class MAVLink_drone_status_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_DRONE_STATUS
         name = 'DRONE_STATUS'
-        fieldnames = ['flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid', 'bat_vol', 'x', 'y', 'z']
-        ordered_fieldnames = ['bat_vol', 'x', 'y', 'z', 'flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float']
-        format = '<ffffBBBBBBB'
-        native_format = bytearray('<ffffBBBBBBB', 'ascii')
-        orders = [4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 59
-        unpacker = struct.Struct('<ffffBBBBBBB')
+        fieldnames = ['lps_time', 'flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid', 'bat_vol', 'x', 'y', 'z']
+        ordered_fieldnames = ['lps_time', 'bat_vol', 'x', 'y', 'z', 'flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid']
+        fieldtypes = ['int32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float']
+        format = '<iffffBBBBBBB'
+        native_format = bytearray('<iffffBBBBBBB', 'ascii')
+        orders = [0, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 58
+        unpacker = struct.Struct('<iffffBBBBBBB')
 
-        def __init__(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
+        def __init__(self, lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
                 MAVLink_message.__init__(self, MAVLink_drone_status_message.id, MAVLink_drone_status_message.name)
                 self._fieldnames = MAVLink_drone_status_message.fieldnames
+                self.lps_time = lps_time
                 self.flight_status = flight_status
                 self.control_auth = control_auth
                 self.commander_mode = commander_mode
@@ -3298,7 +3263,7 @@ class MAVLink_drone_status_message(MAVLink_message):
                 self.z = z
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 59, struct.pack('<ffffBBBBBBB', self.bat_vol, self.x, self.y, self.z, self.flight_status, self.control_auth, self.commander_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.vo_valid), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 58, struct.pack('<iffffBBBBBBB', self.lps_time, self.bat_vol, self.x, self.y, self.z, self.flight_status, self.control_auth, self.commander_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.vo_valid), force_mavlink1=force_mavlink1)
 
 class MAVLink_drone_odom_gt_message(MAVLink_message):
         '''
@@ -3306,20 +3271,21 @@ class MAVLink_drone_odom_gt_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_DRONE_ODOM_GT
         name = 'DRONE_ODOM_GT'
-        fieldnames = ['source_id', 'x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz']
-        ordered_fieldnames = ['x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz', 'source_id']
-        fieldtypes = ['int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
-        format = '<hhhhhhhhhhb'
-        native_format = bytearray('<hhhhhhhhhhb', 'ascii')
-        orders = [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 28
-        unpacker = struct.Struct('<hhhhhhhhhhb')
+        fieldnames = ['lps_time', 'source_id', 'x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz']
+        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz', 'source_id']
+        fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        format = '<ihhhhhhhhhhb'
+        native_format = bytearray('<ihhhhhhhhhhb', 'ascii')
+        orders = [0, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 225
+        unpacker = struct.Struct('<ihhhhhhhhhhb')
 
-        def __init__(self, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz):
+        def __init__(self, lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz):
                 MAVLink_message.__init__(self, MAVLink_drone_odom_gt_message.id, MAVLink_drone_odom_gt_message.name)
                 self._fieldnames = MAVLink_drone_odom_gt_message.fieldnames
+                self.lps_time = lps_time
                 self.source_id = source_id
                 self.x = x
                 self.y = y
@@ -3333,7 +3299,7 @@ class MAVLink_drone_odom_gt_message(MAVLink_message):
                 self.vz = vz
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 28, struct.pack('<hhhhhhhhhhb', self.x, self.y, self.z, self.q0, self.q1, self.q2, self.q3, self.vx, self.vy, self.vz, self.source_id), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 225, struct.pack('<ihhhhhhhhhhb', self.lps_time, self.x, self.y, self.z, self.q0, self.q1, self.q2, self.q3, self.vx, self.vy, self.vz, self.source_id), force_mavlink1=force_mavlink1)
 
 class MAVLink_heartbeat_message(MAVLink_message):
         '''
@@ -3731,18 +3697,18 @@ class MAVLink_gps_raw_int_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_GPS_RAW_INT
         name = 'GPS_RAW_INT'
-        fieldnames = ['time_usec', 'fix_type', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'cog', 'satellites_visible', 'alt_ellipsoid', 'h_acc', 'v_acc', 'vel_acc', 'hdg_acc']
-        ordered_fieldnames = ['time_usec', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'cog', 'fix_type', 'satellites_visible', 'alt_ellipsoid', 'h_acc', 'v_acc', 'vel_acc', 'hdg_acc']
-        fieldtypes = ['uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t', 'int32_t', 'uint32_t', 'uint32_t', 'uint32_t', 'uint32_t']
-        format = '<QiiiHHHHBBiIIII'
-        native_format = bytearray('<QiiiHHHHBBiIIII', 'ascii')
-        orders = [0, 8, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        fieldnames = ['time_usec', 'fix_type', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'cog', 'satellites_visible']
+        ordered_fieldnames = ['time_usec', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'cog', 'fix_type', 'satellites_visible']
+        fieldtypes = ['uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t']
+        format = '<QiiiHHHHBB'
+        native_format = bytearray('<QiiiHHHHBB', 'ascii')
+        orders = [0, 8, 1, 2, 3, 4, 5, 6, 7, 9]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         crc_extra = 24
-        unpacker = struct.Struct('<QiiiHHHHBBiIIII')
+        unpacker = struct.Struct('<QiiiHHHHBB')
 
-        def __init__(self, time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible, alt_ellipsoid=0, h_acc=0, v_acc=0, vel_acc=0, hdg_acc=0):
+        def __init__(self, time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible):
                 MAVLink_message.__init__(self, MAVLink_gps_raw_int_message.id, MAVLink_gps_raw_int_message.name)
                 self._fieldnames = MAVLink_gps_raw_int_message.fieldnames
                 self.time_usec = time_usec
@@ -3755,14 +3721,9 @@ class MAVLink_gps_raw_int_message(MAVLink_message):
                 self.vel = vel
                 self.cog = cog
                 self.satellites_visible = satellites_visible
-                self.alt_ellipsoid = alt_ellipsoid
-                self.h_acc = h_acc
-                self.v_acc = v_acc
-                self.vel_acc = vel_acc
-                self.hdg_acc = hdg_acc
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 24, struct.pack('<QiiiHHHHBBiIIII', self.time_usec, self.lat, self.lon, self.alt, self.eph, self.epv, self.vel, self.cog, self.fix_type, self.satellites_visible, self.alt_ellipsoid, self.h_acc, self.v_acc, self.vel_acc, self.hdg_acc), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 24, struct.pack('<QiiiHHHHBB', self.time_usec, self.lat, self.lon, self.alt, self.eph, self.epv, self.vel, self.cog, self.fix_type, self.satellites_visible), force_mavlink1=force_mavlink1)
 
 class MAVLink_gps_status_message(MAVLink_message):
         '''
@@ -4152,18 +4113,18 @@ class MAVLink_servo_output_raw_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_SERVO_OUTPUT_RAW
         name = 'SERVO_OUTPUT_RAW'
-        fieldnames = ['time_usec', 'port', 'servo1_raw', 'servo2_raw', 'servo3_raw', 'servo4_raw', 'servo5_raw', 'servo6_raw', 'servo7_raw', 'servo8_raw', 'servo9_raw', 'servo10_raw', 'servo11_raw', 'servo12_raw', 'servo13_raw', 'servo14_raw', 'servo15_raw', 'servo16_raw']
-        ordered_fieldnames = ['time_usec', 'servo1_raw', 'servo2_raw', 'servo3_raw', 'servo4_raw', 'servo5_raw', 'servo6_raw', 'servo7_raw', 'servo8_raw', 'port', 'servo9_raw', 'servo10_raw', 'servo11_raw', 'servo12_raw', 'servo13_raw', 'servo14_raw', 'servo15_raw', 'servo16_raw']
-        fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t']
-        format = '<IHHHHHHHHBHHHHHHHH'
-        native_format = bytearray('<IHHHHHHHHBHHHHHHHH', 'ascii')
-        orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        fieldnames = ['time_usec', 'port', 'servo1_raw', 'servo2_raw', 'servo3_raw', 'servo4_raw', 'servo5_raw', 'servo6_raw', 'servo7_raw', 'servo8_raw']
+        ordered_fieldnames = ['time_usec', 'servo1_raw', 'servo2_raw', 'servo3_raw', 'servo4_raw', 'servo5_raw', 'servo6_raw', 'servo7_raw', 'servo8_raw', 'port']
+        fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t']
+        format = '<IHHHHHHHHB'
+        native_format = bytearray('<IHHHHHHHHB', 'ascii')
+        orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         crc_extra = 222
-        unpacker = struct.Struct('<IHHHHHHHHBHHHHHHHH')
+        unpacker = struct.Struct('<IHHHHHHHHB')
 
-        def __init__(self, time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw, servo9_raw=0, servo10_raw=0, servo11_raw=0, servo12_raw=0, servo13_raw=0, servo14_raw=0, servo15_raw=0, servo16_raw=0):
+        def __init__(self, time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw):
                 MAVLink_message.__init__(self, MAVLink_servo_output_raw_message.id, MAVLink_servo_output_raw_message.name)
                 self._fieldnames = MAVLink_servo_output_raw_message.fieldnames
                 self.time_usec = time_usec
@@ -4176,17 +4137,9 @@ class MAVLink_servo_output_raw_message(MAVLink_message):
                 self.servo6_raw = servo6_raw
                 self.servo7_raw = servo7_raw
                 self.servo8_raw = servo8_raw
-                self.servo9_raw = servo9_raw
-                self.servo10_raw = servo10_raw
-                self.servo11_raw = servo11_raw
-                self.servo12_raw = servo12_raw
-                self.servo13_raw = servo13_raw
-                self.servo14_raw = servo14_raw
-                self.servo15_raw = servo15_raw
-                self.servo16_raw = servo16_raw
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 222, struct.pack('<IHHHHHHHHBHHHHHHHH', self.time_usec, self.servo1_raw, self.servo2_raw, self.servo3_raw, self.servo4_raw, self.servo5_raw, self.servo6_raw, self.servo7_raw, self.servo8_raw, self.port, self.servo9_raw, self.servo10_raw, self.servo11_raw, self.servo12_raw, self.servo13_raw, self.servo14_raw, self.servo15_raw, self.servo16_raw), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 222, struct.pack('<IHHHHHHHHB', self.time_usec, self.servo1_raw, self.servo2_raw, self.servo3_raw, self.servo4_raw, self.servo5_raw, self.servo6_raw, self.servo7_raw, self.servo8_raw, self.port), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_request_partial_list_message(MAVLink_message):
         '''
@@ -4196,28 +4149,27 @@ class MAVLink_mission_request_partial_list_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_REQUEST_PARTIAL_LIST
         name = 'MISSION_REQUEST_PARTIAL_LIST'
-        fieldnames = ['target_system', 'target_component', 'start_index', 'end_index', 'mission_type']
-        ordered_fieldnames = ['start_index', 'end_index', 'target_system', 'target_component', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'int16_t', 'int16_t', 'uint8_t']
-        format = '<hhBBB'
-        native_format = bytearray('<hhBBB', 'ascii')
-        orders = [2, 3, 0, 1, 4]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'start_index', 'end_index']
+        ordered_fieldnames = ['start_index', 'end_index', 'target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t', 'int16_t', 'int16_t']
+        format = '<hhBB'
+        native_format = bytearray('<hhBB', 'ascii')
+        orders = [2, 3, 0, 1]
+        lengths = [1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0]
         crc_extra = 212
-        unpacker = struct.Struct('<hhBBB')
+        unpacker = struct.Struct('<hhBB')
 
-        def __init__(self, target_system, target_component, start_index, end_index, mission_type=0):
+        def __init__(self, target_system, target_component, start_index, end_index):
                 MAVLink_message.__init__(self, MAVLink_mission_request_partial_list_message.id, MAVLink_mission_request_partial_list_message.name)
                 self._fieldnames = MAVLink_mission_request_partial_list_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
                 self.start_index = start_index
                 self.end_index = end_index
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 212, struct.pack('<hhBBB', self.start_index, self.end_index, self.target_system, self.target_component, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 212, struct.pack('<hhBB', self.start_index, self.end_index, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_write_partial_list_message(MAVLink_message):
         '''
@@ -4228,28 +4180,27 @@ class MAVLink_mission_write_partial_list_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST
         name = 'MISSION_WRITE_PARTIAL_LIST'
-        fieldnames = ['target_system', 'target_component', 'start_index', 'end_index', 'mission_type']
-        ordered_fieldnames = ['start_index', 'end_index', 'target_system', 'target_component', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'int16_t', 'int16_t', 'uint8_t']
-        format = '<hhBBB'
-        native_format = bytearray('<hhBBB', 'ascii')
-        orders = [2, 3, 0, 1, 4]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'start_index', 'end_index']
+        ordered_fieldnames = ['start_index', 'end_index', 'target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t', 'int16_t', 'int16_t']
+        format = '<hhBB'
+        native_format = bytearray('<hhBB', 'ascii')
+        orders = [2, 3, 0, 1]
+        lengths = [1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0]
         crc_extra = 9
-        unpacker = struct.Struct('<hhBBB')
+        unpacker = struct.Struct('<hhBB')
 
-        def __init__(self, target_system, target_component, start_index, end_index, mission_type=0):
+        def __init__(self, target_system, target_component, start_index, end_index):
                 MAVLink_message.__init__(self, MAVLink_mission_write_partial_list_message.id, MAVLink_mission_write_partial_list_message.name)
                 self._fieldnames = MAVLink_mission_write_partial_list_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
                 self.start_index = start_index
                 self.end_index = end_index
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 9, struct.pack('<hhBBB', self.start_index, self.end_index, self.target_system, self.target_component, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 9, struct.pack('<hhBB', self.start_index, self.end_index, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_item_message(MAVLink_message):
         '''
@@ -4263,18 +4214,18 @@ class MAVLink_mission_item_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_ITEM
         name = 'MISSION_ITEM'
-        fieldnames = ['target_system', 'target_component', 'seq', 'frame', 'command', 'current', 'autocontinue', 'param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'mission_type']
-        ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'seq', 'command', 'target_system', 'target_component', 'frame', 'current', 'autocontinue', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint8_t']
-        format = '<fffffffHHBBBBBB'
-        native_format = bytearray('<fffffffHHBBBBBB', 'ascii')
-        orders = [9, 10, 7, 11, 8, 12, 13, 0, 1, 2, 3, 4, 5, 6, 14]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'seq', 'frame', 'command', 'current', 'autocontinue', 'param1', 'param2', 'param3', 'param4', 'x', 'y', 'z']
+        ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'seq', 'command', 'target_system', 'target_component', 'frame', 'current', 'autocontinue']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        format = '<fffffffHHBBBBB'
+        native_format = bytearray('<fffffffHHBBBBB', 'ascii')
+        orders = [9, 10, 7, 11, 8, 12, 13, 0, 1, 2, 3, 4, 5, 6]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         crc_extra = 254
-        unpacker = struct.Struct('<fffffffHHBBBBBB')
+        unpacker = struct.Struct('<fffffffHHBBBBB')
 
-        def __init__(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type=0):
+        def __init__(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z):
                 MAVLink_message.__init__(self, MAVLink_mission_item_message.id, MAVLink_mission_item_message.name)
                 self._fieldnames = MAVLink_mission_item_message.fieldnames
                 self.target_system = target_system
@@ -4291,10 +4242,9 @@ class MAVLink_mission_item_message(MAVLink_message):
                 self.x = x
                 self.y = y
                 self.z = z
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 254, struct.pack('<fffffffHHBBBBBB', self.param1, self.param2, self.param3, self.param4, self.x, self.y, self.z, self.seq, self.command, self.target_system, self.target_component, self.frame, self.current, self.autocontinue, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 254, struct.pack('<fffffffHHBBBBB', self.param1, self.param2, self.param3, self.param4, self.x, self.y, self.z, self.seq, self.command, self.target_system, self.target_component, self.frame, self.current, self.autocontinue), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_request_message(MAVLink_message):
         '''
@@ -4305,27 +4255,26 @@ class MAVLink_mission_request_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_REQUEST
         name = 'MISSION_REQUEST'
-        fieldnames = ['target_system', 'target_component', 'seq', 'mission_type']
-        ordered_fieldnames = ['seq', 'target_system', 'target_component', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t']
-        format = '<HBBB'
-        native_format = bytearray('<HBBB', 'ascii')
-        orders = [1, 2, 0, 3]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'seq']
+        ordered_fieldnames = ['seq', 'target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
+        format = '<HBB'
+        native_format = bytearray('<HBB', 'ascii')
+        orders = [1, 2, 0]
+        lengths = [1, 1, 1]
+        array_lengths = [0, 0, 0]
         crc_extra = 230
-        unpacker = struct.Struct('<HBBB')
+        unpacker = struct.Struct('<HBB')
 
-        def __init__(self, target_system, target_component, seq, mission_type=0):
+        def __init__(self, target_system, target_component, seq):
                 MAVLink_message.__init__(self, MAVLink_mission_request_message.id, MAVLink_mission_request_message.name)
                 self._fieldnames = MAVLink_mission_request_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
                 self.seq = seq
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 230, struct.pack('<HBBB', self.seq, self.target_system, self.target_component, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 230, struct.pack('<HBB', self.seq, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_set_current_message(MAVLink_message):
         '''
@@ -4391,26 +4340,25 @@ class MAVLink_mission_request_list_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_REQUEST_LIST
         name = 'MISSION_REQUEST_LIST'
-        fieldnames = ['target_system', 'target_component', 'mission_type']
-        ordered_fieldnames = ['target_system', 'target_component', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t']
-        format = '<BBB'
-        native_format = bytearray('<BBB', 'ascii')
-        orders = [0, 1, 2]
-        lengths = [1, 1, 1]
-        array_lengths = [0, 0, 0]
+        fieldnames = ['target_system', 'target_component']
+        ordered_fieldnames = ['target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t']
+        format = '<BB'
+        native_format = bytearray('<BB', 'ascii')
+        orders = [0, 1]
+        lengths = [1, 1]
+        array_lengths = [0, 0]
         crc_extra = 132
-        unpacker = struct.Struct('<BBB')
+        unpacker = struct.Struct('<BB')
 
-        def __init__(self, target_system, target_component, mission_type=0):
+        def __init__(self, target_system, target_component):
                 MAVLink_message.__init__(self, MAVLink_mission_request_list_message.id, MAVLink_mission_request_list_message.name)
                 self._fieldnames = MAVLink_mission_request_list_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 132, struct.pack('<BBB', self.target_system, self.target_component, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 132, struct.pack('<BB', self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_count_message(MAVLink_message):
         '''
@@ -4421,27 +4369,26 @@ class MAVLink_mission_count_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_COUNT
         name = 'MISSION_COUNT'
-        fieldnames = ['target_system', 'target_component', 'count', 'mission_type']
-        ordered_fieldnames = ['count', 'target_system', 'target_component', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t']
-        format = '<HBBB'
-        native_format = bytearray('<HBBB', 'ascii')
-        orders = [1, 2, 0, 3]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'count']
+        ordered_fieldnames = ['count', 'target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
+        format = '<HBB'
+        native_format = bytearray('<HBB', 'ascii')
+        orders = [1, 2, 0]
+        lengths = [1, 1, 1]
+        array_lengths = [0, 0, 0]
         crc_extra = 221
-        unpacker = struct.Struct('<HBBB')
+        unpacker = struct.Struct('<HBB')
 
-        def __init__(self, target_system, target_component, count, mission_type=0):
+        def __init__(self, target_system, target_component, count):
                 MAVLink_message.__init__(self, MAVLink_mission_count_message.id, MAVLink_mission_count_message.name)
                 self._fieldnames = MAVLink_mission_count_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
                 self.count = count
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 221, struct.pack('<HBBB', self.count, self.target_system, self.target_component, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 221, struct.pack('<HBB', self.count, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_clear_all_message(MAVLink_message):
         '''
@@ -4449,26 +4396,25 @@ class MAVLink_mission_clear_all_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_CLEAR_ALL
         name = 'MISSION_CLEAR_ALL'
-        fieldnames = ['target_system', 'target_component', 'mission_type']
-        ordered_fieldnames = ['target_system', 'target_component', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t']
-        format = '<BBB'
-        native_format = bytearray('<BBB', 'ascii')
-        orders = [0, 1, 2]
-        lengths = [1, 1, 1]
-        array_lengths = [0, 0, 0]
+        fieldnames = ['target_system', 'target_component']
+        ordered_fieldnames = ['target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t']
+        format = '<BB'
+        native_format = bytearray('<BB', 'ascii')
+        orders = [0, 1]
+        lengths = [1, 1]
+        array_lengths = [0, 0]
         crc_extra = 232
-        unpacker = struct.Struct('<BBB')
+        unpacker = struct.Struct('<BB')
 
-        def __init__(self, target_system, target_component, mission_type=0):
+        def __init__(self, target_system, target_component):
                 MAVLink_message.__init__(self, MAVLink_mission_clear_all_message.id, MAVLink_mission_clear_all_message.name)
                 self._fieldnames = MAVLink_mission_clear_all_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 232, struct.pack('<BBB', self.target_system, self.target_component, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 232, struct.pack('<BB', self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_item_reached_message(MAVLink_message):
         '''
@@ -4505,27 +4451,26 @@ class MAVLink_mission_ack_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_ACK
         name = 'MISSION_ACK'
-        fieldnames = ['target_system', 'target_component', 'type', 'mission_type']
-        ordered_fieldnames = ['target_system', 'target_component', 'type', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t']
-        format = '<BBBB'
-        native_format = bytearray('<BBBB', 'ascii')
-        orders = [0, 1, 2, 3]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'type']
+        ordered_fieldnames = ['target_system', 'target_component', 'type']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t']
+        format = '<BBB'
+        native_format = bytearray('<BBB', 'ascii')
+        orders = [0, 1, 2]
+        lengths = [1, 1, 1]
+        array_lengths = [0, 0, 0]
         crc_extra = 153
-        unpacker = struct.Struct('<BBBB')
+        unpacker = struct.Struct('<BBB')
 
-        def __init__(self, target_system, target_component, type, mission_type=0):
+        def __init__(self, target_system, target_component, type):
                 MAVLink_message.__init__(self, MAVLink_mission_ack_message.id, MAVLink_mission_ack_message.name)
                 self._fieldnames = MAVLink_mission_ack_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
                 self.type = type
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 153, struct.pack('<BBBB', self.target_system, self.target_component, self.type, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 153, struct.pack('<BBB', self.target_system, self.target_component, self.type), force_mavlink1=force_mavlink1)
 
 class MAVLink_set_gps_global_origin_message(MAVLink_message):
         '''
@@ -4537,28 +4482,27 @@ class MAVLink_set_gps_global_origin_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN
         name = 'SET_GPS_GLOBAL_ORIGIN'
-        fieldnames = ['target_system', 'latitude', 'longitude', 'altitude', 'time_usec']
-        ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'target_system', 'time_usec']
-        fieldtypes = ['uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint64_t']
-        format = '<iiiBQ'
-        native_format = bytearray('<iiiBQ', 'ascii')
-        orders = [3, 0, 1, 2, 4]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0]
+        fieldnames = ['target_system', 'latitude', 'longitude', 'altitude']
+        ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'target_system']
+        fieldtypes = ['uint8_t', 'int32_t', 'int32_t', 'int32_t']
+        format = '<iiiB'
+        native_format = bytearray('<iiiB', 'ascii')
+        orders = [3, 0, 1, 2]
+        lengths = [1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0]
         crc_extra = 41
-        unpacker = struct.Struct('<iiiBQ')
+        unpacker = struct.Struct('<iiiB')
 
-        def __init__(self, target_system, latitude, longitude, altitude, time_usec=0):
+        def __init__(self, target_system, latitude, longitude, altitude):
                 MAVLink_message.__init__(self, MAVLink_set_gps_global_origin_message.id, MAVLink_set_gps_global_origin_message.name)
                 self._fieldnames = MAVLink_set_gps_global_origin_message.fieldnames
                 self.target_system = target_system
                 self.latitude = latitude
                 self.longitude = longitude
                 self.altitude = altitude
-                self.time_usec = time_usec
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 41, struct.pack('<iiiBQ', self.latitude, self.longitude, self.altitude, self.target_system, self.time_usec), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 41, struct.pack('<iiiB', self.latitude, self.longitude, self.altitude, self.target_system), force_mavlink1=force_mavlink1)
 
 class MAVLink_gps_global_origin_message(MAVLink_message):
         '''
@@ -4567,27 +4511,26 @@ class MAVLink_gps_global_origin_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN
         name = 'GPS_GLOBAL_ORIGIN'
-        fieldnames = ['latitude', 'longitude', 'altitude', 'time_usec']
-        ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'time_usec']
-        fieldtypes = ['int32_t', 'int32_t', 'int32_t', 'uint64_t']
-        format = '<iiiQ'
-        native_format = bytearray('<iiiQ', 'ascii')
-        orders = [0, 1, 2, 3]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0]
+        fieldnames = ['latitude', 'longitude', 'altitude']
+        ordered_fieldnames = ['latitude', 'longitude', 'altitude']
+        fieldtypes = ['int32_t', 'int32_t', 'int32_t']
+        format = '<iii'
+        native_format = bytearray('<iii', 'ascii')
+        orders = [0, 1, 2]
+        lengths = [1, 1, 1]
+        array_lengths = [0, 0, 0]
         crc_extra = 39
-        unpacker = struct.Struct('<iiiQ')
+        unpacker = struct.Struct('<iii')
 
-        def __init__(self, latitude, longitude, altitude, time_usec=0):
+        def __init__(self, latitude, longitude, altitude):
                 MAVLink_message.__init__(self, MAVLink_gps_global_origin_message.id, MAVLink_gps_global_origin_message.name)
                 self._fieldnames = MAVLink_gps_global_origin_message.fieldnames
                 self.latitude = latitude
                 self.longitude = longitude
                 self.altitude = altitude
-                self.time_usec = time_usec
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 39, struct.pack('<iiiQ', self.latitude, self.longitude, self.altitude, self.time_usec), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 39, struct.pack('<iii', self.latitude, self.longitude, self.altitude), force_mavlink1=force_mavlink1)
 
 class MAVLink_param_map_rc_message(MAVLink_message):
         '''
@@ -4632,27 +4575,26 @@ class MAVLink_mission_request_int_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_REQUEST_INT
         name = 'MISSION_REQUEST_INT'
-        fieldnames = ['target_system', 'target_component', 'seq', 'mission_type']
-        ordered_fieldnames = ['seq', 'target_system', 'target_component', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t']
-        format = '<HBBB'
-        native_format = bytearray('<HBBB', 'ascii')
-        orders = [1, 2, 0, 3]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'seq']
+        ordered_fieldnames = ['seq', 'target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
+        format = '<HBB'
+        native_format = bytearray('<HBB', 'ascii')
+        orders = [1, 2, 0]
+        lengths = [1, 1, 1]
+        array_lengths = [0, 0, 0]
         crc_extra = 196
-        unpacker = struct.Struct('<HBBB')
+        unpacker = struct.Struct('<HBB')
 
-        def __init__(self, target_system, target_component, seq, mission_type=0):
+        def __init__(self, target_system, target_component, seq):
                 MAVLink_message.__init__(self, MAVLink_mission_request_int_message.id, MAVLink_mission_request_int_message.name)
                 self._fieldnames = MAVLink_mission_request_int_message.fieldnames
                 self.target_system = target_system
                 self.target_component = target_component
                 self.seq = seq
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 196, struct.pack('<HBBB', self.seq, self.target_system, self.target_component, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 196, struct.pack('<HBB', self.seq, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_safety_set_allowed_area_message(MAVLink_message):
         '''
@@ -5017,18 +4959,18 @@ class MAVLink_rc_channels_override_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE
         name = 'RC_CHANNELS_OVERRIDE'
-        fieldnames = ['target_system', 'target_component', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'chan9_raw', 'chan10_raw', 'chan11_raw', 'chan12_raw', 'chan13_raw', 'chan14_raw', 'chan15_raw', 'chan16_raw', 'chan17_raw', 'chan18_raw']
-        ordered_fieldnames = ['chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'target_system', 'target_component', 'chan9_raw', 'chan10_raw', 'chan11_raw', 'chan12_raw', 'chan13_raw', 'chan14_raw', 'chan15_raw', 'chan16_raw', 'chan17_raw', 'chan18_raw']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t']
-        format = '<HHHHHHHHBBHHHHHHHHHH'
-        native_format = bytearray('<HHHHHHHHBBHHHHHHHHHH', 'ascii')
-        orders = [8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw']
+        ordered_fieldnames = ['chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'target_system', 'target_component']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t']
+        format = '<HHHHHHHHBB'
+        native_format = bytearray('<HHHHHHHHBB', 'ascii')
+        orders = [8, 9, 0, 1, 2, 3, 4, 5, 6, 7]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         crc_extra = 124
-        unpacker = struct.Struct('<HHHHHHHHBBHHHHHHHHHH')
+        unpacker = struct.Struct('<HHHHHHHHBB')
 
-        def __init__(self, target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw, chan9_raw=0, chan10_raw=0, chan11_raw=0, chan12_raw=0, chan13_raw=0, chan14_raw=0, chan15_raw=0, chan16_raw=0, chan17_raw=0, chan18_raw=0):
+        def __init__(self, target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw):
                 MAVLink_message.__init__(self, MAVLink_rc_channels_override_message.id, MAVLink_rc_channels_override_message.name)
                 self._fieldnames = MAVLink_rc_channels_override_message.fieldnames
                 self.target_system = target_system
@@ -5041,19 +4983,9 @@ class MAVLink_rc_channels_override_message(MAVLink_message):
                 self.chan6_raw = chan6_raw
                 self.chan7_raw = chan7_raw
                 self.chan8_raw = chan8_raw
-                self.chan9_raw = chan9_raw
-                self.chan10_raw = chan10_raw
-                self.chan11_raw = chan11_raw
-                self.chan12_raw = chan12_raw
-                self.chan13_raw = chan13_raw
-                self.chan14_raw = chan14_raw
-                self.chan15_raw = chan15_raw
-                self.chan16_raw = chan16_raw
-                self.chan17_raw = chan17_raw
-                self.chan18_raw = chan18_raw
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 124, struct.pack('<HHHHHHHHBBHHHHHHHHHH', self.chan1_raw, self.chan2_raw, self.chan3_raw, self.chan4_raw, self.chan5_raw, self.chan6_raw, self.chan7_raw, self.chan8_raw, self.target_system, self.target_component, self.chan9_raw, self.chan10_raw, self.chan11_raw, self.chan12_raw, self.chan13_raw, self.chan14_raw, self.chan15_raw, self.chan16_raw, self.chan17_raw, self.chan18_raw), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 124, struct.pack('<HHHHHHHHBB', self.chan1_raw, self.chan2_raw, self.chan3_raw, self.chan4_raw, self.chan5_raw, self.chan6_raw, self.chan7_raw, self.chan8_raw, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
 
 class MAVLink_mission_item_int_message(MAVLink_message):
         '''
@@ -5067,18 +4999,18 @@ class MAVLink_mission_item_int_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_MISSION_ITEM_INT
         name = 'MISSION_ITEM_INT'
-        fieldnames = ['target_system', 'target_component', 'seq', 'frame', 'command', 'current', 'autocontinue', 'param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'mission_type']
-        ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'seq', 'command', 'target_system', 'target_component', 'frame', 'current', 'autocontinue', 'mission_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'int32_t', 'int32_t', 'float', 'uint8_t']
-        format = '<ffffiifHHBBBBBB'
-        native_format = bytearray('<ffffiifHHBBBBBB', 'ascii')
-        orders = [9, 10, 7, 11, 8, 12, 13, 0, 1, 2, 3, 4, 5, 6, 14]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        fieldnames = ['target_system', 'target_component', 'seq', 'frame', 'command', 'current', 'autocontinue', 'param1', 'param2', 'param3', 'param4', 'x', 'y', 'z']
+        ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'seq', 'command', 'target_system', 'target_component', 'frame', 'current', 'autocontinue']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'int32_t', 'int32_t', 'float']
+        format = '<ffffiifHHBBBBB'
+        native_format = bytearray('<ffffiifHHBBBBB', 'ascii')
+        orders = [9, 10, 7, 11, 8, 12, 13, 0, 1, 2, 3, 4, 5, 6]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         crc_extra = 38
-        unpacker = struct.Struct('<ffffiifHHBBBBBB')
+        unpacker = struct.Struct('<ffffiifHHBBBBB')
 
-        def __init__(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type=0):
+        def __init__(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z):
                 MAVLink_message.__init__(self, MAVLink_mission_item_int_message.id, MAVLink_mission_item_int_message.name)
                 self._fieldnames = MAVLink_mission_item_int_message.fieldnames
                 self.target_system = target_system
@@ -5095,10 +5027,9 @@ class MAVLink_mission_item_int_message(MAVLink_message):
                 self.x = x
                 self.y = y
                 self.z = z
-                self.mission_type = mission_type
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 38, struct.pack('<ffffiifHHBBBBBB', self.param1, self.param2, self.param3, self.param4, self.x, self.y, self.z, self.seq, self.command, self.target_system, self.target_component, self.frame, self.current, self.autocontinue, self.mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 38, struct.pack('<ffffiifHHBBBBB', self.param1, self.param2, self.param3, self.param4, self.x, self.y, self.z, self.seq, self.command, self.target_system, self.target_component, self.frame, self.current, self.autocontinue), force_mavlink1=force_mavlink1)
 
 class MAVLink_vfr_hud_message(MAVLink_message):
         '''
@@ -5210,29 +5141,25 @@ class MAVLink_command_ack_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_COMMAND_ACK
         name = 'COMMAND_ACK'
-        fieldnames = ['command', 'result', 'progress', 'result_param2', 'target_system', 'target_component']
-        ordered_fieldnames = ['command', 'result', 'progress', 'result_param2', 'target_system', 'target_component']
-        fieldtypes = ['uint16_t', 'uint8_t', 'uint8_t', 'int32_t', 'uint8_t', 'uint8_t']
-        format = '<HBBiBB'
-        native_format = bytearray('<HBBiBB', 'ascii')
-        orders = [0, 1, 2, 3, 4, 5]
-        lengths = [1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0]
+        fieldnames = ['command', 'result']
+        ordered_fieldnames = ['command', 'result']
+        fieldtypes = ['uint16_t', 'uint8_t']
+        format = '<HB'
+        native_format = bytearray('<HB', 'ascii')
+        orders = [0, 1]
+        lengths = [1, 1]
+        array_lengths = [0, 0]
         crc_extra = 143
-        unpacker = struct.Struct('<HBBiBB')
+        unpacker = struct.Struct('<HB')
 
-        def __init__(self, command, result, progress=0, result_param2=0, target_system=0, target_component=0):
+        def __init__(self, command, result):
                 MAVLink_message.__init__(self, MAVLink_command_ack_message.id, MAVLink_command_ack_message.name)
                 self._fieldnames = MAVLink_command_ack_message.fieldnames
                 self.command = command
                 self.result = result
-                self.progress = progress
-                self.result_param2 = result_param2
-                self.target_system = target_system
-                self.target_component = target_component
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 143, struct.pack('<HBBiBB', self.command, self.result, self.progress, self.result_param2, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 143, struct.pack('<HB', self.command, self.result), force_mavlink1=force_mavlink1)
 
 class MAVLink_manual_setpoint_message(MAVLink_message):
         '''
@@ -5689,18 +5616,18 @@ class MAVLink_optical_flow_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_OPTICAL_FLOW
         name = 'OPTICAL_FLOW'
-        fieldnames = ['time_usec', 'sensor_id', 'flow_x', 'flow_y', 'flow_comp_m_x', 'flow_comp_m_y', 'quality', 'ground_distance', 'flow_rate_x', 'flow_rate_y']
-        ordered_fieldnames = ['time_usec', 'flow_comp_m_x', 'flow_comp_m_y', 'ground_distance', 'flow_x', 'flow_y', 'sensor_id', 'quality', 'flow_rate_x', 'flow_rate_y']
-        fieldtypes = ['uint64_t', 'uint8_t', 'int16_t', 'int16_t', 'float', 'float', 'uint8_t', 'float', 'float', 'float']
-        format = '<QfffhhBBff'
-        native_format = bytearray('<QfffhhBBff', 'ascii')
-        orders = [0, 6, 4, 5, 1, 2, 7, 3, 8, 9]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        fieldnames = ['time_usec', 'sensor_id', 'flow_x', 'flow_y', 'flow_comp_m_x', 'flow_comp_m_y', 'quality', 'ground_distance']
+        ordered_fieldnames = ['time_usec', 'flow_comp_m_x', 'flow_comp_m_y', 'ground_distance', 'flow_x', 'flow_y', 'sensor_id', 'quality']
+        fieldtypes = ['uint64_t', 'uint8_t', 'int16_t', 'int16_t', 'float', 'float', 'uint8_t', 'float']
+        format = '<QfffhhBB'
+        native_format = bytearray('<QfffhhBB', 'ascii')
+        orders = [0, 6, 4, 5, 1, 2, 7, 3]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0]
         crc_extra = 175
-        unpacker = struct.Struct('<QfffhhBBff')
+        unpacker = struct.Struct('<QfffhhBB')
 
-        def __init__(self, time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance, flow_rate_x=0, flow_rate_y=0):
+        def __init__(self, time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance):
                 MAVLink_message.__init__(self, MAVLink_optical_flow_message.id, MAVLink_optical_flow_message.name)
                 self._fieldnames = MAVLink_optical_flow_message.fieldnames
                 self.time_usec = time_usec
@@ -5711,11 +5638,9 @@ class MAVLink_optical_flow_message(MAVLink_message):
                 self.flow_comp_m_y = flow_comp_m_y
                 self.quality = quality
                 self.ground_distance = ground_distance
-                self.flow_rate_x = flow_rate_x
-                self.flow_rate_y = flow_rate_y
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 175, struct.pack('<QfffhhBBff', self.time_usec, self.flow_comp_m_x, self.flow_comp_m_y, self.ground_distance, self.flow_x, self.flow_y, self.sensor_id, self.quality, self.flow_rate_x, self.flow_rate_y), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 175, struct.pack('<QfffhhBB', self.time_usec, self.flow_comp_m_x, self.flow_comp_m_y, self.ground_distance, self.flow_x, self.flow_y, self.sensor_id, self.quality), force_mavlink1=force_mavlink1)
 
 class MAVLink_global_vision_position_estimate_message(MAVLink_message):
         '''
@@ -5723,18 +5648,18 @@ class MAVLink_global_vision_position_estimate_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE
         name = 'GLOBAL_VISION_POSITION_ESTIMATE'
-        fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw', 'covariance']
-        ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw', 'covariance']
-        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
-        format = '<Qffffff21f'
-        native_format = bytearray('<Qfffffff', 'ascii')
-        orders = [0, 1, 2, 3, 4, 5, 6, 7]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 21]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 21]
+        fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
+        ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
+        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        format = '<Qffffff'
+        native_format = bytearray('<Qffffff', 'ascii')
+        orders = [0, 1, 2, 3, 4, 5, 6]
+        lengths = [1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0]
         crc_extra = 102
-        unpacker = struct.Struct('<Qffffff21f')
+        unpacker = struct.Struct('<Qffffff')
 
-        def __init__(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def __init__(self, usec, x, y, z, roll, pitch, yaw):
                 MAVLink_message.__init__(self, MAVLink_global_vision_position_estimate_message.id, MAVLink_global_vision_position_estimate_message.name)
                 self._fieldnames = MAVLink_global_vision_position_estimate_message.fieldnames
                 self.usec = usec
@@ -5744,10 +5669,9 @@ class MAVLink_global_vision_position_estimate_message(MAVLink_message):
                 self.roll = roll
                 self.pitch = pitch
                 self.yaw = yaw
-                self.covariance = covariance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 102, struct.pack('<Qffffff21f', self.usec, self.x, self.y, self.z, self.roll, self.pitch, self.yaw, self.covariance[0], self.covariance[1], self.covariance[2], self.covariance[3], self.covariance[4], self.covariance[5], self.covariance[6], self.covariance[7], self.covariance[8], self.covariance[9], self.covariance[10], self.covariance[11], self.covariance[12], self.covariance[13], self.covariance[14], self.covariance[15], self.covariance[16], self.covariance[17], self.covariance[18], self.covariance[19], self.covariance[20]), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 102, struct.pack('<Qffffff', self.usec, self.x, self.y, self.z, self.roll, self.pitch, self.yaw), force_mavlink1=force_mavlink1)
 
 class MAVLink_vision_position_estimate_message(MAVLink_message):
         '''
@@ -5755,18 +5679,18 @@ class MAVLink_vision_position_estimate_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_VISION_POSITION_ESTIMATE
         name = 'VISION_POSITION_ESTIMATE'
-        fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw', 'covariance']
-        ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw', 'covariance']
-        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
-        format = '<Qffffff21f'
-        native_format = bytearray('<Qfffffff', 'ascii')
-        orders = [0, 1, 2, 3, 4, 5, 6, 7]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 21]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 21]
+        fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
+        ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
+        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        format = '<Qffffff'
+        native_format = bytearray('<Qffffff', 'ascii')
+        orders = [0, 1, 2, 3, 4, 5, 6]
+        lengths = [1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0]
         crc_extra = 158
-        unpacker = struct.Struct('<Qffffff21f')
+        unpacker = struct.Struct('<Qffffff')
 
-        def __init__(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def __init__(self, usec, x, y, z, roll, pitch, yaw):
                 MAVLink_message.__init__(self, MAVLink_vision_position_estimate_message.id, MAVLink_vision_position_estimate_message.name)
                 self._fieldnames = MAVLink_vision_position_estimate_message.fieldnames
                 self.usec = usec
@@ -5776,10 +5700,9 @@ class MAVLink_vision_position_estimate_message(MAVLink_message):
                 self.roll = roll
                 self.pitch = pitch
                 self.yaw = yaw
-                self.covariance = covariance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 158, struct.pack('<Qffffff21f', self.usec, self.x, self.y, self.z, self.roll, self.pitch, self.yaw, self.covariance[0], self.covariance[1], self.covariance[2], self.covariance[3], self.covariance[4], self.covariance[5], self.covariance[6], self.covariance[7], self.covariance[8], self.covariance[9], self.covariance[10], self.covariance[11], self.covariance[12], self.covariance[13], self.covariance[14], self.covariance[15], self.covariance[16], self.covariance[17], self.covariance[18], self.covariance[19], self.covariance[20]), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 158, struct.pack('<Qffffff', self.usec, self.x, self.y, self.z, self.roll, self.pitch, self.yaw), force_mavlink1=force_mavlink1)
 
 class MAVLink_vision_speed_estimate_message(MAVLink_message):
         '''
@@ -5787,28 +5710,27 @@ class MAVLink_vision_speed_estimate_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE
         name = 'VISION_SPEED_ESTIMATE'
-        fieldnames = ['usec', 'x', 'y', 'z', 'covariance']
-        ordered_fieldnames = ['usec', 'x', 'y', 'z', 'covariance']
-        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float']
-        format = '<Qfff9f'
-        native_format = bytearray('<Qffff', 'ascii')
-        orders = [0, 1, 2, 3, 4]
-        lengths = [1, 1, 1, 1, 9]
-        array_lengths = [0, 0, 0, 0, 9]
+        fieldnames = ['usec', 'x', 'y', 'z']
+        ordered_fieldnames = ['usec', 'x', 'y', 'z']
+        fieldtypes = ['uint64_t', 'float', 'float', 'float']
+        format = '<Qfff'
+        native_format = bytearray('<Qfff', 'ascii')
+        orders = [0, 1, 2, 3]
+        lengths = [1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0]
         crc_extra = 208
-        unpacker = struct.Struct('<Qfff9f')
+        unpacker = struct.Struct('<Qfff')
 
-        def __init__(self, usec, x, y, z, covariance=[0,0,0,0,0,0,0,0,0]):
+        def __init__(self, usec, x, y, z):
                 MAVLink_message.__init__(self, MAVLink_vision_speed_estimate_message.id, MAVLink_vision_speed_estimate_message.name)
                 self._fieldnames = MAVLink_vision_speed_estimate_message.fieldnames
                 self.usec = usec
                 self.x = x
                 self.y = y
                 self.z = z
-                self.covariance = covariance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 208, struct.pack('<Qfff9f', self.usec, self.x, self.y, self.z, self.covariance[0], self.covariance[1], self.covariance[2], self.covariance[3], self.covariance[4], self.covariance[5], self.covariance[6], self.covariance[7], self.covariance[8]), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 208, struct.pack('<Qfff', self.usec, self.x, self.y, self.z), force_mavlink1=force_mavlink1)
 
 class MAVLink_vicon_position_estimate_message(MAVLink_message):
         '''
@@ -5816,18 +5738,18 @@ class MAVLink_vicon_position_estimate_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE
         name = 'VICON_POSITION_ESTIMATE'
-        fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw', 'covariance']
-        ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw', 'covariance']
-        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
-        format = '<Qffffff21f'
-        native_format = bytearray('<Qfffffff', 'ascii')
-        orders = [0, 1, 2, 3, 4, 5, 6, 7]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 21]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 21]
+        fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
+        ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
+        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        format = '<Qffffff'
+        native_format = bytearray('<Qffffff', 'ascii')
+        orders = [0, 1, 2, 3, 4, 5, 6]
+        lengths = [1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0]
         crc_extra = 56
-        unpacker = struct.Struct('<Qffffff21f')
+        unpacker = struct.Struct('<Qffffff')
 
-        def __init__(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def __init__(self, usec, x, y, z, roll, pitch, yaw):
                 MAVLink_message.__init__(self, MAVLink_vicon_position_estimate_message.id, MAVLink_vicon_position_estimate_message.name)
                 self._fieldnames = MAVLink_vicon_position_estimate_message.fieldnames
                 self.usec = usec
@@ -5837,10 +5759,9 @@ class MAVLink_vicon_position_estimate_message(MAVLink_message):
                 self.roll = roll
                 self.pitch = pitch
                 self.yaw = yaw
-                self.covariance = covariance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 56, struct.pack('<Qffffff21f', self.usec, self.x, self.y, self.z, self.roll, self.pitch, self.yaw, self.covariance[0], self.covariance[1], self.covariance[2], self.covariance[3], self.covariance[4], self.covariance[5], self.covariance[6], self.covariance[7], self.covariance[8], self.covariance[9], self.covariance[10], self.covariance[11], self.covariance[12], self.covariance[13], self.covariance[14], self.covariance[15], self.covariance[16], self.covariance[17], self.covariance[18], self.covariance[19], self.covariance[20]), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 56, struct.pack('<Qffffff', self.usec, self.x, self.y, self.z, self.roll, self.pitch, self.yaw), force_mavlink1=force_mavlink1)
 
 class MAVLink_highres_imu_message(MAVLink_message):
         '''
@@ -6912,18 +6833,18 @@ class MAVLink_att_pos_mocap_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_ATT_POS_MOCAP
         name = 'ATT_POS_MOCAP'
-        fieldnames = ['time_usec', 'q', 'x', 'y', 'z', 'covariance']
-        ordered_fieldnames = ['time_usec', 'q', 'x', 'y', 'z', 'covariance']
-        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float']
-        format = '<Q4ffff21f'
-        native_format = bytearray('<Qfffff', 'ascii')
-        orders = [0, 1, 2, 3, 4, 5]
-        lengths = [1, 4, 1, 1, 1, 21]
-        array_lengths = [0, 4, 0, 0, 0, 21]
+        fieldnames = ['time_usec', 'q', 'x', 'y', 'z']
+        ordered_fieldnames = ['time_usec', 'q', 'x', 'y', 'z']
+        fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float']
+        format = '<Q4ffff'
+        native_format = bytearray('<Qffff', 'ascii')
+        orders = [0, 1, 2, 3, 4]
+        lengths = [1, 4, 1, 1, 1]
+        array_lengths = [0, 4, 0, 0, 0]
         crc_extra = 109
-        unpacker = struct.Struct('<Q4ffff21f')
+        unpacker = struct.Struct('<Q4ffff')
 
-        def __init__(self, time_usec, q, x, y, z, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def __init__(self, time_usec, q, x, y, z):
                 MAVLink_message.__init__(self, MAVLink_att_pos_mocap_message.id, MAVLink_att_pos_mocap_message.name)
                 self._fieldnames = MAVLink_att_pos_mocap_message.fieldnames
                 self.time_usec = time_usec
@@ -6931,10 +6852,9 @@ class MAVLink_att_pos_mocap_message(MAVLink_message):
                 self.x = x
                 self.y = y
                 self.z = z
-                self.covariance = covariance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 109, struct.pack('<Q4ffff21f', self.time_usec, self.q[0], self.q[1], self.q[2], self.q[3], self.x, self.y, self.z, self.covariance[0], self.covariance[1], self.covariance[2], self.covariance[3], self.covariance[4], self.covariance[5], self.covariance[6], self.covariance[7], self.covariance[8], self.covariance[9], self.covariance[10], self.covariance[11], self.covariance[12], self.covariance[13], self.covariance[14], self.covariance[15], self.covariance[16], self.covariance[17], self.covariance[18], self.covariance[19], self.covariance[20]), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 109, struct.pack('<Q4ffff', self.time_usec, self.q[0], self.q[1], self.q[2], self.q[3], self.x, self.y, self.z), force_mavlink1=force_mavlink1)
 
 class MAVLink_set_actuator_control_target_message(MAVLink_message):
         '''
@@ -7164,18 +7084,18 @@ class MAVLink_battery_status_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_BATTERY_STATUS
         name = 'BATTERY_STATUS'
-        fieldnames = ['id', 'battery_function', 'type', 'temperature', 'voltages', 'current_battery', 'current_consumed', 'energy_consumed', 'battery_remaining', 'time_remaining', 'charge_state']
-        ordered_fieldnames = ['current_consumed', 'energy_consumed', 'temperature', 'voltages', 'current_battery', 'id', 'battery_function', 'type', 'battery_remaining', 'time_remaining', 'charge_state']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int16_t', 'int32_t', 'int32_t', 'int8_t', 'int32_t', 'uint8_t']
-        format = '<iih10HhBBBbiB'
-        native_format = bytearray('<iihHhBBBbiB', 'ascii')
-        orders = [5, 6, 7, 2, 3, 4, 0, 1, 8, 9, 10]
-        lengths = [1, 1, 1, 10, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0]
+        fieldnames = ['id', 'battery_function', 'type', 'temperature', 'voltages', 'current_battery', 'current_consumed', 'energy_consumed', 'battery_remaining']
+        ordered_fieldnames = ['current_consumed', 'energy_consumed', 'temperature', 'voltages', 'current_battery', 'id', 'battery_function', 'type', 'battery_remaining']
+        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int16_t', 'int32_t', 'int32_t', 'int8_t']
+        format = '<iih10HhBBBb'
+        native_format = bytearray('<iihHhBBBb', 'ascii')
+        orders = [5, 6, 7, 2, 3, 4, 0, 1, 8]
+        lengths = [1, 1, 1, 10, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 10, 0, 0, 0, 0, 0]
         crc_extra = 154
-        unpacker = struct.Struct('<iih10HhBBBbiB')
+        unpacker = struct.Struct('<iih10HhBBBb')
 
-        def __init__(self, id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining, time_remaining=0, charge_state=0):
+        def __init__(self, id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining):
                 MAVLink_message.__init__(self, MAVLink_battery_status_message.id, MAVLink_battery_status_message.name)
                 self._fieldnames = MAVLink_battery_status_message.fieldnames
                 self.id = id
@@ -7187,11 +7107,9 @@ class MAVLink_battery_status_message(MAVLink_message):
                 self.current_consumed = current_consumed
                 self.energy_consumed = energy_consumed
                 self.battery_remaining = battery_remaining
-                self.time_remaining = time_remaining
-                self.charge_state = charge_state
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 154, struct.pack('<iih10HhBBBbiB', self.current_consumed, self.energy_consumed, self.temperature, self.voltages[0], self.voltages[1], self.voltages[2], self.voltages[3], self.voltages[4], self.voltages[5], self.voltages[6], self.voltages[7], self.voltages[8], self.voltages[9], self.current_battery, self.id, self.battery_function, self.type, self.battery_remaining, self.time_remaining, self.charge_state), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 154, struct.pack('<iih10HhBBBb', self.current_consumed, self.energy_consumed, self.temperature, self.voltages[0], self.voltages[1], self.voltages[2], self.voltages[3], self.voltages[4], self.voltages[5], self.voltages[6], self.voltages[7], self.voltages[8], self.voltages[9], self.current_battery, self.id, self.battery_function, self.type, self.battery_remaining), force_mavlink1=force_mavlink1)
 
 class MAVLink_autopilot_version_message(MAVLink_message):
         '''
@@ -7199,18 +7117,18 @@ class MAVLink_autopilot_version_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_AUTOPILOT_VERSION
         name = 'AUTOPILOT_VERSION'
-        fieldnames = ['capabilities', 'flight_sw_version', 'middleware_sw_version', 'os_sw_version', 'board_version', 'flight_custom_version', 'middleware_custom_version', 'os_custom_version', 'vendor_id', 'product_id', 'uid', 'uid2']
-        ordered_fieldnames = ['capabilities', 'uid', 'flight_sw_version', 'middleware_sw_version', 'os_sw_version', 'board_version', 'vendor_id', 'product_id', 'flight_custom_version', 'middleware_custom_version', 'os_custom_version', 'uid2']
-        fieldtypes = ['uint64_t', 'uint32_t', 'uint32_t', 'uint32_t', 'uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint64_t', 'uint8_t']
-        format = '<QQIIIIHH8B8B8B18B'
-        native_format = bytearray('<QQIIIIHHBBBB', 'ascii')
-        orders = [0, 2, 3, 4, 5, 8, 9, 10, 6, 7, 1, 11]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 8, 8, 8, 18]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 18]
+        fieldnames = ['capabilities', 'flight_sw_version', 'middleware_sw_version', 'os_sw_version', 'board_version', 'flight_custom_version', 'middleware_custom_version', 'os_custom_version', 'vendor_id', 'product_id', 'uid']
+        ordered_fieldnames = ['capabilities', 'uid', 'flight_sw_version', 'middleware_sw_version', 'os_sw_version', 'board_version', 'vendor_id', 'product_id', 'flight_custom_version', 'middleware_custom_version', 'os_custom_version']
+        fieldtypes = ['uint64_t', 'uint32_t', 'uint32_t', 'uint32_t', 'uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint64_t']
+        format = '<QQIIIIHH8B8B8B'
+        native_format = bytearray('<QQIIIIHHBBB', 'ascii')
+        orders = [0, 2, 3, 4, 5, 8, 9, 10, 6, 7, 1]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 8, 8, 8]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8]
         crc_extra = 178
-        unpacker = struct.Struct('<QQIIIIHH8B8B8B18B')
+        unpacker = struct.Struct('<QQIIIIHH8B8B8B')
 
-        def __init__(self, capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid, uid2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def __init__(self, capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid):
                 MAVLink_message.__init__(self, MAVLink_autopilot_version_message.id, MAVLink_autopilot_version_message.name)
                 self._fieldnames = MAVLink_autopilot_version_message.fieldnames
                 self.capabilities = capabilities
@@ -7224,10 +7142,9 @@ class MAVLink_autopilot_version_message(MAVLink_message):
                 self.vendor_id = vendor_id
                 self.product_id = product_id
                 self.uid = uid
-                self.uid2 = uid2
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 178, struct.pack('<QQIIIIHH8B8B8B18B', self.capabilities, self.uid, self.flight_sw_version, self.middleware_sw_version, self.os_sw_version, self.board_version, self.vendor_id, self.product_id, self.flight_custom_version[0], self.flight_custom_version[1], self.flight_custom_version[2], self.flight_custom_version[3], self.flight_custom_version[4], self.flight_custom_version[5], self.flight_custom_version[6], self.flight_custom_version[7], self.middleware_custom_version[0], self.middleware_custom_version[1], self.middleware_custom_version[2], self.middleware_custom_version[3], self.middleware_custom_version[4], self.middleware_custom_version[5], self.middleware_custom_version[6], self.middleware_custom_version[7], self.os_custom_version[0], self.os_custom_version[1], self.os_custom_version[2], self.os_custom_version[3], self.os_custom_version[4], self.os_custom_version[5], self.os_custom_version[6], self.os_custom_version[7], self.uid2[0], self.uid2[1], self.uid2[2], self.uid2[3], self.uid2[4], self.uid2[5], self.uid2[6], self.uid2[7], self.uid2[8], self.uid2[9], self.uid2[10], self.uid2[11], self.uid2[12], self.uid2[13], self.uid2[14], self.uid2[15], self.uid2[16], self.uid2[17]), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 178, struct.pack('<QQIIIIHH8B8B8B', self.capabilities, self.uid, self.flight_sw_version, self.middleware_sw_version, self.os_sw_version, self.board_version, self.vendor_id, self.product_id, self.flight_custom_version[0], self.flight_custom_version[1], self.flight_custom_version[2], self.flight_custom_version[3], self.flight_custom_version[4], self.flight_custom_version[5], self.flight_custom_version[6], self.flight_custom_version[7], self.middleware_custom_version[0], self.middleware_custom_version[1], self.middleware_custom_version[2], self.middleware_custom_version[3], self.middleware_custom_version[4], self.middleware_custom_version[5], self.middleware_custom_version[6], self.middleware_custom_version[7], self.os_custom_version[0], self.os_custom_version[1], self.os_custom_version[2], self.os_custom_version[3], self.os_custom_version[4], self.os_custom_version[5], self.os_custom_version[6], self.os_custom_version[7]), force_mavlink1=force_mavlink1)
 
 class MAVLink_landing_target_message(MAVLink_message):
         '''
@@ -7236,18 +7153,18 @@ class MAVLink_landing_target_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_LANDING_TARGET
         name = 'LANDING_TARGET'
-        fieldnames = ['time_usec', 'target_num', 'frame', 'angle_x', 'angle_y', 'distance', 'size_x', 'size_y', 'x', 'y', 'z', 'q', 'type', 'position_valid']
-        ordered_fieldnames = ['time_usec', 'angle_x', 'angle_y', 'distance', 'size_x', 'size_y', 'target_num', 'frame', 'x', 'y', 'z', 'q', 'type', 'position_valid']
-        fieldtypes = ['uint64_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint8_t', 'uint8_t']
-        format = '<QfffffBBfff4fBB'
-        native_format = bytearray('<QfffffBBffffBB', 'ascii')
-        orders = [0, 6, 7, 1, 2, 3, 4, 5, 8, 9, 10, 11, 12, 13]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0]
+        fieldnames = ['time_usec', 'target_num', 'frame', 'angle_x', 'angle_y', 'distance', 'size_x', 'size_y']
+        ordered_fieldnames = ['time_usec', 'angle_x', 'angle_y', 'distance', 'size_x', 'size_y', 'target_num', 'frame']
+        fieldtypes = ['uint64_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
+        format = '<QfffffBB'
+        native_format = bytearray('<QfffffBB', 'ascii')
+        orders = [0, 6, 7, 1, 2, 3, 4, 5]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0]
         crc_extra = 200
-        unpacker = struct.Struct('<QfffffBBfff4fBB')
+        unpacker = struct.Struct('<QfffffBB')
 
-        def __init__(self, time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y, x=0, y=0, z=0, q=[0,0,0,0], type=0, position_valid=0):
+        def __init__(self, time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y):
                 MAVLink_message.__init__(self, MAVLink_landing_target_message.id, MAVLink_landing_target_message.name)
                 self._fieldnames = MAVLink_landing_target_message.fieldnames
                 self.time_usec = time_usec
@@ -7258,15 +7175,9 @@ class MAVLink_landing_target_message(MAVLink_message):
                 self.distance = distance
                 self.size_x = size_x
                 self.size_y = size_y
-                self.x = x
-                self.y = y
-                self.z = z
-                self.q = q
-                self.type = type
-                self.position_valid = position_valid
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 200, struct.pack('<QfffffBBfff4fBB', self.time_usec, self.angle_x, self.angle_y, self.distance, self.size_x, self.size_y, self.target_num, self.frame, self.x, self.y, self.z, self.q[0], self.q[1], self.q[2], self.q[3], self.type, self.position_valid), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 200, struct.pack('<QfffffBB', self.time_usec, self.angle_x, self.angle_y, self.distance, self.size_x, self.size_y, self.target_num, self.frame), force_mavlink1=force_mavlink1)
 
 class MAVLink_estimator_status_message(MAVLink_message):
         '''
@@ -7569,18 +7480,18 @@ class MAVLink_home_position_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_HOME_POSITION
         name = 'HOME_POSITION'
-        fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z', 'time_usec']
-        ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z', 'time_usec']
-        fieldtypes = ['int32_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint64_t']
-        format = '<iiifff4ffffQ'
-        native_format = bytearray('<iiifffffffQ', 'ascii')
-        orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        lengths = [1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0]
+        fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z']
+        ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z']
+        fieldtypes = ['int32_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        format = '<iiifff4ffff'
+        native_format = bytearray('<iiifffffff', 'ascii')
+        orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        lengths = [1, 1, 1, 1, 1, 1, 4, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 4, 0, 0, 0]
         crc_extra = 104
-        unpacker = struct.Struct('<iiifff4ffffQ')
+        unpacker = struct.Struct('<iiifff4ffff')
 
-        def __init__(self, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec=0):
+        def __init__(self, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z):
                 MAVLink_message.__init__(self, MAVLink_home_position_message.id, MAVLink_home_position_message.name)
                 self._fieldnames = MAVLink_home_position_message.fieldnames
                 self.latitude = latitude
@@ -7593,10 +7504,9 @@ class MAVLink_home_position_message(MAVLink_message):
                 self.approach_x = approach_x
                 self.approach_y = approach_y
                 self.approach_z = approach_z
-                self.time_usec = time_usec
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 104, struct.pack('<iiifff4ffffQ', self.latitude, self.longitude, self.altitude, self.x, self.y, self.z, self.q[0], self.q[1], self.q[2], self.q[3], self.approach_x, self.approach_y, self.approach_z, self.time_usec), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 104, struct.pack('<iiifff4ffff', self.latitude, self.longitude, self.altitude, self.x, self.y, self.z, self.q[0], self.q[1], self.q[2], self.q[3], self.approach_x, self.approach_y, self.approach_z), force_mavlink1=force_mavlink1)
 
 class MAVLink_set_home_position_message(MAVLink_message):
         '''
@@ -7614,18 +7524,18 @@ class MAVLink_set_home_position_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_SET_HOME_POSITION
         name = 'SET_HOME_POSITION'
-        fieldnames = ['target_system', 'latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z', 'time_usec']
-        ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z', 'target_system', 'time_usec']
-        fieldtypes = ['uint8_t', 'int32_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint64_t']
-        format = '<iiifff4ffffBQ'
-        native_format = bytearray('<iiifffffffBQ', 'ascii')
-        orders = [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11]
-        lengths = [1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0]
+        fieldnames = ['target_system', 'latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z']
+        ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z', 'target_system']
+        fieldtypes = ['uint8_t', 'int32_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        format = '<iiifff4ffffB'
+        native_format = bytearray('<iiifffffffB', 'ascii')
+        orders = [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        lengths = [1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0]
         crc_extra = 85
-        unpacker = struct.Struct('<iiifff4ffffBQ')
+        unpacker = struct.Struct('<iiifff4ffffB')
 
-        def __init__(self, target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec=0):
+        def __init__(self, target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z):
                 MAVLink_message.__init__(self, MAVLink_set_home_position_message.id, MAVLink_set_home_position_message.name)
                 self._fieldnames = MAVLink_set_home_position_message.fieldnames
                 self.target_system = target_system
@@ -7639,10 +7549,9 @@ class MAVLink_set_home_position_message(MAVLink_message):
                 self.approach_x = approach_x
                 self.approach_y = approach_y
                 self.approach_z = approach_z
-                self.time_usec = time_usec
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 85, struct.pack('<iiifff4ffffBQ', self.latitude, self.longitude, self.altitude, self.x, self.y, self.z, self.q[0], self.q[1], self.q[2], self.q[3], self.approach_x, self.approach_y, self.approach_z, self.target_system, self.time_usec), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 85, struct.pack('<iiifff4ffffB', self.latitude, self.longitude, self.altitude, self.x, self.y, self.z, self.q[0], self.q[1], self.q[2], self.q[3], self.approach_x, self.approach_y, self.approach_z, self.target_system), force_mavlink1=force_mavlink1)
 
 class MAVLink_message_interval_message(MAVLink_message):
         '''
@@ -7972,891 +7881,6 @@ class MAVLink_debug_message(MAVLink_message):
         def pack(self, mav, force_mavlink1=False):
                 return MAVLink_message.pack(self, mav, 46, struct.pack('<IfB', self.time_boot_ms, self.value, self.ind), force_mavlink1=force_mavlink1)
 
-class MAVLink_setup_signing_message(MAVLink_message):
-        '''
-        Setup a MAVLink2 signing key. If called with secret_key of all
-        zero and zero initial_timestamp will disable signing
-        '''
-        id = MAVLINK_MSG_ID_SETUP_SIGNING
-        name = 'SETUP_SIGNING'
-        fieldnames = ['target_system', 'target_component', 'secret_key', 'initial_timestamp']
-        ordered_fieldnames = ['initial_timestamp', 'target_system', 'target_component', 'secret_key']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint64_t']
-        format = '<QBB32B'
-        native_format = bytearray('<QBBB', 'ascii')
-        orders = [1, 2, 3, 0]
-        lengths = [1, 1, 1, 32]
-        array_lengths = [0, 0, 0, 32]
-        crc_extra = 71
-        unpacker = struct.Struct('<QBB32B')
-
-        def __init__(self, target_system, target_component, secret_key, initial_timestamp):
-                MAVLink_message.__init__(self, MAVLink_setup_signing_message.id, MAVLink_setup_signing_message.name)
-                self._fieldnames = MAVLink_setup_signing_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.secret_key = secret_key
-                self.initial_timestamp = initial_timestamp
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 71, struct.pack('<QBB32B', self.initial_timestamp, self.target_system, self.target_component, self.secret_key[0], self.secret_key[1], self.secret_key[2], self.secret_key[3], self.secret_key[4], self.secret_key[5], self.secret_key[6], self.secret_key[7], self.secret_key[8], self.secret_key[9], self.secret_key[10], self.secret_key[11], self.secret_key[12], self.secret_key[13], self.secret_key[14], self.secret_key[15], self.secret_key[16], self.secret_key[17], self.secret_key[18], self.secret_key[19], self.secret_key[20], self.secret_key[21], self.secret_key[22], self.secret_key[23], self.secret_key[24], self.secret_key[25], self.secret_key[26], self.secret_key[27], self.secret_key[28], self.secret_key[29], self.secret_key[30], self.secret_key[31]), force_mavlink1=force_mavlink1)
-
-class MAVLink_button_change_message(MAVLink_message):
-        '''
-        Report button state change.
-        '''
-        id = MAVLINK_MSG_ID_BUTTON_CHANGE
-        name = 'BUTTON_CHANGE'
-        fieldnames = ['time_boot_ms', 'last_change_ms', 'state']
-        ordered_fieldnames = ['time_boot_ms', 'last_change_ms', 'state']
-        fieldtypes = ['uint32_t', 'uint32_t', 'uint8_t']
-        format = '<IIB'
-        native_format = bytearray('<IIB', 'ascii')
-        orders = [0, 1, 2]
-        lengths = [1, 1, 1]
-        array_lengths = [0, 0, 0]
-        crc_extra = 131
-        unpacker = struct.Struct('<IIB')
-
-        def __init__(self, time_boot_ms, last_change_ms, state):
-                MAVLink_message.__init__(self, MAVLink_button_change_message.id, MAVLink_button_change_message.name)
-                self._fieldnames = MAVLink_button_change_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.last_change_ms = last_change_ms
-                self.state = state
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 131, struct.pack('<IIB', self.time_boot_ms, self.last_change_ms, self.state), force_mavlink1=force_mavlink1)
-
-class MAVLink_play_tune_message(MAVLink_message):
-        '''
-        Control vehicle tone generation (buzzer)
-        '''
-        id = MAVLINK_MSG_ID_PLAY_TUNE
-        name = 'PLAY_TUNE'
-        fieldnames = ['target_system', 'target_component', 'tune']
-        ordered_fieldnames = ['target_system', 'target_component', 'tune']
-        fieldtypes = ['uint8_t', 'uint8_t', 'char']
-        format = '<BB30s'
-        native_format = bytearray('<BBc', 'ascii')
-        orders = [0, 1, 2]
-        lengths = [1, 1, 1]
-        array_lengths = [0, 0, 30]
-        crc_extra = 187
-        unpacker = struct.Struct('<BB30s')
-
-        def __init__(self, target_system, target_component, tune):
-                MAVLink_message.__init__(self, MAVLink_play_tune_message.id, MAVLink_play_tune_message.name)
-                self._fieldnames = MAVLink_play_tune_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.tune = tune
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 187, struct.pack('<BB30s', self.target_system, self.target_component, self.tune), force_mavlink1=force_mavlink1)
-
-class MAVLink_camera_information_message(MAVLink_message):
-        '''
-        Information about a camera
-        '''
-        id = MAVLINK_MSG_ID_CAMERA_INFORMATION
-        name = 'CAMERA_INFORMATION'
-        fieldnames = ['time_boot_ms', 'vendor_name', 'model_name', 'firmware_version', 'focal_length', 'sensor_size_h', 'sensor_size_v', 'resolution_h', 'resolution_v', 'lens_id', 'flags', 'cam_definition_version', 'cam_definition_uri']
-        ordered_fieldnames = ['time_boot_ms', 'firmware_version', 'focal_length', 'sensor_size_h', 'sensor_size_v', 'flags', 'resolution_h', 'resolution_v', 'cam_definition_version', 'vendor_name', 'model_name', 'lens_id', 'cam_definition_uri']
-        fieldtypes = ['uint32_t', 'uint8_t', 'uint8_t', 'uint32_t', 'float', 'float', 'float', 'uint16_t', 'uint16_t', 'uint8_t', 'uint32_t', 'uint16_t', 'char']
-        format = '<IIfffIHHH32B32BB140s'
-        native_format = bytearray('<IIfffIHHHBBBc', 'ascii')
-        orders = [0, 9, 10, 1, 2, 3, 4, 6, 7, 11, 5, 8, 12]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 32, 32, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 32, 0, 140]
-        crc_extra = 92
-        unpacker = struct.Struct('<IIfffIHHH32B32BB140s')
-
-        def __init__(self, time_boot_ms, vendor_name, model_name, firmware_version, focal_length, sensor_size_h, sensor_size_v, resolution_h, resolution_v, lens_id, flags, cam_definition_version, cam_definition_uri):
-                MAVLink_message.__init__(self, MAVLink_camera_information_message.id, MAVLink_camera_information_message.name)
-                self._fieldnames = MAVLink_camera_information_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.vendor_name = vendor_name
-                self.model_name = model_name
-                self.firmware_version = firmware_version
-                self.focal_length = focal_length
-                self.sensor_size_h = sensor_size_h
-                self.sensor_size_v = sensor_size_v
-                self.resolution_h = resolution_h
-                self.resolution_v = resolution_v
-                self.lens_id = lens_id
-                self.flags = flags
-                self.cam_definition_version = cam_definition_version
-                self.cam_definition_uri = cam_definition_uri
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 92, struct.pack('<IIfffIHHH32B32BB140s', self.time_boot_ms, self.firmware_version, self.focal_length, self.sensor_size_h, self.sensor_size_v, self.flags, self.resolution_h, self.resolution_v, self.cam_definition_version, self.vendor_name[0], self.vendor_name[1], self.vendor_name[2], self.vendor_name[3], self.vendor_name[4], self.vendor_name[5], self.vendor_name[6], self.vendor_name[7], self.vendor_name[8], self.vendor_name[9], self.vendor_name[10], self.vendor_name[11], self.vendor_name[12], self.vendor_name[13], self.vendor_name[14], self.vendor_name[15], self.vendor_name[16], self.vendor_name[17], self.vendor_name[18], self.vendor_name[19], self.vendor_name[20], self.vendor_name[21], self.vendor_name[22], self.vendor_name[23], self.vendor_name[24], self.vendor_name[25], self.vendor_name[26], self.vendor_name[27], self.vendor_name[28], self.vendor_name[29], self.vendor_name[30], self.vendor_name[31], self.model_name[0], self.model_name[1], self.model_name[2], self.model_name[3], self.model_name[4], self.model_name[5], self.model_name[6], self.model_name[7], self.model_name[8], self.model_name[9], self.model_name[10], self.model_name[11], self.model_name[12], self.model_name[13], self.model_name[14], self.model_name[15], self.model_name[16], self.model_name[17], self.model_name[18], self.model_name[19], self.model_name[20], self.model_name[21], self.model_name[22], self.model_name[23], self.model_name[24], self.model_name[25], self.model_name[26], self.model_name[27], self.model_name[28], self.model_name[29], self.model_name[30], self.model_name[31], self.lens_id, self.cam_definition_uri), force_mavlink1=force_mavlink1)
-
-class MAVLink_camera_settings_message(MAVLink_message):
-        '''
-        Settings of a camera, can be requested using
-        MAV_CMD_REQUEST_CAMERA_SETTINGS.
-        '''
-        id = MAVLINK_MSG_ID_CAMERA_SETTINGS
-        name = 'CAMERA_SETTINGS'
-        fieldnames = ['time_boot_ms', 'mode_id']
-        ordered_fieldnames = ['time_boot_ms', 'mode_id']
-        fieldtypes = ['uint32_t', 'uint8_t']
-        format = '<IB'
-        native_format = bytearray('<IB', 'ascii')
-        orders = [0, 1]
-        lengths = [1, 1]
-        array_lengths = [0, 0]
-        crc_extra = 146
-        unpacker = struct.Struct('<IB')
-
-        def __init__(self, time_boot_ms, mode_id):
-                MAVLink_message.__init__(self, MAVLink_camera_settings_message.id, MAVLink_camera_settings_message.name)
-                self._fieldnames = MAVLink_camera_settings_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.mode_id = mode_id
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 146, struct.pack('<IB', self.time_boot_ms, self.mode_id), force_mavlink1=force_mavlink1)
-
-class MAVLink_storage_information_message(MAVLink_message):
-        '''
-        Information about a storage medium.
-        '''
-        id = MAVLINK_MSG_ID_STORAGE_INFORMATION
-        name = 'STORAGE_INFORMATION'
-        fieldnames = ['time_boot_ms', 'storage_id', 'storage_count', 'status', 'total_capacity', 'used_capacity', 'available_capacity', 'read_speed', 'write_speed']
-        ordered_fieldnames = ['time_boot_ms', 'total_capacity', 'used_capacity', 'available_capacity', 'read_speed', 'write_speed', 'storage_id', 'storage_count', 'status']
-        fieldtypes = ['uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
-        format = '<IfffffBBB'
-        native_format = bytearray('<IfffffBBB', 'ascii')
-        orders = [0, 6, 7, 8, 1, 2, 3, 4, 5]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 179
-        unpacker = struct.Struct('<IfffffBBB')
-
-        def __init__(self, time_boot_ms, storage_id, storage_count, status, total_capacity, used_capacity, available_capacity, read_speed, write_speed):
-                MAVLink_message.__init__(self, MAVLink_storage_information_message.id, MAVLink_storage_information_message.name)
-                self._fieldnames = MAVLink_storage_information_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.storage_id = storage_id
-                self.storage_count = storage_count
-                self.status = status
-                self.total_capacity = total_capacity
-                self.used_capacity = used_capacity
-                self.available_capacity = available_capacity
-                self.read_speed = read_speed
-                self.write_speed = write_speed
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 179, struct.pack('<IfffffBBB', self.time_boot_ms, self.total_capacity, self.used_capacity, self.available_capacity, self.read_speed, self.write_speed, self.storage_id, self.storage_count, self.status), force_mavlink1=force_mavlink1)
-
-class MAVLink_camera_capture_status_message(MAVLink_message):
-        '''
-        Information about the status of a capture.
-        '''
-        id = MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS
-        name = 'CAMERA_CAPTURE_STATUS'
-        fieldnames = ['time_boot_ms', 'image_status', 'video_status', 'image_interval', 'recording_time_ms', 'available_capacity']
-        ordered_fieldnames = ['time_boot_ms', 'image_interval', 'recording_time_ms', 'available_capacity', 'image_status', 'video_status']
-        fieldtypes = ['uint32_t', 'uint8_t', 'uint8_t', 'float', 'uint32_t', 'float']
-        format = '<IfIfBB'
-        native_format = bytearray('<IfIfBB', 'ascii')
-        orders = [0, 4, 5, 1, 2, 3]
-        lengths = [1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0]
-        crc_extra = 12
-        unpacker = struct.Struct('<IfIfBB')
-
-        def __init__(self, time_boot_ms, image_status, video_status, image_interval, recording_time_ms, available_capacity):
-                MAVLink_message.__init__(self, MAVLink_camera_capture_status_message.id, MAVLink_camera_capture_status_message.name)
-                self._fieldnames = MAVLink_camera_capture_status_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.image_status = image_status
-                self.video_status = video_status
-                self.image_interval = image_interval
-                self.recording_time_ms = recording_time_ms
-                self.available_capacity = available_capacity
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 12, struct.pack('<IfIfBB', self.time_boot_ms, self.image_interval, self.recording_time_ms, self.available_capacity, self.image_status, self.video_status), force_mavlink1=force_mavlink1)
-
-class MAVLink_camera_image_captured_message(MAVLink_message):
-        '''
-        Information about a captured image
-        '''
-        id = MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED
-        name = 'CAMERA_IMAGE_CAPTURED'
-        fieldnames = ['time_boot_ms', 'time_utc', 'camera_id', 'lat', 'lon', 'alt', 'relative_alt', 'q', 'image_index', 'capture_result', 'file_url']
-        ordered_fieldnames = ['time_utc', 'time_boot_ms', 'lat', 'lon', 'alt', 'relative_alt', 'q', 'image_index', 'camera_id', 'capture_result', 'file_url']
-        fieldtypes = ['uint32_t', 'uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'float', 'int32_t', 'int8_t', 'char']
-        format = '<QIiiii4fiBb205s'
-        native_format = bytearray('<QIiiiifiBbc', 'ascii')
-        orders = [1, 0, 8, 2, 3, 4, 5, 6, 7, 9, 10]
-        lengths = [1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 205]
-        crc_extra = 133
-        unpacker = struct.Struct('<QIiiii4fiBb205s')
-
-        def __init__(self, time_boot_ms, time_utc, camera_id, lat, lon, alt, relative_alt, q, image_index, capture_result, file_url):
-                MAVLink_message.__init__(self, MAVLink_camera_image_captured_message.id, MAVLink_camera_image_captured_message.name)
-                self._fieldnames = MAVLink_camera_image_captured_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.time_utc = time_utc
-                self.camera_id = camera_id
-                self.lat = lat
-                self.lon = lon
-                self.alt = alt
-                self.relative_alt = relative_alt
-                self.q = q
-                self.image_index = image_index
-                self.capture_result = capture_result
-                self.file_url = file_url
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 133, struct.pack('<QIiiii4fiBb205s', self.time_utc, self.time_boot_ms, self.lat, self.lon, self.alt, self.relative_alt, self.q[0], self.q[1], self.q[2], self.q[3], self.image_index, self.camera_id, self.capture_result, self.file_url), force_mavlink1=force_mavlink1)
-
-class MAVLink_flight_information_message(MAVLink_message):
-        '''
-        Information about flight since last arming.
-        '''
-        id = MAVLINK_MSG_ID_FLIGHT_INFORMATION
-        name = 'FLIGHT_INFORMATION'
-        fieldnames = ['time_boot_ms', 'arming_time_utc', 'takeoff_time_utc', 'flight_uuid']
-        ordered_fieldnames = ['arming_time_utc', 'takeoff_time_utc', 'flight_uuid', 'time_boot_ms']
-        fieldtypes = ['uint32_t', 'uint64_t', 'uint64_t', 'uint64_t']
-        format = '<QQQI'
-        native_format = bytearray('<QQQI', 'ascii')
-        orders = [3, 0, 1, 2]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0]
-        crc_extra = 49
-        unpacker = struct.Struct('<QQQI')
-
-        def __init__(self, time_boot_ms, arming_time_utc, takeoff_time_utc, flight_uuid):
-                MAVLink_message.__init__(self, MAVLink_flight_information_message.id, MAVLink_flight_information_message.name)
-                self._fieldnames = MAVLink_flight_information_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.arming_time_utc = arming_time_utc
-                self.takeoff_time_utc = takeoff_time_utc
-                self.flight_uuid = flight_uuid
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 49, struct.pack('<QQQI', self.arming_time_utc, self.takeoff_time_utc, self.flight_uuid, self.time_boot_ms), force_mavlink1=force_mavlink1)
-
-class MAVLink_mount_orientation_message(MAVLink_message):
-        '''
-        Orientation of a mount
-        '''
-        id = MAVLINK_MSG_ID_MOUNT_ORIENTATION
-        name = 'MOUNT_ORIENTATION'
-        fieldnames = ['time_boot_ms', 'roll', 'pitch', 'yaw', 'yaw_absolute']
-        ordered_fieldnames = ['time_boot_ms', 'roll', 'pitch', 'yaw', 'yaw_absolute']
-        fieldtypes = ['uint32_t', 'float', 'float', 'float', 'float']
-        format = '<Iffff'
-        native_format = bytearray('<Iffff', 'ascii')
-        orders = [0, 1, 2, 3, 4]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0]
-        crc_extra = 26
-        unpacker = struct.Struct('<Iffff')
-
-        def __init__(self, time_boot_ms, roll, pitch, yaw, yaw_absolute=0):
-                MAVLink_message.__init__(self, MAVLink_mount_orientation_message.id, MAVLink_mount_orientation_message.name)
-                self._fieldnames = MAVLink_mount_orientation_message.fieldnames
-                self.time_boot_ms = time_boot_ms
-                self.roll = roll
-                self.pitch = pitch
-                self.yaw = yaw
-                self.yaw_absolute = yaw_absolute
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 26, struct.pack('<Iffff', self.time_boot_ms, self.roll, self.pitch, self.yaw, self.yaw_absolute), force_mavlink1=force_mavlink1)
-
-class MAVLink_logging_data_message(MAVLink_message):
-        '''
-        A message containing logged data (see also
-        MAV_CMD_LOGGING_START)
-        '''
-        id = MAVLINK_MSG_ID_LOGGING_DATA
-        name = 'LOGGING_DATA'
-        fieldnames = ['target_system', 'target_component', 'sequence', 'length', 'first_message_offset', 'data']
-        ordered_fieldnames = ['sequence', 'target_system', 'target_component', 'length', 'first_message_offset', 'data']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'uint8_t']
-        format = '<HBBBB249B'
-        native_format = bytearray('<HBBBBB', 'ascii')
-        orders = [1, 2, 0, 3, 4, 5]
-        lengths = [1, 1, 1, 1, 1, 249]
-        array_lengths = [0, 0, 0, 0, 0, 249]
-        crc_extra = 193
-        unpacker = struct.Struct('<HBBBB249B')
-
-        def __init__(self, target_system, target_component, sequence, length, first_message_offset, data):
-                MAVLink_message.__init__(self, MAVLink_logging_data_message.id, MAVLink_logging_data_message.name)
-                self._fieldnames = MAVLink_logging_data_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.sequence = sequence
-                self.length = length
-                self.first_message_offset = first_message_offset
-                self.data = data
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 193, struct.pack('<HBBBB249B', self.sequence, self.target_system, self.target_component, self.length, self.first_message_offset, self.data[0], self.data[1], self.data[2], self.data[3], self.data[4], self.data[5], self.data[6], self.data[7], self.data[8], self.data[9], self.data[10], self.data[11], self.data[12], self.data[13], self.data[14], self.data[15], self.data[16], self.data[17], self.data[18], self.data[19], self.data[20], self.data[21], self.data[22], self.data[23], self.data[24], self.data[25], self.data[26], self.data[27], self.data[28], self.data[29], self.data[30], self.data[31], self.data[32], self.data[33], self.data[34], self.data[35], self.data[36], self.data[37], self.data[38], self.data[39], self.data[40], self.data[41], self.data[42], self.data[43], self.data[44], self.data[45], self.data[46], self.data[47], self.data[48], self.data[49], self.data[50], self.data[51], self.data[52], self.data[53], self.data[54], self.data[55], self.data[56], self.data[57], self.data[58], self.data[59], self.data[60], self.data[61], self.data[62], self.data[63], self.data[64], self.data[65], self.data[66], self.data[67], self.data[68], self.data[69], self.data[70], self.data[71], self.data[72], self.data[73], self.data[74], self.data[75], self.data[76], self.data[77], self.data[78], self.data[79], self.data[80], self.data[81], self.data[82], self.data[83], self.data[84], self.data[85], self.data[86], self.data[87], self.data[88], self.data[89], self.data[90], self.data[91], self.data[92], self.data[93], self.data[94], self.data[95], self.data[96], self.data[97], self.data[98], self.data[99], self.data[100], self.data[101], self.data[102], self.data[103], self.data[104], self.data[105], self.data[106], self.data[107], self.data[108], self.data[109], self.data[110], self.data[111], self.data[112], self.data[113], self.data[114], self.data[115], self.data[116], self.data[117], self.data[118], self.data[119], self.data[120], self.data[121], self.data[122], self.data[123], self.data[124], self.data[125], self.data[126], self.data[127], self.data[128], self.data[129], self.data[130], self.data[131], self.data[132], self.data[133], self.data[134], self.data[135], self.data[136], self.data[137], self.data[138], self.data[139], self.data[140], self.data[141], self.data[142], self.data[143], self.data[144], self.data[145], self.data[146], self.data[147], self.data[148], self.data[149], self.data[150], self.data[151], self.data[152], self.data[153], self.data[154], self.data[155], self.data[156], self.data[157], self.data[158], self.data[159], self.data[160], self.data[161], self.data[162], self.data[163], self.data[164], self.data[165], self.data[166], self.data[167], self.data[168], self.data[169], self.data[170], self.data[171], self.data[172], self.data[173], self.data[174], self.data[175], self.data[176], self.data[177], self.data[178], self.data[179], self.data[180], self.data[181], self.data[182], self.data[183], self.data[184], self.data[185], self.data[186], self.data[187], self.data[188], self.data[189], self.data[190], self.data[191], self.data[192], self.data[193], self.data[194], self.data[195], self.data[196], self.data[197], self.data[198], self.data[199], self.data[200], self.data[201], self.data[202], self.data[203], self.data[204], self.data[205], self.data[206], self.data[207], self.data[208], self.data[209], self.data[210], self.data[211], self.data[212], self.data[213], self.data[214], self.data[215], self.data[216], self.data[217], self.data[218], self.data[219], self.data[220], self.data[221], self.data[222], self.data[223], self.data[224], self.data[225], self.data[226], self.data[227], self.data[228], self.data[229], self.data[230], self.data[231], self.data[232], self.data[233], self.data[234], self.data[235], self.data[236], self.data[237], self.data[238], self.data[239], self.data[240], self.data[241], self.data[242], self.data[243], self.data[244], self.data[245], self.data[246], self.data[247], self.data[248]), force_mavlink1=force_mavlink1)
-
-class MAVLink_logging_data_acked_message(MAVLink_message):
-        '''
-        A message containing logged data which requires a LOGGING_ACK
-        to be sent back
-        '''
-        id = MAVLINK_MSG_ID_LOGGING_DATA_ACKED
-        name = 'LOGGING_DATA_ACKED'
-        fieldnames = ['target_system', 'target_component', 'sequence', 'length', 'first_message_offset', 'data']
-        ordered_fieldnames = ['sequence', 'target_system', 'target_component', 'length', 'first_message_offset', 'data']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'uint8_t']
-        format = '<HBBBB249B'
-        native_format = bytearray('<HBBBBB', 'ascii')
-        orders = [1, 2, 0, 3, 4, 5]
-        lengths = [1, 1, 1, 1, 1, 249]
-        array_lengths = [0, 0, 0, 0, 0, 249]
-        crc_extra = 35
-        unpacker = struct.Struct('<HBBBB249B')
-
-        def __init__(self, target_system, target_component, sequence, length, first_message_offset, data):
-                MAVLink_message.__init__(self, MAVLink_logging_data_acked_message.id, MAVLink_logging_data_acked_message.name)
-                self._fieldnames = MAVLink_logging_data_acked_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.sequence = sequence
-                self.length = length
-                self.first_message_offset = first_message_offset
-                self.data = data
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 35, struct.pack('<HBBBB249B', self.sequence, self.target_system, self.target_component, self.length, self.first_message_offset, self.data[0], self.data[1], self.data[2], self.data[3], self.data[4], self.data[5], self.data[6], self.data[7], self.data[8], self.data[9], self.data[10], self.data[11], self.data[12], self.data[13], self.data[14], self.data[15], self.data[16], self.data[17], self.data[18], self.data[19], self.data[20], self.data[21], self.data[22], self.data[23], self.data[24], self.data[25], self.data[26], self.data[27], self.data[28], self.data[29], self.data[30], self.data[31], self.data[32], self.data[33], self.data[34], self.data[35], self.data[36], self.data[37], self.data[38], self.data[39], self.data[40], self.data[41], self.data[42], self.data[43], self.data[44], self.data[45], self.data[46], self.data[47], self.data[48], self.data[49], self.data[50], self.data[51], self.data[52], self.data[53], self.data[54], self.data[55], self.data[56], self.data[57], self.data[58], self.data[59], self.data[60], self.data[61], self.data[62], self.data[63], self.data[64], self.data[65], self.data[66], self.data[67], self.data[68], self.data[69], self.data[70], self.data[71], self.data[72], self.data[73], self.data[74], self.data[75], self.data[76], self.data[77], self.data[78], self.data[79], self.data[80], self.data[81], self.data[82], self.data[83], self.data[84], self.data[85], self.data[86], self.data[87], self.data[88], self.data[89], self.data[90], self.data[91], self.data[92], self.data[93], self.data[94], self.data[95], self.data[96], self.data[97], self.data[98], self.data[99], self.data[100], self.data[101], self.data[102], self.data[103], self.data[104], self.data[105], self.data[106], self.data[107], self.data[108], self.data[109], self.data[110], self.data[111], self.data[112], self.data[113], self.data[114], self.data[115], self.data[116], self.data[117], self.data[118], self.data[119], self.data[120], self.data[121], self.data[122], self.data[123], self.data[124], self.data[125], self.data[126], self.data[127], self.data[128], self.data[129], self.data[130], self.data[131], self.data[132], self.data[133], self.data[134], self.data[135], self.data[136], self.data[137], self.data[138], self.data[139], self.data[140], self.data[141], self.data[142], self.data[143], self.data[144], self.data[145], self.data[146], self.data[147], self.data[148], self.data[149], self.data[150], self.data[151], self.data[152], self.data[153], self.data[154], self.data[155], self.data[156], self.data[157], self.data[158], self.data[159], self.data[160], self.data[161], self.data[162], self.data[163], self.data[164], self.data[165], self.data[166], self.data[167], self.data[168], self.data[169], self.data[170], self.data[171], self.data[172], self.data[173], self.data[174], self.data[175], self.data[176], self.data[177], self.data[178], self.data[179], self.data[180], self.data[181], self.data[182], self.data[183], self.data[184], self.data[185], self.data[186], self.data[187], self.data[188], self.data[189], self.data[190], self.data[191], self.data[192], self.data[193], self.data[194], self.data[195], self.data[196], self.data[197], self.data[198], self.data[199], self.data[200], self.data[201], self.data[202], self.data[203], self.data[204], self.data[205], self.data[206], self.data[207], self.data[208], self.data[209], self.data[210], self.data[211], self.data[212], self.data[213], self.data[214], self.data[215], self.data[216], self.data[217], self.data[218], self.data[219], self.data[220], self.data[221], self.data[222], self.data[223], self.data[224], self.data[225], self.data[226], self.data[227], self.data[228], self.data[229], self.data[230], self.data[231], self.data[232], self.data[233], self.data[234], self.data[235], self.data[236], self.data[237], self.data[238], self.data[239], self.data[240], self.data[241], self.data[242], self.data[243], self.data[244], self.data[245], self.data[246], self.data[247], self.data[248]), force_mavlink1=force_mavlink1)
-
-class MAVLink_logging_ack_message(MAVLink_message):
-        '''
-        An ack for a LOGGING_DATA_ACKED message
-        '''
-        id = MAVLINK_MSG_ID_LOGGING_ACK
-        name = 'LOGGING_ACK'
-        fieldnames = ['target_system', 'target_component', 'sequence']
-        ordered_fieldnames = ['sequence', 'target_system', 'target_component']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
-        format = '<HBB'
-        native_format = bytearray('<HBB', 'ascii')
-        orders = [1, 2, 0]
-        lengths = [1, 1, 1]
-        array_lengths = [0, 0, 0]
-        crc_extra = 14
-        unpacker = struct.Struct('<HBB')
-
-        def __init__(self, target_system, target_component, sequence):
-                MAVLink_message.__init__(self, MAVLink_logging_ack_message.id, MAVLink_logging_ack_message.name)
-                self._fieldnames = MAVLink_logging_ack_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.sequence = sequence
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 14, struct.pack('<HBB', self.sequence, self.target_system, self.target_component), force_mavlink1=force_mavlink1)
-
-class MAVLink_video_stream_information_message(MAVLink_message):
-        '''
-        Information about video stream
-        '''
-        id = MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION
-        name = 'VIDEO_STREAM_INFORMATION'
-        fieldnames = ['camera_id', 'status', 'framerate', 'resolution_h', 'resolution_v', 'bitrate', 'rotation', 'uri']
-        ordered_fieldnames = ['framerate', 'bitrate', 'resolution_h', 'resolution_v', 'rotation', 'camera_id', 'status', 'uri']
-        fieldtypes = ['uint8_t', 'uint8_t', 'float', 'uint16_t', 'uint16_t', 'uint32_t', 'uint16_t', 'char']
-        format = '<fIHHHBB230s'
-        native_format = bytearray('<fIHHHBBc', 'ascii')
-        orders = [5, 6, 0, 2, 3, 1, 4, 7]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 230]
-        crc_extra = 58
-        unpacker = struct.Struct('<fIHHHBB230s')
-
-        def __init__(self, camera_id, status, framerate, resolution_h, resolution_v, bitrate, rotation, uri):
-                MAVLink_message.__init__(self, MAVLink_video_stream_information_message.id, MAVLink_video_stream_information_message.name)
-                self._fieldnames = MAVLink_video_stream_information_message.fieldnames
-                self.camera_id = camera_id
-                self.status = status
-                self.framerate = framerate
-                self.resolution_h = resolution_h
-                self.resolution_v = resolution_v
-                self.bitrate = bitrate
-                self.rotation = rotation
-                self.uri = uri
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 58, struct.pack('<fIHHHBB230s', self.framerate, self.bitrate, self.resolution_h, self.resolution_v, self.rotation, self.camera_id, self.status, self.uri), force_mavlink1=force_mavlink1)
-
-class MAVLink_set_video_stream_settings_message(MAVLink_message):
-        '''
-        Message that sets video stream settings
-        '''
-        id = MAVLINK_MSG_ID_SET_VIDEO_STREAM_SETTINGS
-        name = 'SET_VIDEO_STREAM_SETTINGS'
-        fieldnames = ['target_system', 'target_component', 'camera_id', 'framerate', 'resolution_h', 'resolution_v', 'bitrate', 'rotation', 'uri']
-        ordered_fieldnames = ['framerate', 'bitrate', 'resolution_h', 'resolution_v', 'rotation', 'target_system', 'target_component', 'camera_id', 'uri']
-        fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'float', 'uint16_t', 'uint16_t', 'uint32_t', 'uint16_t', 'char']
-        format = '<fIHHHBBB230s'
-        native_format = bytearray('<fIHHHBBBc', 'ascii')
-        orders = [5, 6, 7, 0, 2, 3, 1, 4, 8]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 230]
-        crc_extra = 232
-        unpacker = struct.Struct('<fIHHHBBB230s')
-
-        def __init__(self, target_system, target_component, camera_id, framerate, resolution_h, resolution_v, bitrate, rotation, uri):
-                MAVLink_message.__init__(self, MAVLink_set_video_stream_settings_message.id, MAVLink_set_video_stream_settings_message.name)
-                self._fieldnames = MAVLink_set_video_stream_settings_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.camera_id = camera_id
-                self.framerate = framerate
-                self.resolution_h = resolution_h
-                self.resolution_v = resolution_v
-                self.bitrate = bitrate
-                self.rotation = rotation
-                self.uri = uri
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 232, struct.pack('<fIHHHBBB230s', self.framerate, self.bitrate, self.resolution_h, self.resolution_v, self.rotation, self.target_system, self.target_component, self.camera_id, self.uri), force_mavlink1=force_mavlink1)
-
-class MAVLink_wifi_config_ap_message(MAVLink_message):
-        '''
-        Configure AP SSID and Password.
-        '''
-        id = MAVLINK_MSG_ID_WIFI_CONFIG_AP
-        name = 'WIFI_CONFIG_AP'
-        fieldnames = ['ssid', 'password']
-        ordered_fieldnames = ['ssid', 'password']
-        fieldtypes = ['char', 'char']
-        format = '<32s64s'
-        native_format = bytearray('<cc', 'ascii')
-        orders = [0, 1]
-        lengths = [1, 1]
-        array_lengths = [32, 64]
-        crc_extra = 19
-        unpacker = struct.Struct('<32s64s')
-
-        def __init__(self, ssid, password):
-                MAVLink_message.__init__(self, MAVLink_wifi_config_ap_message.id, MAVLink_wifi_config_ap_message.name)
-                self._fieldnames = MAVLink_wifi_config_ap_message.fieldnames
-                self.ssid = ssid
-                self.password = password
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 19, struct.pack('<32s64s', self.ssid, self.password), force_mavlink1=force_mavlink1)
-
-class MAVLink_protocol_version_message(MAVLink_message):
-        '''
-        Version and capability of protocol version. This message is
-        the response to REQUEST_PROTOCOL_VERSION and is used as part
-        of the handshaking to establish which MAVLink version should
-        be used on the network. Every node should respond to
-        REQUEST_PROTOCOL_VERSION to enable the handshaking. Library
-        implementers should consider adding this into the default
-        decoding state machine to allow the protocol core to respond
-        directly.
-        '''
-        id = MAVLINK_MSG_ID_PROTOCOL_VERSION
-        name = 'PROTOCOL_VERSION'
-        fieldnames = ['version', 'min_version', 'max_version', 'spec_version_hash', 'library_version_hash']
-        ordered_fieldnames = ['version', 'min_version', 'max_version', 'spec_version_hash', 'library_version_hash']
-        fieldtypes = ['uint16_t', 'uint16_t', 'uint16_t', 'uint8_t', 'uint8_t']
-        format = '<HHH8B8B'
-        native_format = bytearray('<HHHBB', 'ascii')
-        orders = [0, 1, 2, 3, 4]
-        lengths = [1, 1, 1, 8, 8]
-        array_lengths = [0, 0, 0, 8, 8]
-        crc_extra = 217
-        unpacker = struct.Struct('<HHH8B8B')
-
-        def __init__(self, version, min_version, max_version, spec_version_hash, library_version_hash):
-                MAVLink_message.__init__(self, MAVLink_protocol_version_message.id, MAVLink_protocol_version_message.name)
-                self._fieldnames = MAVLink_protocol_version_message.fieldnames
-                self.version = version
-                self.min_version = min_version
-                self.max_version = max_version
-                self.spec_version_hash = spec_version_hash
-                self.library_version_hash = library_version_hash
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 217, struct.pack('<HHH8B8B', self.version, self.min_version, self.max_version, self.spec_version_hash[0], self.spec_version_hash[1], self.spec_version_hash[2], self.spec_version_hash[3], self.spec_version_hash[4], self.spec_version_hash[5], self.spec_version_hash[6], self.spec_version_hash[7], self.library_version_hash[0], self.library_version_hash[1], self.library_version_hash[2], self.library_version_hash[3], self.library_version_hash[4], self.library_version_hash[5], self.library_version_hash[6], self.library_version_hash[7]), force_mavlink1=force_mavlink1)
-
-class MAVLink_uavcan_node_status_message(MAVLink_message):
-        '''
-        General status information of an UAVCAN node. Please refer to
-        the definition of the UAVCAN message
-        "uavcan.protocol.NodeStatus" for the background information.
-        The UAVCAN specification is available at http://uavcan.org.
-        '''
-        id = MAVLINK_MSG_ID_UAVCAN_NODE_STATUS
-        name = 'UAVCAN_NODE_STATUS'
-        fieldnames = ['time_usec', 'uptime_sec', 'health', 'mode', 'sub_mode', 'vendor_specific_status_code']
-        ordered_fieldnames = ['time_usec', 'uptime_sec', 'vendor_specific_status_code', 'health', 'mode', 'sub_mode']
-        fieldtypes = ['uint64_t', 'uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint16_t']
-        format = '<QIHBBB'
-        native_format = bytearray('<QIHBBB', 'ascii')
-        orders = [0, 1, 3, 4, 5, 2]
-        lengths = [1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0]
-        crc_extra = 28
-        unpacker = struct.Struct('<QIHBBB')
-
-        def __init__(self, time_usec, uptime_sec, health, mode, sub_mode, vendor_specific_status_code):
-                MAVLink_message.__init__(self, MAVLink_uavcan_node_status_message.id, MAVLink_uavcan_node_status_message.name)
-                self._fieldnames = MAVLink_uavcan_node_status_message.fieldnames
-                self.time_usec = time_usec
-                self.uptime_sec = uptime_sec
-                self.health = health
-                self.mode = mode
-                self.sub_mode = sub_mode
-                self.vendor_specific_status_code = vendor_specific_status_code
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 28, struct.pack('<QIHBBB', self.time_usec, self.uptime_sec, self.vendor_specific_status_code, self.health, self.mode, self.sub_mode), force_mavlink1=force_mavlink1)
-
-class MAVLink_uavcan_node_info_message(MAVLink_message):
-        '''
-        General information describing a particular UAVCAN node.
-        Please refer to the definition of the UAVCAN service
-        "uavcan.protocol.GetNodeInfo" for the background information.
-        This message should be emitted by the system whenever a new
-        node appears online, or an existing node reboots.
-        Additionally, it can be emitted upon request from the other
-        end of the MAVLink channel (see MAV_CMD_UAVCAN_GET_NODE_INFO).
-        It is also not prohibited to emit this message unconditionally
-        at a low frequency. The UAVCAN specification is available at
-        http://uavcan.org.
-        '''
-        id = MAVLINK_MSG_ID_UAVCAN_NODE_INFO
-        name = 'UAVCAN_NODE_INFO'
-        fieldnames = ['time_usec', 'uptime_sec', 'name', 'hw_version_major', 'hw_version_minor', 'hw_unique_id', 'sw_version_major', 'sw_version_minor', 'sw_vcs_commit']
-        ordered_fieldnames = ['time_usec', 'uptime_sec', 'sw_vcs_commit', 'name', 'hw_version_major', 'hw_version_minor', 'hw_unique_id', 'sw_version_major', 'sw_version_minor']
-        fieldtypes = ['uint64_t', 'uint32_t', 'char', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint32_t']
-        format = '<QII80sBB16BBB'
-        native_format = bytearray('<QIIcBBBBB', 'ascii')
-        orders = [0, 1, 3, 4, 5, 6, 7, 8, 2]
-        lengths = [1, 1, 1, 1, 1, 1, 16, 1, 1]
-        array_lengths = [0, 0, 0, 80, 0, 0, 16, 0, 0]
-        crc_extra = 95
-        unpacker = struct.Struct('<QII80sBB16BBB')
-
-        def __init__(self, time_usec, uptime_sec, name, hw_version_major, hw_version_minor, hw_unique_id, sw_version_major, sw_version_minor, sw_vcs_commit):
-                MAVLink_message.__init__(self, MAVLink_uavcan_node_info_message.id, MAVLink_uavcan_node_info_message.name)
-                self._fieldnames = MAVLink_uavcan_node_info_message.fieldnames
-                self.time_usec = time_usec
-                self.uptime_sec = uptime_sec
-                self.name = name
-                self.hw_version_major = hw_version_major
-                self.hw_version_minor = hw_version_minor
-                self.hw_unique_id = hw_unique_id
-                self.sw_version_major = sw_version_major
-                self.sw_version_minor = sw_version_minor
-                self.sw_vcs_commit = sw_vcs_commit
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 95, struct.pack('<QII80sBB16BBB', self.time_usec, self.uptime_sec, self.sw_vcs_commit, self.name, self.hw_version_major, self.hw_version_minor, self.hw_unique_id[0], self.hw_unique_id[1], self.hw_unique_id[2], self.hw_unique_id[3], self.hw_unique_id[4], self.hw_unique_id[5], self.hw_unique_id[6], self.hw_unique_id[7], self.hw_unique_id[8], self.hw_unique_id[9], self.hw_unique_id[10], self.hw_unique_id[11], self.hw_unique_id[12], self.hw_unique_id[13], self.hw_unique_id[14], self.hw_unique_id[15], self.sw_version_major, self.sw_version_minor), force_mavlink1=force_mavlink1)
-
-class MAVLink_param_ext_request_read_message(MAVLink_message):
-        '''
-        Request to read the value of a parameter with the either the
-        param_id string id or param_index.
-        '''
-        id = MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ
-        name = 'PARAM_EXT_REQUEST_READ'
-        fieldnames = ['target_system', 'target_component', 'param_id', 'param_index']
-        ordered_fieldnames = ['param_index', 'target_system', 'target_component', 'param_id']
-        fieldtypes = ['uint8_t', 'uint8_t', 'char', 'int16_t']
-        format = '<hBB16s'
-        native_format = bytearray('<hBBc', 'ascii')
-        orders = [1, 2, 3, 0]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 16]
-        crc_extra = 243
-        unpacker = struct.Struct('<hBB16s')
-
-        def __init__(self, target_system, target_component, param_id, param_index):
-                MAVLink_message.__init__(self, MAVLink_param_ext_request_read_message.id, MAVLink_param_ext_request_read_message.name)
-                self._fieldnames = MAVLink_param_ext_request_read_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.param_id = param_id
-                self.param_index = param_index
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 243, struct.pack('<hBB16s', self.param_index, self.target_system, self.target_component, self.param_id), force_mavlink1=force_mavlink1)
-
-class MAVLink_param_ext_request_list_message(MAVLink_message):
-        '''
-        Request all parameters of this component. After this request,
-        all parameters are emitted.
-        '''
-        id = MAVLINK_MSG_ID_PARAM_EXT_REQUEST_LIST
-        name = 'PARAM_EXT_REQUEST_LIST'
-        fieldnames = ['target_system', 'target_component']
-        ordered_fieldnames = ['target_system', 'target_component']
-        fieldtypes = ['uint8_t', 'uint8_t']
-        format = '<BB'
-        native_format = bytearray('<BB', 'ascii')
-        orders = [0, 1]
-        lengths = [1, 1]
-        array_lengths = [0, 0]
-        crc_extra = 88
-        unpacker = struct.Struct('<BB')
-
-        def __init__(self, target_system, target_component):
-                MAVLink_message.__init__(self, MAVLink_param_ext_request_list_message.id, MAVLink_param_ext_request_list_message.name)
-                self._fieldnames = MAVLink_param_ext_request_list_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 88, struct.pack('<BB', self.target_system, self.target_component), force_mavlink1=force_mavlink1)
-
-class MAVLink_param_ext_value_message(MAVLink_message):
-        '''
-        Emit the value of a parameter. The inclusion of param_count
-        and param_index in the message allows the recipient to keep
-        track of received parameters and allows them to re-request
-        missing parameters after a loss or timeout.
-        '''
-        id = MAVLINK_MSG_ID_PARAM_EXT_VALUE
-        name = 'PARAM_EXT_VALUE'
-        fieldnames = ['param_id', 'param_value', 'param_type', 'param_count', 'param_index']
-        ordered_fieldnames = ['param_count', 'param_index', 'param_id', 'param_value', 'param_type']
-        fieldtypes = ['char', 'char', 'uint8_t', 'uint16_t', 'uint16_t']
-        format = '<HH16s128sB'
-        native_format = bytearray('<HHccB', 'ascii')
-        orders = [2, 3, 4, 0, 1]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 16, 128, 0]
-        crc_extra = 243
-        unpacker = struct.Struct('<HH16s128sB')
-
-        def __init__(self, param_id, param_value, param_type, param_count, param_index):
-                MAVLink_message.__init__(self, MAVLink_param_ext_value_message.id, MAVLink_param_ext_value_message.name)
-                self._fieldnames = MAVLink_param_ext_value_message.fieldnames
-                self.param_id = param_id
-                self.param_value = param_value
-                self.param_type = param_type
-                self.param_count = param_count
-                self.param_index = param_index
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 243, struct.pack('<HH16s128sB', self.param_count, self.param_index, self.param_id, self.param_value, self.param_type), force_mavlink1=force_mavlink1)
-
-class MAVLink_param_ext_set_message(MAVLink_message):
-        '''
-        Set a parameter value. In order to deal with message loss (and
-        retransmission of PARAM_EXT_SET), when setting a parameter
-        value and the new value is the same as the current value, you
-        will immediately get a PARAM_ACK_ACCEPTED response. If the
-        current state is PARAM_ACK_IN_PROGRESS, you will accordingly
-        receive a PARAM_ACK_IN_PROGRESS in response.
-        '''
-        id = MAVLINK_MSG_ID_PARAM_EXT_SET
-        name = 'PARAM_EXT_SET'
-        fieldnames = ['target_system', 'target_component', 'param_id', 'param_value', 'param_type']
-        ordered_fieldnames = ['target_system', 'target_component', 'param_id', 'param_value', 'param_type']
-        fieldtypes = ['uint8_t', 'uint8_t', 'char', 'char', 'uint8_t']
-        format = '<BB16s128sB'
-        native_format = bytearray('<BBccB', 'ascii')
-        orders = [0, 1, 2, 3, 4]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 16, 128, 0]
-        crc_extra = 78
-        unpacker = struct.Struct('<BB16s128sB')
-
-        def __init__(self, target_system, target_component, param_id, param_value, param_type):
-                MAVLink_message.__init__(self, MAVLink_param_ext_set_message.id, MAVLink_param_ext_set_message.name)
-                self._fieldnames = MAVLink_param_ext_set_message.fieldnames
-                self.target_system = target_system
-                self.target_component = target_component
-                self.param_id = param_id
-                self.param_value = param_value
-                self.param_type = param_type
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 78, struct.pack('<BB16s128sB', self.target_system, self.target_component, self.param_id, self.param_value, self.param_type), force_mavlink1=force_mavlink1)
-
-class MAVLink_param_ext_ack_message(MAVLink_message):
-        '''
-        Response from a PARAM_EXT_SET message.
-        '''
-        id = MAVLINK_MSG_ID_PARAM_EXT_ACK
-        name = 'PARAM_EXT_ACK'
-        fieldnames = ['param_id', 'param_value', 'param_type', 'param_result']
-        ordered_fieldnames = ['param_id', 'param_value', 'param_type', 'param_result']
-        fieldtypes = ['char', 'char', 'uint8_t', 'uint8_t']
-        format = '<16s128sBB'
-        native_format = bytearray('<ccBB', 'ascii')
-        orders = [0, 1, 2, 3]
-        lengths = [1, 1, 1, 1]
-        array_lengths = [16, 128, 0, 0]
-        crc_extra = 132
-        unpacker = struct.Struct('<16s128sBB')
-
-        def __init__(self, param_id, param_value, param_type, param_result):
-                MAVLink_message.__init__(self, MAVLink_param_ext_ack_message.id, MAVLink_param_ext_ack_message.name)
-                self._fieldnames = MAVLink_param_ext_ack_message.fieldnames
-                self.param_id = param_id
-                self.param_value = param_value
-                self.param_type = param_type
-                self.param_result = param_result
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 132, struct.pack('<16s128sBB', self.param_id, self.param_value, self.param_type, self.param_result), force_mavlink1=force_mavlink1)
-
-class MAVLink_obstacle_distance_message(MAVLink_message):
-        '''
-        Obstacle distances in front of the sensor, starting from the
-        left in increment degrees to the right
-        '''
-        id = MAVLINK_MSG_ID_OBSTACLE_DISTANCE
-        name = 'OBSTACLE_DISTANCE'
-        fieldnames = ['time_usec', 'sensor_type', 'distances', 'increment', 'min_distance', 'max_distance']
-        ordered_fieldnames = ['time_usec', 'distances', 'min_distance', 'max_distance', 'sensor_type', 'increment']
-        fieldtypes = ['uint64_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint16_t', 'uint16_t']
-        format = '<Q72HHHBB'
-        native_format = bytearray('<QHHHBB', 'ascii')
-        orders = [0, 4, 1, 5, 2, 3]
-        lengths = [1, 72, 1, 1, 1, 1]
-        array_lengths = [0, 72, 0, 0, 0, 0]
-        crc_extra = 23
-        unpacker = struct.Struct('<Q72HHHBB')
-
-        def __init__(self, time_usec, sensor_type, distances, increment, min_distance, max_distance):
-                MAVLink_message.__init__(self, MAVLink_obstacle_distance_message.id, MAVLink_obstacle_distance_message.name)
-                self._fieldnames = MAVLink_obstacle_distance_message.fieldnames
-                self.time_usec = time_usec
-                self.sensor_type = sensor_type
-                self.distances = distances
-                self.increment = increment
-                self.min_distance = min_distance
-                self.max_distance = max_distance
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 23, struct.pack('<Q72HHHBB', self.time_usec, self.distances[0], self.distances[1], self.distances[2], self.distances[3], self.distances[4], self.distances[5], self.distances[6], self.distances[7], self.distances[8], self.distances[9], self.distances[10], self.distances[11], self.distances[12], self.distances[13], self.distances[14], self.distances[15], self.distances[16], self.distances[17], self.distances[18], self.distances[19], self.distances[20], self.distances[21], self.distances[22], self.distances[23], self.distances[24], self.distances[25], self.distances[26], self.distances[27], self.distances[28], self.distances[29], self.distances[30], self.distances[31], self.distances[32], self.distances[33], self.distances[34], self.distances[35], self.distances[36], self.distances[37], self.distances[38], self.distances[39], self.distances[40], self.distances[41], self.distances[42], self.distances[43], self.distances[44], self.distances[45], self.distances[46], self.distances[47], self.distances[48], self.distances[49], self.distances[50], self.distances[51], self.distances[52], self.distances[53], self.distances[54], self.distances[55], self.distances[56], self.distances[57], self.distances[58], self.distances[59], self.distances[60], self.distances[61], self.distances[62], self.distances[63], self.distances[64], self.distances[65], self.distances[66], self.distances[67], self.distances[68], self.distances[69], self.distances[70], self.distances[71], self.min_distance, self.max_distance, self.sensor_type, self.increment), force_mavlink1=force_mavlink1)
-
-class MAVLink_odometry_message(MAVLink_message):
-        '''
-        Odometry message to communicate odometry information with an
-        external interface. Fits ROS REP 147 standard for aerial
-        vehicles (http://www.ros.org/reps/rep-0147.html).
-        '''
-        id = MAVLINK_MSG_ID_ODOMETRY
-        name = 'ODOMETRY'
-        fieldnames = ['time_usec', 'frame_id', 'child_frame_id', 'x', 'y', 'z', 'q', 'vx', 'vy', 'vz', 'rollspeed', 'pitchspeed', 'yawspeed', 'pose_covariance', 'twist_covariance']
-        ordered_fieldnames = ['time_usec', 'x', 'y', 'z', 'q', 'vx', 'vy', 'vz', 'rollspeed', 'pitchspeed', 'yawspeed', 'pose_covariance', 'twist_covariance', 'frame_id', 'child_frame_id']
-        fieldtypes = ['uint64_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
-        format = '<Qfff4fffffff21f21fBB'
-        native_format = bytearray('<QffffffffffffBB', 'ascii')
-        orders = [0, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        lengths = [1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 21, 21, 1, 1]
-        array_lengths = [0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 21, 21, 0, 0]
-        crc_extra = 58
-        unpacker = struct.Struct('<Qfff4fffffff21f21fBB')
-
-        def __init__(self, time_usec, frame_id, child_frame_id, x, y, z, q, vx, vy, vz, rollspeed, pitchspeed, yawspeed, pose_covariance, twist_covariance):
-                MAVLink_message.__init__(self, MAVLink_odometry_message.id, MAVLink_odometry_message.name)
-                self._fieldnames = MAVLink_odometry_message.fieldnames
-                self.time_usec = time_usec
-                self.frame_id = frame_id
-                self.child_frame_id = child_frame_id
-                self.x = x
-                self.y = y
-                self.z = z
-                self.q = q
-                self.vx = vx
-                self.vy = vy
-                self.vz = vz
-                self.rollspeed = rollspeed
-                self.pitchspeed = pitchspeed
-                self.yawspeed = yawspeed
-                self.pose_covariance = pose_covariance
-                self.twist_covariance = twist_covariance
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 58, struct.pack('<Qfff4fffffff21f21fBB', self.time_usec, self.x, self.y, self.z, self.q[0], self.q[1], self.q[2], self.q[3], self.vx, self.vy, self.vz, self.rollspeed, self.pitchspeed, self.yawspeed, self.pose_covariance[0], self.pose_covariance[1], self.pose_covariance[2], self.pose_covariance[3], self.pose_covariance[4], self.pose_covariance[5], self.pose_covariance[6], self.pose_covariance[7], self.pose_covariance[8], self.pose_covariance[9], self.pose_covariance[10], self.pose_covariance[11], self.pose_covariance[12], self.pose_covariance[13], self.pose_covariance[14], self.pose_covariance[15], self.pose_covariance[16], self.pose_covariance[17], self.pose_covariance[18], self.pose_covariance[19], self.pose_covariance[20], self.twist_covariance[0], self.twist_covariance[1], self.twist_covariance[2], self.twist_covariance[3], self.twist_covariance[4], self.twist_covariance[5], self.twist_covariance[6], self.twist_covariance[7], self.twist_covariance[8], self.twist_covariance[9], self.twist_covariance[10], self.twist_covariance[11], self.twist_covariance[12], self.twist_covariance[13], self.twist_covariance[14], self.twist_covariance[15], self.twist_covariance[16], self.twist_covariance[17], self.twist_covariance[18], self.twist_covariance[19], self.twist_covariance[20], self.frame_id, self.child_frame_id), force_mavlink1=force_mavlink1)
-
-class MAVLink_trajectory_representation_waypoints_message(MAVLink_message):
-        '''
-        Describe a trajectory using an array of up-to 5 waypoints in
-        the local frame.
-        '''
-        id = MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS
-        name = 'TRAJECTORY_REPRESENTATION_WAYPOINTS'
-        fieldnames = ['time_usec', 'valid_points', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z', 'acc_x', 'acc_y', 'acc_z', 'pos_yaw', 'vel_yaw']
-        ordered_fieldnames = ['time_usec', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z', 'acc_x', 'acc_y', 'acc_z', 'pos_yaw', 'vel_yaw', 'valid_points']
-        fieldtypes = ['uint64_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
-        format = '<Q5f5f5f5f5f5f5f5f5f5f5fB'
-        native_format = bytearray('<QfffffffffffB', 'ascii')
-        orders = [0, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-        lengths = [1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1]
-        array_lengths = [0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0]
-        crc_extra = 91
-        unpacker = struct.Struct('<Q5f5f5f5f5f5f5f5f5f5f5fB')
-
-        def __init__(self, time_usec, valid_points, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, acc_x, acc_y, acc_z, pos_yaw, vel_yaw):
-                MAVLink_message.__init__(self, MAVLink_trajectory_representation_waypoints_message.id, MAVLink_trajectory_representation_waypoints_message.name)
-                self._fieldnames = MAVLink_trajectory_representation_waypoints_message.fieldnames
-                self.time_usec = time_usec
-                self.valid_points = valid_points
-                self.pos_x = pos_x
-                self.pos_y = pos_y
-                self.pos_z = pos_z
-                self.vel_x = vel_x
-                self.vel_y = vel_y
-                self.vel_z = vel_z
-                self.acc_x = acc_x
-                self.acc_y = acc_y
-                self.acc_z = acc_z
-                self.pos_yaw = pos_yaw
-                self.vel_yaw = vel_yaw
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 91, struct.pack('<Q5f5f5f5f5f5f5f5f5f5f5fB', self.time_usec, self.pos_x[0], self.pos_x[1], self.pos_x[2], self.pos_x[3], self.pos_x[4], self.pos_y[0], self.pos_y[1], self.pos_y[2], self.pos_y[3], self.pos_y[4], self.pos_z[0], self.pos_z[1], self.pos_z[2], self.pos_z[3], self.pos_z[4], self.vel_x[0], self.vel_x[1], self.vel_x[2], self.vel_x[3], self.vel_x[4], self.vel_y[0], self.vel_y[1], self.vel_y[2], self.vel_y[3], self.vel_y[4], self.vel_z[0], self.vel_z[1], self.vel_z[2], self.vel_z[3], self.vel_z[4], self.acc_x[0], self.acc_x[1], self.acc_x[2], self.acc_x[3], self.acc_x[4], self.acc_y[0], self.acc_y[1], self.acc_y[2], self.acc_y[3], self.acc_y[4], self.acc_z[0], self.acc_z[1], self.acc_z[2], self.acc_z[3], self.acc_z[4], self.pos_yaw[0], self.pos_yaw[1], self.pos_yaw[2], self.pos_yaw[3], self.pos_yaw[4], self.vel_yaw[0], self.vel_yaw[1], self.vel_yaw[2], self.vel_yaw[3], self.vel_yaw[4], self.valid_points), force_mavlink1=force_mavlink1)
-
-class MAVLink_trajectory_representation_bezier_message(MAVLink_message):
-        '''
-        Describe a trajectory using an array of up-to 5 bezier points
-        in the local frame.
-        '''
-        id = MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER
-        name = 'TRAJECTORY_REPRESENTATION_BEZIER'
-        fieldnames = ['time_usec', 'valid_points', 'pos_x', 'pos_y', 'pos_z', 'delta', 'pos_yaw']
-        ordered_fieldnames = ['time_usec', 'pos_x', 'pos_y', 'pos_z', 'delta', 'pos_yaw', 'valid_points']
-        fieldtypes = ['uint64_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
-        format = '<Q5f5f5f5f5fB'
-        native_format = bytearray('<QfffffB', 'ascii')
-        orders = [0, 6, 1, 2, 3, 4, 5]
-        lengths = [1, 5, 5, 5, 5, 5, 1]
-        array_lengths = [0, 5, 5, 5, 5, 5, 0]
-        crc_extra = 231
-        unpacker = struct.Struct('<Q5f5f5f5f5fB')
-
-        def __init__(self, time_usec, valid_points, pos_x, pos_y, pos_z, delta, pos_yaw):
-                MAVLink_message.__init__(self, MAVLink_trajectory_representation_bezier_message.id, MAVLink_trajectory_representation_bezier_message.name)
-                self._fieldnames = MAVLink_trajectory_representation_bezier_message.fieldnames
-                self.time_usec = time_usec
-                self.valid_points = valid_points
-                self.pos_x = pos_x
-                self.pos_y = pos_y
-                self.pos_z = pos_z
-                self.delta = delta
-                self.pos_yaw = pos_yaw
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 231, struct.pack('<Q5f5f5f5f5fB', self.time_usec, self.pos_x[0], self.pos_x[1], self.pos_x[2], self.pos_x[3], self.pos_x[4], self.pos_y[0], self.pos_y[1], self.pos_y[2], self.pos_y[3], self.pos_y[4], self.pos_z[0], self.pos_z[1], self.pos_z[2], self.pos_z[3], self.pos_z[4], self.delta[0], self.delta[1], self.delta[2], self.delta[3], self.delta[4], self.pos_yaw[0], self.pos_yaw[1], self.pos_yaw[2], self.pos_yaw[3], self.pos_yaw[4], self.valid_points), force_mavlink1=force_mavlink1)
-
 
 mavlink_map = {
         MAVLINK_MSG_ID_NODE_REALTIME_INFO : MAVLink_node_realtime_info_message,
@@ -9002,34 +8026,6 @@ mavlink_map = {
         MAVLINK_MSG_ID_NAMED_VALUE_INT : MAVLink_named_value_int_message,
         MAVLINK_MSG_ID_STATUSTEXT : MAVLink_statustext_message,
         MAVLINK_MSG_ID_DEBUG : MAVLink_debug_message,
-        MAVLINK_MSG_ID_SETUP_SIGNING : MAVLink_setup_signing_message,
-        MAVLINK_MSG_ID_BUTTON_CHANGE : MAVLink_button_change_message,
-        MAVLINK_MSG_ID_PLAY_TUNE : MAVLink_play_tune_message,
-        MAVLINK_MSG_ID_CAMERA_INFORMATION : MAVLink_camera_information_message,
-        MAVLINK_MSG_ID_CAMERA_SETTINGS : MAVLink_camera_settings_message,
-        MAVLINK_MSG_ID_STORAGE_INFORMATION : MAVLink_storage_information_message,
-        MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS : MAVLink_camera_capture_status_message,
-        MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED : MAVLink_camera_image_captured_message,
-        MAVLINK_MSG_ID_FLIGHT_INFORMATION : MAVLink_flight_information_message,
-        MAVLINK_MSG_ID_MOUNT_ORIENTATION : MAVLink_mount_orientation_message,
-        MAVLINK_MSG_ID_LOGGING_DATA : MAVLink_logging_data_message,
-        MAVLINK_MSG_ID_LOGGING_DATA_ACKED : MAVLink_logging_data_acked_message,
-        MAVLINK_MSG_ID_LOGGING_ACK : MAVLink_logging_ack_message,
-        MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION : MAVLink_video_stream_information_message,
-        MAVLINK_MSG_ID_SET_VIDEO_STREAM_SETTINGS : MAVLink_set_video_stream_settings_message,
-        MAVLINK_MSG_ID_WIFI_CONFIG_AP : MAVLink_wifi_config_ap_message,
-        MAVLINK_MSG_ID_PROTOCOL_VERSION : MAVLink_protocol_version_message,
-        MAVLINK_MSG_ID_UAVCAN_NODE_STATUS : MAVLink_uavcan_node_status_message,
-        MAVLINK_MSG_ID_UAVCAN_NODE_INFO : MAVLink_uavcan_node_info_message,
-        MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ : MAVLink_param_ext_request_read_message,
-        MAVLINK_MSG_ID_PARAM_EXT_REQUEST_LIST : MAVLink_param_ext_request_list_message,
-        MAVLINK_MSG_ID_PARAM_EXT_VALUE : MAVLink_param_ext_value_message,
-        MAVLINK_MSG_ID_PARAM_EXT_SET : MAVLink_param_ext_set_message,
-        MAVLINK_MSG_ID_PARAM_EXT_ACK : MAVLink_param_ext_ack_message,
-        MAVLINK_MSG_ID_OBSTACLE_DISTANCE : MAVLink_obstacle_distance_message,
-        MAVLINK_MSG_ID_ODOMETRY : MAVLink_odometry_message,
-        MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS : MAVLink_trajectory_representation_waypoints_message,
-        MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER : MAVLink_trajectory_representation_bezier_message,
 }
 
 class MAVError(Exception):
@@ -9096,7 +8092,7 @@ class MAVLink(object):
                 self.expected_length = HEADER_LEN_V1+2
                 self.have_prefix_error = False
                 self.robust_parsing = False
-                self.protocol_marker = 253
+                self.protocol_marker = 254
                 self.little_endian = True
                 self.crc_extra = True
                 self.sort_fields = True
@@ -9429,76 +8425,69 @@ class MAVLink(object):
                 m._crc = crc
                 m._header = MAVLink_header(msgId, incompat_flags, compat_flags, mlen, seq, srcSystem, srcComponent)
                 return m
-        def node_realtime_info_encode(self, odom_vaild, x, y, z, q0, q1, q2, q3, vx, vy, vz, remote_distance):
+        def node_realtime_info_encode(self, lps_time, odom_vaild, x, y, z, yaw, remote_distance):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 odom_vaild                : If odometry is vaild (type:uint8_t)
-                x                         : X Position [m] (type:float)
-                y                         : Y Position [m] (type:float)
-                z                         : Z Position [m] (type:float)
-                q0                        : q0*10000 [m] (type:int16_t)
-                q1                        : q1*10000 [m] (type:int16_t)
-                q2                        : q2*10000 [m] (type:int16_t)
-                q3                        : q3*10000 [m] (type:int16_t)
-                vx                        : X linear speed*1000 [m/s] (type:int16_t)
-                vy                        : Y linear speed*1000 [m/s] (type:int16_t)
-                vz                        : Z linear speed*1000 [m/s] (type:int16_t)
-                remote_distance           : Distance to Remote Drone*1000 [m] (type:int16_t)
+                x                         : X Position [mm] (type:float)
+                y                         : Y Position [mm] (type:float)
+                z                         : Z Position [mm] (type:float)
+                yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
+                remote_distance           : Distance to Remote Drone*1000 [m] (type:uint16_t)
 
                 '''
-                return MAVLink_node_realtime_info_message(odom_vaild, x, y, z, q0, q1, q2, q3, vx, vy, vz, remote_distance)
+                return MAVLink_node_realtime_info_message(lps_time, odom_vaild, x, y, z, yaw, remote_distance)
 
-        def node_realtime_info_send(self, odom_vaild, x, y, z, q0, q1, q2, q3, vx, vy, vz, remote_distance, force_mavlink1=False):
+        def node_realtime_info_send(self, lps_time, odom_vaild, x, y, z, yaw, remote_distance, force_mavlink1=False):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 odom_vaild                : If odometry is vaild (type:uint8_t)
-                x                         : X Position [m] (type:float)
-                y                         : Y Position [m] (type:float)
-                z                         : Z Position [m] (type:float)
-                q0                        : q0*10000 [m] (type:int16_t)
-                q1                        : q1*10000 [m] (type:int16_t)
-                q2                        : q2*10000 [m] (type:int16_t)
-                q3                        : q3*10000 [m] (type:int16_t)
-                vx                        : X linear speed*1000 [m/s] (type:int16_t)
-                vy                        : Y linear speed*1000 [m/s] (type:int16_t)
-                vz                        : Z linear speed*1000 [m/s] (type:int16_t)
-                remote_distance           : Distance to Remote Drone*1000 [m] (type:int16_t)
+                x                         : X Position [mm] (type:float)
+                y                         : Y Position [mm] (type:float)
+                z                         : Z Position [mm] (type:float)
+                yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
+                remote_distance           : Distance to Remote Drone*1000 [m] (type:uint16_t)
 
                 '''
-                return self.send(self.node_realtime_info_encode(odom_vaild, x, y, z, q0, q1, q2, q3, vx, vy, vz, remote_distance), force_mavlink1=force_mavlink1)
+                return self.send(self.node_realtime_info_encode(lps_time, odom_vaild, x, y, z, yaw, remote_distance), force_mavlink1=force_mavlink1)
 
-        def node_relative_fused_encode(self, target_id, rel_x, rel_y, rel_z, rel_yaw_offset):
+        def node_relative_fused_encode(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 target_id                 : Target ID of drone (type:uint8_t)
                 rel_x                     : Relative X Position*1000 [m] (type:int16_t)
                 rel_y                     : Relative Y Position*1000 [m] (type:int16_t)
                 rel_z                     : Relative Z Position*1000 [m] (type:int16_t)
-                rel_yaw_offset            : Relative Yaw coorinate offset *10 [deg] (type:int16_t)
+                rel_yaw_offset            : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
 
                 '''
-                return MAVLink_node_relative_fused_message(target_id, rel_x, rel_y, rel_z, rel_yaw_offset)
+                return MAVLink_node_relative_fused_message(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset)
 
-        def node_relative_fused_send(self, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, force_mavlink1=False):
+        def node_relative_fused_send(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, force_mavlink1=False):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 target_id                 : Target ID of drone (type:uint8_t)
                 rel_x                     : Relative X Position*1000 [m] (type:int16_t)
                 rel_y                     : Relative Y Position*1000 [m] (type:int16_t)
                 rel_z                     : Relative Z Position*1000 [m] (type:int16_t)
-                rel_yaw_offset            : Relative Yaw coorinate offset *10 [deg] (type:int16_t)
+                rel_yaw_offset            : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
 
                 '''
-                return self.send(self.node_relative_fused_encode(target_id, rel_x, rel_y, rel_z, rel_yaw_offset), force_mavlink1=force_mavlink1)
+                return self.send(self.node_relative_fused_encode(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset), force_mavlink1=force_mavlink1)
 
-        def swarm_remote_command_encode(self, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10):
+        def swarm_remote_command_encode(self, lps_time, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 target_id                 : Target ID of drone (type:int8_t)
                 command_type              : Onboard command type [m] (type:uint8_t)
                 param1                    : param1 [m] (type:int32_t)
@@ -9513,12 +8502,13 @@ class MAVLink(object):
                 param10                   : param10 [m] (type:int32_t)
 
                 '''
-                return MAVLink_swarm_remote_command_message(target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
+                return MAVLink_swarm_remote_command_message(lps_time, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
 
-        def swarm_remote_command_send(self, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, force_mavlink1=False):
+        def swarm_remote_command_send(self, lps_time, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, force_mavlink1=False):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 target_id                 : Target ID of drone (type:int8_t)
                 command_type              : Onboard command type [m] (type:uint8_t)
                 param1                    : param1 [m] (type:int32_t)
@@ -9533,50 +8523,41 @@ class MAVLink(object):
                 param10                   : param10 [m] (type:int32_t)
 
                 '''
-                return self.send(self.swarm_remote_command_encode(target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10), force_mavlink1=force_mavlink1)
+                return self.send(self.swarm_remote_command_encode(lps_time, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10), force_mavlink1=force_mavlink1)
 
-        def node_detected_encode(self, target_id, x, y, z, corx, cory, corz, q0, q1, q2, q3):
+        def node_detected_encode(self, lps_time, target_id, x, y, z, yaw):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 target_id                 : Target ID of drone (type:int8_t)
                 x                         : Relative X Position*1000 [m] (type:int16_t)
                 y                         : Relative Y Position*1000 [m] (type:int16_t)
                 z                         : Relative Z Position*1000 [m] (type:int16_t)
-                corx                      : Relative X Position Corvariance*1000 [m] (type:int16_t)
-                cory                      : Relative X Position Corvariance*1000 [m] (type:int16_t)
-                corz                      : Relative X Position Corvariance*1000 [m] (type:int16_t)
-                q0                        : Relative QUAT W*10000 [m] (type:int16_t)
-                q1                        : Relative QUAT X*10000 [m] (type:int16_t)
-                q2                        : Relative QUAT Y*10000 [m] (type:int16_t)
-                q3                        : Relative QUAT Z*10000 [m] (type:int16_t)
+                yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
 
                 '''
-                return MAVLink_node_detected_message(target_id, x, y, z, corx, cory, corz, q0, q1, q2, q3)
+                return MAVLink_node_detected_message(lps_time, target_id, x, y, z, yaw)
 
-        def node_detected_send(self, target_id, x, y, z, corx, cory, corz, q0, q1, q2, q3, force_mavlink1=False):
+        def node_detected_send(self, lps_time, target_id, x, y, z, yaw, force_mavlink1=False):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 target_id                 : Target ID of drone (type:int8_t)
                 x                         : Relative X Position*1000 [m] (type:int16_t)
                 y                         : Relative Y Position*1000 [m] (type:int16_t)
                 z                         : Relative Z Position*1000 [m] (type:int16_t)
-                corx                      : Relative X Position Corvariance*1000 [m] (type:int16_t)
-                cory                      : Relative X Position Corvariance*1000 [m] (type:int16_t)
-                corz                      : Relative X Position Corvariance*1000 [m] (type:int16_t)
-                q0                        : Relative QUAT W*10000 [m] (type:int16_t)
-                q1                        : Relative QUAT X*10000 [m] (type:int16_t)
-                q2                        : Relative QUAT Y*10000 [m] (type:int16_t)
-                q3                        : Relative QUAT Z*10000 [m] (type:int16_t)
+                yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
 
                 '''
-                return self.send(self.node_detected_encode(target_id, x, y, z, corx, cory, corz, q0, q1, q2, q3), force_mavlink1=force_mavlink1)
+                return self.send(self.node_detected_encode(lps_time, target_id, x, y, z, yaw), force_mavlink1=force_mavlink1)
 
-        def drone_status_encode(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
+        def drone_status_encode(self, lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 flight_status             : Flight status of drone (type:uint8_t)
                 control_auth              : Control AUTH of drone (type:uint8_t)
                 commander_mode            : COMMANDER MODE (type:uint8_t)
@@ -9590,12 +8571,13 @@ class MAVLink(object):
                 z                         : Z Position [m] (type:float)
 
                 '''
-                return MAVLink_drone_status_message(flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z)
+                return MAVLink_drone_status_message(lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z)
 
-        def drone_status_send(self, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, force_mavlink1=False):
+        def drone_status_send(self, lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, force_mavlink1=False):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 flight_status             : Flight status of drone (type:uint8_t)
                 control_auth              : Control AUTH of drone (type:uint8_t)
                 commander_mode            : COMMANDER MODE (type:uint8_t)
@@ -9609,12 +8591,13 @@ class MAVLink(object):
                 z                         : Z Position [m] (type:float)
 
                 '''
-                return self.send(self.drone_status_encode(flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z), force_mavlink1=force_mavlink1)
+                return self.send(self.drone_status_encode(lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z), force_mavlink1=force_mavlink1)
 
-        def drone_odom_gt_encode(self, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz):
+        def drone_odom_gt_encode(self, lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 source_id                 : Source ID of drone (type:int8_t)
                 x                         : X Position*1000 [m] (type:int16_t)
                 y                         : Y Position*1000 [m] (type:int16_t)
@@ -9628,12 +8611,13 @@ class MAVLink(object):
                 vz                        : Velocity_Z*1000 [m] (type:int16_t)
 
                 '''
-                return MAVLink_drone_odom_gt_message(source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz)
+                return MAVLink_drone_odom_gt_message(lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz)
 
-        def drone_odom_gt_send(self, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz, force_mavlink1=False):
+        def drone_odom_gt_send(self, lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz, force_mavlink1=False):
                 '''
                 
 
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
                 source_id                 : Source ID of drone (type:int8_t)
                 x                         : X Position*1000 [m] (type:int16_t)
                 y                         : Y Position*1000 [m] (type:int16_t)
@@ -9647,7 +8631,7 @@ class MAVLink(object):
                 vz                        : Velocity_Z*1000 [m] (type:int16_t)
 
                 '''
-                return self.send(self.drone_odom_gt_encode(source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz), force_mavlink1=force_mavlink1)
+                return self.send(self.drone_odom_gt_encode(lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz), force_mavlink1=force_mavlink1)
 
         def heartbeat_encode(self, type, autopilot, base_mode, custom_mode, system_status, mavlink_version=3):
                 '''
@@ -10047,7 +9031,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.param_set_encode(target_system, target_component, param_id, param_value, param_type), force_mavlink1=force_mavlink1)
 
-        def gps_raw_int_encode(self, time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible, alt_ellipsoid=0, h_acc=0, v_acc=0, vel_acc=0, hdg_acc=0):
+        def gps_raw_int_encode(self, time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible):
                 '''
                 The global position, as returned by the Global Positioning System
                 (GPS). This is                 NOT the global position
@@ -10065,16 +9049,11 @@ class MAVLink(object):
                 vel                       : GPS ground speed. If unknown, set to: UINT16_MAX [cm/s] (type:uint16_t)
                 cog                       : Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX [cdeg] (type:uint16_t)
                 satellites_visible        : Number of satellites visible. If unknown, set to 255 (type:uint8_t)
-                alt_ellipsoid             : Altitude (above WGS84, EGM96 ellipsoid). Positive for up. [mm] (type:int32_t)
-                h_acc                     : Position uncertainty. Positive for up. [mm] (type:uint32_t)
-                v_acc                     : Altitude uncertainty. Positive for up. [mm] (type:uint32_t)
-                vel_acc                   : Speed uncertainty. Positive for up. [mm] (type:uint32_t)
-                hdg_acc                   : Heading / track uncertainty [degE5] (type:uint32_t)
 
                 '''
-                return MAVLink_gps_raw_int_message(time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible, alt_ellipsoid, h_acc, v_acc, vel_acc, hdg_acc)
+                return MAVLink_gps_raw_int_message(time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible)
 
-        def gps_raw_int_send(self, time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible, alt_ellipsoid=0, h_acc=0, v_acc=0, vel_acc=0, hdg_acc=0, force_mavlink1=False):
+        def gps_raw_int_send(self, time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible, force_mavlink1=False):
                 '''
                 The global position, as returned by the Global Positioning System
                 (GPS). This is                 NOT the global position
@@ -10092,14 +9071,9 @@ class MAVLink(object):
                 vel                       : GPS ground speed. If unknown, set to: UINT16_MAX [cm/s] (type:uint16_t)
                 cog                       : Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX [cdeg] (type:uint16_t)
                 satellites_visible        : Number of satellites visible. If unknown, set to 255 (type:uint8_t)
-                alt_ellipsoid             : Altitude (above WGS84, EGM96 ellipsoid). Positive for up. [mm] (type:int32_t)
-                h_acc                     : Position uncertainty. Positive for up. [mm] (type:uint32_t)
-                v_acc                     : Altitude uncertainty. Positive for up. [mm] (type:uint32_t)
-                vel_acc                   : Speed uncertainty. Positive for up. [mm] (type:uint32_t)
-                hdg_acc                   : Heading / track uncertainty [degE5] (type:uint32_t)
 
                 '''
-                return self.send(self.gps_raw_int_encode(time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible, alt_ellipsoid, h_acc, v_acc, vel_acc, hdg_acc), force_mavlink1=force_mavlink1)
+                return self.send(self.gps_raw_int_encode(time_usec, fix_type, lat, lon, alt, eph, epv, vel, cog, satellites_visible), force_mavlink1=force_mavlink1)
 
         def gps_status_encode(self, satellites_visible, satellite_prn, satellite_used, satellite_elevation, satellite_azimuth, satellite_snr):
                 '''
@@ -10509,7 +9483,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.rc_channels_raw_encode(time_boot_ms, port, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw, rssi), force_mavlink1=force_mavlink1)
 
-        def servo_output_raw_encode(self, time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw, servo9_raw=0, servo10_raw=0, servo11_raw=0, servo12_raw=0, servo13_raw=0, servo14_raw=0, servo15_raw=0, servo16_raw=0):
+        def servo_output_raw_encode(self, time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw):
                 '''
                 The RAW values of the servo outputs (for RC input from the remote, use
                 the RC_CHANNELS messages). The standard PPM modulation
@@ -10526,19 +9500,11 @@ class MAVLink(object):
                 servo6_raw                : Servo output 6 value [us] (type:uint16_t)
                 servo7_raw                : Servo output 7 value [us] (type:uint16_t)
                 servo8_raw                : Servo output 8 value [us] (type:uint16_t)
-                servo9_raw                : Servo output 9 value [us] (type:uint16_t)
-                servo10_raw               : Servo output 10 value [us] (type:uint16_t)
-                servo11_raw               : Servo output 11 value [us] (type:uint16_t)
-                servo12_raw               : Servo output 12 value [us] (type:uint16_t)
-                servo13_raw               : Servo output 13 value [us] (type:uint16_t)
-                servo14_raw               : Servo output 14 value [us] (type:uint16_t)
-                servo15_raw               : Servo output 15 value [us] (type:uint16_t)
-                servo16_raw               : Servo output 16 value [us] (type:uint16_t)
 
                 '''
-                return MAVLink_servo_output_raw_message(time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw, servo9_raw, servo10_raw, servo11_raw, servo12_raw, servo13_raw, servo14_raw, servo15_raw, servo16_raw)
+                return MAVLink_servo_output_raw_message(time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw)
 
-        def servo_output_raw_send(self, time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw, servo9_raw=0, servo10_raw=0, servo11_raw=0, servo12_raw=0, servo13_raw=0, servo14_raw=0, servo15_raw=0, servo16_raw=0, force_mavlink1=False):
+        def servo_output_raw_send(self, time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw, force_mavlink1=False):
                 '''
                 The RAW values of the servo outputs (for RC input from the remote, use
                 the RC_CHANNELS messages). The standard PPM modulation
@@ -10555,19 +9521,11 @@ class MAVLink(object):
                 servo6_raw                : Servo output 6 value [us] (type:uint16_t)
                 servo7_raw                : Servo output 7 value [us] (type:uint16_t)
                 servo8_raw                : Servo output 8 value [us] (type:uint16_t)
-                servo9_raw                : Servo output 9 value [us] (type:uint16_t)
-                servo10_raw               : Servo output 10 value [us] (type:uint16_t)
-                servo11_raw               : Servo output 11 value [us] (type:uint16_t)
-                servo12_raw               : Servo output 12 value [us] (type:uint16_t)
-                servo13_raw               : Servo output 13 value [us] (type:uint16_t)
-                servo14_raw               : Servo output 14 value [us] (type:uint16_t)
-                servo15_raw               : Servo output 15 value [us] (type:uint16_t)
-                servo16_raw               : Servo output 16 value [us] (type:uint16_t)
 
                 '''
-                return self.send(self.servo_output_raw_encode(time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw, servo9_raw, servo10_raw, servo11_raw, servo12_raw, servo13_raw, servo14_raw, servo15_raw, servo16_raw), force_mavlink1=force_mavlink1)
+                return self.send(self.servo_output_raw_encode(time_usec, port, servo1_raw, servo2_raw, servo3_raw, servo4_raw, servo5_raw, servo6_raw, servo7_raw, servo8_raw), force_mavlink1=force_mavlink1)
 
-        def mission_request_partial_list_encode(self, target_system, target_component, start_index, end_index, mission_type=0):
+        def mission_request_partial_list_encode(self, target_system, target_component, start_index, end_index):
                 '''
                 Request a partial list of mission items from the system/component.
                 https://mavlink.io/en/protocol/mission.html. If start
@@ -10577,12 +9535,11 @@ class MAVLink(object):
                 target_component          : Component ID (type:uint8_t)
                 start_index               : Start index, 0 by default (type:int16_t)
                 end_index                 : End index, -1 by default (-1: send list to end). Else a valid index of the list (type:int16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_request_partial_list_message(target_system, target_component, start_index, end_index, mission_type)
+                return MAVLink_mission_request_partial_list_message(target_system, target_component, start_index, end_index)
 
-        def mission_request_partial_list_send(self, target_system, target_component, start_index, end_index, mission_type=0, force_mavlink1=False):
+        def mission_request_partial_list_send(self, target_system, target_component, start_index, end_index, force_mavlink1=False):
                 '''
                 Request a partial list of mission items from the system/component.
                 https://mavlink.io/en/protocol/mission.html. If start
@@ -10592,12 +9549,11 @@ class MAVLink(object):
                 target_component          : Component ID (type:uint8_t)
                 start_index               : Start index, 0 by default (type:int16_t)
                 end_index                 : End index, -1 by default (-1: send list to end). Else a valid index of the list (type:int16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_request_partial_list_encode(target_system, target_component, start_index, end_index, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_request_partial_list_encode(target_system, target_component, start_index, end_index), force_mavlink1=force_mavlink1)
 
-        def mission_write_partial_list_encode(self, target_system, target_component, start_index, end_index, mission_type=0):
+        def mission_write_partial_list_encode(self, target_system, target_component, start_index, end_index):
                 '''
                 This message is sent to the MAV to write a partial list. If start
                 index == end index, only one item will be transmitted
@@ -10608,12 +9564,11 @@ class MAVLink(object):
                 target_component          : Component ID (type:uint8_t)
                 start_index               : Start index, 0 by default and smaller / equal to the largest index of the current onboard list. (type:int16_t)
                 end_index                 : End index, equal or greater than start index. (type:int16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_write_partial_list_message(target_system, target_component, start_index, end_index, mission_type)
+                return MAVLink_mission_write_partial_list_message(target_system, target_component, start_index, end_index)
 
-        def mission_write_partial_list_send(self, target_system, target_component, start_index, end_index, mission_type=0, force_mavlink1=False):
+        def mission_write_partial_list_send(self, target_system, target_component, start_index, end_index, force_mavlink1=False):
                 '''
                 This message is sent to the MAV to write a partial list. If start
                 index == end index, only one item will be transmitted
@@ -10624,12 +9579,11 @@ class MAVLink(object):
                 target_component          : Component ID (type:uint8_t)
                 start_index               : Start index, 0 by default and smaller / equal to the largest index of the current onboard list. (type:int16_t)
                 end_index                 : End index, equal or greater than start index. (type:int16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_write_partial_list_encode(target_system, target_component, start_index, end_index, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_write_partial_list_encode(target_system, target_component, start_index, end_index), force_mavlink1=force_mavlink1)
 
-        def mission_item_encode(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type=0):
+        def mission_item_encode(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z):
                 '''
                 Message encoding a mission item. This message is emitted to announce
                 the presence of a mission item and to set a mission
@@ -10653,12 +9607,11 @@ class MAVLink(object):
                 x                         : PARAM5 / local: X coordinate, global: latitude (type:float)
                 y                         : PARAM6 / local: Y coordinate, global: longitude (type:float)
                 z                         : PARAM7 / local: Z coordinate, global: altitude (relative or absolute, depending on frame). (type:float)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_item_message(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type)
+                return MAVLink_mission_item_message(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z)
 
-        def mission_item_send(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type=0, force_mavlink1=False):
+        def mission_item_send(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, force_mavlink1=False):
                 '''
                 Message encoding a mission item. This message is emitted to announce
                 the presence of a mission item and to set a mission
@@ -10682,27 +9635,11 @@ class MAVLink(object):
                 x                         : PARAM5 / local: X coordinate, global: latitude (type:float)
                 y                         : PARAM6 / local: Y coordinate, global: longitude (type:float)
                 z                         : PARAM7 / local: Z coordinate, global: altitude (relative or absolute, depending on frame). (type:float)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_item_encode(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_item_encode(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z), force_mavlink1=force_mavlink1)
 
-        def mission_request_encode(self, target_system, target_component, seq, mission_type=0):
-                '''
-                Request the information of the mission item with the sequence number
-                seq. The response of the system to this message should
-                be a MISSION_ITEM message.
-                https://mavlink.io/en/protocol/mission.html
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                seq                       : Sequence (type:uint16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
-
-                '''
-                return MAVLink_mission_request_message(target_system, target_component, seq, mission_type)
-
-        def mission_request_send(self, target_system, target_component, seq, mission_type=0, force_mavlink1=False):
+        def mission_request_encode(self, target_system, target_component, seq):
                 '''
                 Request the information of the mission item with the sequence number
                 seq. The response of the system to this message should
@@ -10712,10 +9649,23 @@ class MAVLink(object):
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
                 seq                       : Sequence (type:uint16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_request_encode(target_system, target_component, seq, mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_mission_request_message(target_system, target_component, seq)
+
+        def mission_request_send(self, target_system, target_component, seq, force_mavlink1=False):
+                '''
+                Request the information of the mission item with the sequence number
+                seq. The response of the system to this message should
+                be a MISSION_ITEM message.
+                https://mavlink.io/en/protocol/mission.html
+
+                target_system             : System ID (type:uint8_t)
+                target_component          : Component ID (type:uint8_t)
+                seq                       : Sequence (type:uint16_t)
+
+                '''
+                return self.send(self.mission_request_encode(target_system, target_component, seq), force_mavlink1=force_mavlink1)
 
         def mission_set_current_encode(self, target_system, target_component, seq):
                 '''
@@ -10767,29 +9717,27 @@ class MAVLink(object):
                 '''
                 return self.send(self.mission_current_encode(seq), force_mavlink1=force_mavlink1)
 
-        def mission_request_list_encode(self, target_system, target_component, mission_type=0):
+        def mission_request_list_encode(self, target_system, target_component):
                 '''
                 Request the overall list of mission items from the system/component.
 
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_request_list_message(target_system, target_component, mission_type)
+                return MAVLink_mission_request_list_message(target_system, target_component)
 
-        def mission_request_list_send(self, target_system, target_component, mission_type=0, force_mavlink1=False):
+        def mission_request_list_send(self, target_system, target_component, force_mavlink1=False):
                 '''
                 Request the overall list of mission items from the system/component.
 
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_request_list_encode(target_system, target_component, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_request_list_encode(target_system, target_component), force_mavlink1=force_mavlink1)
 
-        def mission_count_encode(self, target_system, target_component, count, mission_type=0):
+        def mission_count_encode(self, target_system, target_component, count):
                 '''
                 This message is emitted as response to MISSION_REQUEST_LIST by the MAV
                 and to initiate a write transaction. The GCS can then
@@ -10799,12 +9747,11 @@ class MAVLink(object):
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
                 count                     : Number of mission items in the sequence (type:uint16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_count_message(target_system, target_component, count, mission_type)
+                return MAVLink_mission_count_message(target_system, target_component, count)
 
-        def mission_count_send(self, target_system, target_component, count, mission_type=0, force_mavlink1=False):
+        def mission_count_send(self, target_system, target_component, count, force_mavlink1=False):
                 '''
                 This message is emitted as response to MISSION_REQUEST_LIST by the MAV
                 and to initiate a write transaction. The GCS can then
@@ -10814,32 +9761,29 @@ class MAVLink(object):
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
                 count                     : Number of mission items in the sequence (type:uint16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_count_encode(target_system, target_component, count, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_count_encode(target_system, target_component, count), force_mavlink1=force_mavlink1)
 
-        def mission_clear_all_encode(self, target_system, target_component, mission_type=0):
-                '''
-                Delete all mission items at once.
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
-
-                '''
-                return MAVLink_mission_clear_all_message(target_system, target_component, mission_type)
-
-        def mission_clear_all_send(self, target_system, target_component, mission_type=0, force_mavlink1=False):
+        def mission_clear_all_encode(self, target_system, target_component):
                 '''
                 Delete all mission items at once.
 
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_clear_all_encode(target_system, target_component, mission_type), force_mavlink1=force_mavlink1)
+                return MAVLink_mission_clear_all_message(target_system, target_component)
+
+        def mission_clear_all_send(self, target_system, target_component, force_mavlink1=False):
+                '''
+                Delete all mission items at once.
+
+                target_system             : System ID (type:uint8_t)
+                target_component          : Component ID (type:uint8_t)
+
+                '''
+                return self.send(self.mission_clear_all_encode(target_system, target_component), force_mavlink1=force_mavlink1)
 
         def mission_item_reached_encode(self, seq):
                 '''
@@ -10865,7 +9809,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.mission_item_reached_encode(seq), force_mavlink1=force_mavlink1)
 
-        def mission_ack_encode(self, target_system, target_component, type, mission_type=0):
+        def mission_ack_encode(self, target_system, target_component, type):
                 '''
                 Acknowledgment message during waypoint handling. The type field states
                 if this message is a positive ack (type=0) or if an
@@ -10874,12 +9818,11 @@ class MAVLink(object):
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
                 type                      : Mission result. (type:uint8_t, values:MAV_MISSION_RESULT)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_ack_message(target_system, target_component, type, mission_type)
+                return MAVLink_mission_ack_message(target_system, target_component, type)
 
-        def mission_ack_send(self, target_system, target_component, type, mission_type=0, force_mavlink1=False):
+        def mission_ack_send(self, target_system, target_component, type, force_mavlink1=False):
                 '''
                 Acknowledgment message during waypoint handling. The type field states
                 if this message is a positive ack (type=0) or if an
@@ -10888,12 +9831,11 @@ class MAVLink(object):
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
                 type                      : Mission result. (type:uint8_t, values:MAV_MISSION_RESULT)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_ack_encode(target_system, target_component, type, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_ack_encode(target_system, target_component, type), force_mavlink1=force_mavlink1)
 
-        def set_gps_global_origin_encode(self, target_system, latitude, longitude, altitude, time_usec=0):
+        def set_gps_global_origin_encode(self, target_system, latitude, longitude, altitude):
                 '''
                 As local waypoints exist, the global waypoint reference allows to
                 transform between the local coordinate frame and the
@@ -10905,12 +9847,11 @@ class MAVLink(object):
                 latitude                  : Latitude (WGS84) [degE7] (type:int32_t)
                 longitude                 : Longitude (WGS84) [degE7] (type:int32_t)
                 altitude                  : Altitude (AMSL). Positive for up. [mm] (type:int32_t)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
 
                 '''
-                return MAVLink_set_gps_global_origin_message(target_system, latitude, longitude, altitude, time_usec)
+                return MAVLink_set_gps_global_origin_message(target_system, latitude, longitude, altitude)
 
-        def set_gps_global_origin_send(self, target_system, latitude, longitude, altitude, time_usec=0, force_mavlink1=False):
+        def set_gps_global_origin_send(self, target_system, latitude, longitude, altitude, force_mavlink1=False):
                 '''
                 As local waypoints exist, the global waypoint reference allows to
                 transform between the local coordinate frame and the
@@ -10922,25 +9863,11 @@ class MAVLink(object):
                 latitude                  : Latitude (WGS84) [degE7] (type:int32_t)
                 longitude                 : Longitude (WGS84) [degE7] (type:int32_t)
                 altitude                  : Altitude (AMSL). Positive for up. [mm] (type:int32_t)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
 
                 '''
-                return self.send(self.set_gps_global_origin_encode(target_system, latitude, longitude, altitude, time_usec), force_mavlink1=force_mavlink1)
+                return self.send(self.set_gps_global_origin_encode(target_system, latitude, longitude, altitude), force_mavlink1=force_mavlink1)
 
-        def gps_global_origin_encode(self, latitude, longitude, altitude, time_usec=0):
-                '''
-                Once the MAV sets a new GPS-Local correspondence, this message
-                announces the origin (0,0,0) position
-
-                latitude                  : Latitude (WGS84) [degE7] (type:int32_t)
-                longitude                 : Longitude (WGS84) [degE7] (type:int32_t)
-                altitude                  : Altitude (AMSL). Positive for up. [mm] (type:int32_t)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-
-                '''
-                return MAVLink_gps_global_origin_message(latitude, longitude, altitude, time_usec)
-
-        def gps_global_origin_send(self, latitude, longitude, altitude, time_usec=0, force_mavlink1=False):
+        def gps_global_origin_encode(self, latitude, longitude, altitude):
                 '''
                 Once the MAV sets a new GPS-Local correspondence, this message
                 announces the origin (0,0,0) position
@@ -10948,10 +9875,21 @@ class MAVLink(object):
                 latitude                  : Latitude (WGS84) [degE7] (type:int32_t)
                 longitude                 : Longitude (WGS84) [degE7] (type:int32_t)
                 altitude                  : Altitude (AMSL). Positive for up. [mm] (type:int32_t)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
 
                 '''
-                return self.send(self.gps_global_origin_encode(latitude, longitude, altitude, time_usec), force_mavlink1=force_mavlink1)
+                return MAVLink_gps_global_origin_message(latitude, longitude, altitude)
+
+        def gps_global_origin_send(self, latitude, longitude, altitude, force_mavlink1=False):
+                '''
+                Once the MAV sets a new GPS-Local correspondence, this message
+                announces the origin (0,0,0) position
+
+                latitude                  : Latitude (WGS84) [degE7] (type:int32_t)
+                longitude                 : Longitude (WGS84) [degE7] (type:int32_t)
+                altitude                  : Altitude (AMSL). Positive for up. [mm] (type:int32_t)
+
+                '''
+                return self.send(self.gps_global_origin_encode(latitude, longitude, altitude), force_mavlink1=force_mavlink1)
 
         def param_map_rc_encode(self, target_system, target_component, param_id, param_index, parameter_rc_channel_index, param_value0, scale, param_value_min, param_value_max):
                 '''
@@ -10989,7 +9927,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.param_map_rc_encode(target_system, target_component, param_id, param_index, parameter_rc_channel_index, param_value0, scale, param_value_min, param_value_max), force_mavlink1=force_mavlink1)
 
-        def mission_request_int_encode(self, target_system, target_component, seq, mission_type=0):
+        def mission_request_int_encode(self, target_system, target_component, seq):
                 '''
                 Request the information of the mission item with the sequence number
                 seq. The response of the system to this message should
@@ -10999,12 +9937,11 @@ class MAVLink(object):
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
                 seq                       : Sequence (type:uint16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_request_int_message(target_system, target_component, seq, mission_type)
+                return MAVLink_mission_request_int_message(target_system, target_component, seq)
 
-        def mission_request_int_send(self, target_system, target_component, seq, mission_type=0, force_mavlink1=False):
+        def mission_request_int_send(self, target_system, target_component, seq, force_mavlink1=False):
                 '''
                 Request the information of the mission item with the sequence number
                 seq. The response of the system to this message should
@@ -11014,10 +9951,9 @@ class MAVLink(object):
                 target_system             : System ID (type:uint8_t)
                 target_component          : Component ID (type:uint8_t)
                 seq                       : Sequence (type:uint16_t)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_request_int_encode(target_system, target_component, seq, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_request_int_encode(target_system, target_component, seq), force_mavlink1=force_mavlink1)
 
         def safety_set_allowed_area_encode(self, target_system, target_component, frame, p1x, p1y, p1z, p2x, p2y, p2z):
                 '''
@@ -11403,7 +10339,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.manual_control_encode(target, x, y, z, r, buttons), force_mavlink1=force_mavlink1)
 
-        def rc_channels_override_encode(self, target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw, chan9_raw=0, chan10_raw=0, chan11_raw=0, chan12_raw=0, chan13_raw=0, chan14_raw=0, chan15_raw=0, chan16_raw=0, chan17_raw=0, chan18_raw=0):
+        def rc_channels_override_encode(self, target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw):
                 '''
                 The RAW values of the RC channels sent to the MAV to override info
                 received from the RC radio. A value of UINT16_MAX
@@ -11424,21 +10360,11 @@ class MAVLink(object):
                 chan6_raw                 : RC channel 6 value. A value of UINT16_MAX means to ignore this field. [us] (type:uint16_t)
                 chan7_raw                 : RC channel 7 value. A value of UINT16_MAX means to ignore this field. [us] (type:uint16_t)
                 chan8_raw                 : RC channel 8 value. A value of UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan9_raw                 : RC channel 9 value. A value of 0 means to ignore this field. [us] (type:uint16_t)
-                chan10_raw                : RC channel 10 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan11_raw                : RC channel 11 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan12_raw                : RC channel 12 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan13_raw                : RC channel 13 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan14_raw                : RC channel 14 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan15_raw                : RC channel 15 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan16_raw                : RC channel 16 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan17_raw                : RC channel 17 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan18_raw                : RC channel 18 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
 
                 '''
-                return MAVLink_rc_channels_override_message(target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw, chan9_raw, chan10_raw, chan11_raw, chan12_raw, chan13_raw, chan14_raw, chan15_raw, chan16_raw, chan17_raw, chan18_raw)
+                return MAVLink_rc_channels_override_message(target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw)
 
-        def rc_channels_override_send(self, target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw, chan9_raw=0, chan10_raw=0, chan11_raw=0, chan12_raw=0, chan13_raw=0, chan14_raw=0, chan15_raw=0, chan16_raw=0, chan17_raw=0, chan18_raw=0, force_mavlink1=False):
+        def rc_channels_override_send(self, target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw, force_mavlink1=False):
                 '''
                 The RAW values of the RC channels sent to the MAV to override info
                 received from the RC radio. A value of UINT16_MAX
@@ -11459,21 +10385,11 @@ class MAVLink(object):
                 chan6_raw                 : RC channel 6 value. A value of UINT16_MAX means to ignore this field. [us] (type:uint16_t)
                 chan7_raw                 : RC channel 7 value. A value of UINT16_MAX means to ignore this field. [us] (type:uint16_t)
                 chan8_raw                 : RC channel 8 value. A value of UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan9_raw                 : RC channel 9 value. A value of 0 means to ignore this field. [us] (type:uint16_t)
-                chan10_raw                : RC channel 10 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan11_raw                : RC channel 11 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan12_raw                : RC channel 12 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan13_raw                : RC channel 13 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan14_raw                : RC channel 14 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan15_raw                : RC channel 15 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan16_raw                : RC channel 16 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan17_raw                : RC channel 17 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
-                chan18_raw                : RC channel 18 value. A value of 0 or UINT16_MAX means to ignore this field. [us] (type:uint16_t)
 
                 '''
-                return self.send(self.rc_channels_override_encode(target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw, chan9_raw, chan10_raw, chan11_raw, chan12_raw, chan13_raw, chan14_raw, chan15_raw, chan16_raw, chan17_raw, chan18_raw), force_mavlink1=force_mavlink1)
+                return self.send(self.rc_channels_override_encode(target_system, target_component, chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw), force_mavlink1=force_mavlink1)
 
-        def mission_item_int_encode(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type=0):
+        def mission_item_int_encode(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z):
                 '''
                 Message encoding a mission item. This message is emitted to announce
                 the presence of a mission item and to set a mission
@@ -11497,12 +10413,11 @@ class MAVLink(object):
                 x                         : PARAM5 / local: x position in meters * 1e4, global: latitude in degrees * 10^7 (type:int32_t)
                 y                         : PARAM6 / y position: local: x position in meters * 1e4, global: longitude in degrees *10^7 (type:int32_t)
                 z                         : PARAM7 / z position: global: altitude in meters (relative or absolute, depending on frame. (type:float)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return MAVLink_mission_item_int_message(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type)
+                return MAVLink_mission_item_int_message(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z)
 
-        def mission_item_int_send(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type=0, force_mavlink1=False):
+        def mission_item_int_send(self, target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, force_mavlink1=False):
                 '''
                 Message encoding a mission item. This message is emitted to announce
                 the presence of a mission item and to set a mission
@@ -11526,10 +10441,9 @@ class MAVLink(object):
                 x                         : PARAM5 / local: x position in meters * 1e4, global: latitude in degrees * 10^7 (type:int32_t)
                 y                         : PARAM6 / y position: local: x position in meters * 1e4, global: longitude in degrees *10^7 (type:int32_t)
                 z                         : PARAM7 / z position: global: altitude in meters (relative or absolute, depending on frame. (type:float)
-                mission_type              : Mission type. (type:uint8_t, values:MAV_MISSION_TYPE)
 
                 '''
-                return self.send(self.mission_item_int_encode(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z, mission_type), force_mavlink1=force_mavlink1)
+                return self.send(self.mission_item_int_encode(target_system, target_component, seq, frame, command, current, autocontinue, param1, param2, param3, param4, x, y, z), force_mavlink1=force_mavlink1)
 
         def vfr_hud_encode(self, airspeed, groundspeed, heading, throttle, alt, climb):
                 '''
@@ -11641,35 +10555,27 @@ class MAVLink(object):
                 '''
                 return self.send(self.command_long_encode(target_system, target_component, command, confirmation, param1, param2, param3, param4, param5, param6, param7), force_mavlink1=force_mavlink1)
 
-        def command_ack_encode(self, command, result, progress=0, result_param2=0, target_system=0, target_component=0):
+        def command_ack_encode(self, command, result):
                 '''
                 Report status of a command. Includes feedback whether the command was
                 executed.
 
                 command                   : Command ID (of acknowledged command). (type:uint16_t, values:MAV_CMD)
                 result                    : Result of command. (type:uint8_t, values:MAV_RESULT)
-                progress                  : WIP: Also used as result_param1, it can be set with a enum containing the errors reasons of why the command was denied or the progress percentage or 255 if unknown the progress when result is MAV_RESULT_IN_PROGRESS. (type:uint8_t)
-                result_param2             : WIP: Additional parameter of the result, example: which parameter of MAV_CMD_NAV_WAYPOINT caused it to be denied. (type:int32_t)
-                target_system             : WIP: System which requested the command to be executed (type:uint8_t)
-                target_component          : WIP: Component which requested the command to be executed (type:uint8_t)
 
                 '''
-                return MAVLink_command_ack_message(command, result, progress, result_param2, target_system, target_component)
+                return MAVLink_command_ack_message(command, result)
 
-        def command_ack_send(self, command, result, progress=0, result_param2=0, target_system=0, target_component=0, force_mavlink1=False):
+        def command_ack_send(self, command, result, force_mavlink1=False):
                 '''
                 Report status of a command. Includes feedback whether the command was
                 executed.
 
                 command                   : Command ID (of acknowledged command). (type:uint16_t, values:MAV_CMD)
                 result                    : Result of command. (type:uint8_t, values:MAV_RESULT)
-                progress                  : WIP: Also used as result_param1, it can be set with a enum containing the errors reasons of why the command was denied or the progress percentage or 255 if unknown the progress when result is MAV_RESULT_IN_PROGRESS. (type:uint8_t)
-                result_param2             : WIP: Additional parameter of the result, example: which parameter of MAV_CMD_NAV_WAYPOINT caused it to be denied. (type:int32_t)
-                target_system             : WIP: System which requested the command to be executed (type:uint8_t)
-                target_component          : WIP: Component which requested the command to be executed (type:uint8_t)
 
                 '''
-                return self.send(self.command_ack_encode(command, result, progress, result_param2, target_system, target_component), force_mavlink1=force_mavlink1)
+                return self.send(self.command_ack_encode(command, result), force_mavlink1=force_mavlink1)
 
         def manual_setpoint_encode(self, time_boot_ms, roll, pitch, yaw, thrust, mode_switch, manual_override_switch):
                 '''
@@ -12193,7 +11099,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.hil_actuator_controls_encode(time_usec, controls, mode, flags), force_mavlink1=force_mavlink1)
 
-        def optical_flow_encode(self, time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance, flow_rate_x=0, flow_rate_y=0):
+        def optical_flow_encode(self, time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance):
                 '''
                 Optical flow from a flow sensor (e.g. optical mouse sensor)
 
@@ -12205,13 +11111,11 @@ class MAVLink(object):
                 flow_comp_m_y             : Flow in y-sensor direction, angular-speed compensated [m] (type:float)
                 quality                   : Optical flow quality / confidence. 0: bad, 255: maximum quality (type:uint8_t)
                 ground_distance           : Ground distance. Positive value: distance known. Negative value: Unknown distance [m] (type:float)
-                flow_rate_x               : Flow rate about X axis [rad/s] (type:float)
-                flow_rate_y               : Flow rate about Y axis [rad/s] (type:float)
 
                 '''
-                return MAVLink_optical_flow_message(time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance, flow_rate_x, flow_rate_y)
+                return MAVLink_optical_flow_message(time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance)
 
-        def optical_flow_send(self, time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance, flow_rate_x=0, flow_rate_y=0, force_mavlink1=False):
+        def optical_flow_send(self, time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance, force_mavlink1=False):
                 '''
                 Optical flow from a flow sensor (e.g. optical mouse sensor)
 
@@ -12223,13 +11127,11 @@ class MAVLink(object):
                 flow_comp_m_y             : Flow in y-sensor direction, angular-speed compensated [m] (type:float)
                 quality                   : Optical flow quality / confidence. 0: bad, 255: maximum quality (type:uint8_t)
                 ground_distance           : Ground distance. Positive value: distance known. Negative value: Unknown distance [m] (type:float)
-                flow_rate_x               : Flow rate about X axis [rad/s] (type:float)
-                flow_rate_y               : Flow rate about Y axis [rad/s] (type:float)
 
                 '''
-                return self.send(self.optical_flow_encode(time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance, flow_rate_x, flow_rate_y), force_mavlink1=force_mavlink1)
+                return self.send(self.optical_flow_encode(time_usec, sensor_id, flow_x, flow_y, flow_comp_m_x, flow_comp_m_y, quality, ground_distance), force_mavlink1=force_mavlink1)
 
-        def global_vision_position_estimate_encode(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def global_vision_position_estimate_encode(self, usec, x, y, z, roll, pitch, yaw):
                 '''
                 
 
@@ -12240,12 +11142,11 @@ class MAVLink(object):
                 roll                      : Roll angle [rad] (type:float)
                 pitch                     : Pitch angle [rad] (type:float)
                 yaw                       : Yaw angle [rad] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
 
                 '''
-                return MAVLink_global_vision_position_estimate_message(usec, x, y, z, roll, pitch, yaw, covariance)
+                return MAVLink_global_vision_position_estimate_message(usec, x, y, z, roll, pitch, yaw)
 
-        def global_vision_position_estimate_send(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], force_mavlink1=False):
+        def global_vision_position_estimate_send(self, usec, x, y, z, roll, pitch, yaw, force_mavlink1=False):
                 '''
                 
 
@@ -12256,28 +11157,11 @@ class MAVLink(object):
                 roll                      : Roll angle [rad] (type:float)
                 pitch                     : Pitch angle [rad] (type:float)
                 yaw                       : Yaw angle [rad] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
 
                 '''
-                return self.send(self.global_vision_position_estimate_encode(usec, x, y, z, roll, pitch, yaw, covariance), force_mavlink1=force_mavlink1)
+                return self.send(self.global_vision_position_estimate_encode(usec, x, y, z, roll, pitch, yaw), force_mavlink1=force_mavlink1)
 
-        def vision_position_estimate_encode(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
-                '''
-                
-
-                usec                      : Timestamp (UNIX time or time since system boot) [us] (type:uint64_t)
-                x                         : Global X position [m] (type:float)
-                y                         : Global Y position [m] (type:float)
-                z                         : Global Z position [m] (type:float)
-                roll                      : Roll angle [rad] (type:float)
-                pitch                     : Pitch angle [rad] (type:float)
-                yaw                       : Yaw angle [rad] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
-
-                '''
-                return MAVLink_vision_position_estimate_message(usec, x, y, z, roll, pitch, yaw, covariance)
-
-        def vision_position_estimate_send(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], force_mavlink1=False):
+        def vision_position_estimate_encode(self, usec, x, y, z, roll, pitch, yaw):
                 '''
                 
 
@@ -12288,12 +11172,26 @@ class MAVLink(object):
                 roll                      : Roll angle [rad] (type:float)
                 pitch                     : Pitch angle [rad] (type:float)
                 yaw                       : Yaw angle [rad] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
 
                 '''
-                return self.send(self.vision_position_estimate_encode(usec, x, y, z, roll, pitch, yaw, covariance), force_mavlink1=force_mavlink1)
+                return MAVLink_vision_position_estimate_message(usec, x, y, z, roll, pitch, yaw)
 
-        def vision_speed_estimate_encode(self, usec, x, y, z, covariance=[0,0,0,0,0,0,0,0,0]):
+        def vision_position_estimate_send(self, usec, x, y, z, roll, pitch, yaw, force_mavlink1=False):
+                '''
+                
+
+                usec                      : Timestamp (UNIX time or time since system boot) [us] (type:uint64_t)
+                x                         : Global X position [m] (type:float)
+                y                         : Global Y position [m] (type:float)
+                z                         : Global Z position [m] (type:float)
+                roll                      : Roll angle [rad] (type:float)
+                pitch                     : Pitch angle [rad] (type:float)
+                yaw                       : Yaw angle [rad] (type:float)
+
+                '''
+                return self.send(self.vision_position_estimate_encode(usec, x, y, z, roll, pitch, yaw), force_mavlink1=force_mavlink1)
+
+        def vision_speed_estimate_encode(self, usec, x, y, z):
                 '''
                 
 
@@ -12301,12 +11199,11 @@ class MAVLink(object):
                 x                         : Global X speed [m/s] (type:float)
                 y                         : Global Y speed [m/s] (type:float)
                 z                         : Global Z speed [m/s] (type:float)
-                covariance                : Linear velocity covariance matrix (1st three entries - 1st row, etc.) (type:float)
 
                 '''
-                return MAVLink_vision_speed_estimate_message(usec, x, y, z, covariance)
+                return MAVLink_vision_speed_estimate_message(usec, x, y, z)
 
-        def vision_speed_estimate_send(self, usec, x, y, z, covariance=[0,0,0,0,0,0,0,0,0], force_mavlink1=False):
+        def vision_speed_estimate_send(self, usec, x, y, z, force_mavlink1=False):
                 '''
                 
 
@@ -12314,28 +11211,11 @@ class MAVLink(object):
                 x                         : Global X speed [m/s] (type:float)
                 y                         : Global Y speed [m/s] (type:float)
                 z                         : Global Z speed [m/s] (type:float)
-                covariance                : Linear velocity covariance matrix (1st three entries - 1st row, etc.) (type:float)
 
                 '''
-                return self.send(self.vision_speed_estimate_encode(usec, x, y, z, covariance), force_mavlink1=force_mavlink1)
+                return self.send(self.vision_speed_estimate_encode(usec, x, y, z), force_mavlink1=force_mavlink1)
 
-        def vicon_position_estimate_encode(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
-                '''
-                
-
-                usec                      : Timestamp (UNIX time or time since system boot) [us] (type:uint64_t)
-                x                         : Global X position [m] (type:float)
-                y                         : Global Y position [m] (type:float)
-                z                         : Global Z position [m] (type:float)
-                roll                      : Roll angle [rad] (type:float)
-                pitch                     : Pitch angle [rad] (type:float)
-                yaw                       : Yaw angle [rad] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
-
-                '''
-                return MAVLink_vicon_position_estimate_message(usec, x, y, z, roll, pitch, yaw, covariance)
-
-        def vicon_position_estimate_send(self, usec, x, y, z, roll, pitch, yaw, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], force_mavlink1=False):
+        def vicon_position_estimate_encode(self, usec, x, y, z, roll, pitch, yaw):
                 '''
                 
 
@@ -12346,10 +11226,24 @@ class MAVLink(object):
                 roll                      : Roll angle [rad] (type:float)
                 pitch                     : Pitch angle [rad] (type:float)
                 yaw                       : Yaw angle [rad] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
 
                 '''
-                return self.send(self.vicon_position_estimate_encode(usec, x, y, z, roll, pitch, yaw, covariance), force_mavlink1=force_mavlink1)
+                return MAVLink_vicon_position_estimate_message(usec, x, y, z, roll, pitch, yaw)
+
+        def vicon_position_estimate_send(self, usec, x, y, z, roll, pitch, yaw, force_mavlink1=False):
+                '''
+                
+
+                usec                      : Timestamp (UNIX time or time since system boot) [us] (type:uint64_t)
+                x                         : Global X position [m] (type:float)
+                y                         : Global Y position [m] (type:float)
+                z                         : Global Z position [m] (type:float)
+                roll                      : Roll angle [rad] (type:float)
+                pitch                     : Pitch angle [rad] (type:float)
+                yaw                       : Yaw angle [rad] (type:float)
+
+                '''
+                return self.send(self.vicon_position_estimate_encode(usec, x, y, z, roll, pitch, yaw), force_mavlink1=force_mavlink1)
 
         def highres_imu_encode(self, time_usec, xacc, yacc, zacc, xgyro, ygyro, zgyro, xmag, ymag, zmag, abs_pressure, diff_pressure, pressure_alt, temperature, fields_updated):
                 '''
@@ -13427,7 +12321,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.scaled_pressure2_encode(time_boot_ms, press_abs, press_diff, temperature), force_mavlink1=force_mavlink1)
 
-        def att_pos_mocap_encode(self, time_usec, q, x, y, z, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def att_pos_mocap_encode(self, time_usec, q, x, y, z):
                 '''
                 Motion capture attitude and position
 
@@ -13436,12 +12330,11 @@ class MAVLink(object):
                 x                         : X position (NED) [m] (type:float)
                 y                         : Y position (NED) [m] (type:float)
                 z                         : Z position (NED) [m] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
 
                 '''
-                return MAVLink_att_pos_mocap_message(time_usec, q, x, y, z, covariance)
+                return MAVLink_att_pos_mocap_message(time_usec, q, x, y, z)
 
-        def att_pos_mocap_send(self, time_usec, q, x, y, z, covariance=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], force_mavlink1=False):
+        def att_pos_mocap_send(self, time_usec, q, x, y, z, force_mavlink1=False):
                 '''
                 Motion capture attitude and position
 
@@ -13450,10 +12343,9 @@ class MAVLink(object):
                 x                         : X position (NED) [m] (type:float)
                 y                         : Y position (NED) [m] (type:float)
                 z                         : Z position (NED) [m] (type:float)
-                covariance                : Pose covariance matrix upper right triangular (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
 
                 '''
-                return self.send(self.att_pos_mocap_encode(time_usec, q, x, y, z, covariance), force_mavlink1=force_mavlink1)
+                return self.send(self.att_pos_mocap_encode(time_usec, q, x, y, z), force_mavlink1=force_mavlink1)
 
         def set_actuator_control_target_encode(self, time_usec, group_mlx, target_system, target_component, controls):
                 '''
@@ -13675,7 +12567,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.control_system_state_encode(time_usec, x_acc, y_acc, z_acc, x_vel, y_vel, z_vel, x_pos, y_pos, z_pos, airspeed, vel_variance, pos_variance, q, roll_rate, pitch_rate, yaw_rate), force_mavlink1=force_mavlink1)
 
-        def battery_status_encode(self, id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining, time_remaining=0, charge_state=0):
+        def battery_status_encode(self, id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining):
                 '''
                 Battery information
 
@@ -13688,13 +12580,11 @@ class MAVLink(object):
                 current_consumed          : Consumed charge, -1: autopilot does not provide consumption estimate [mAh] (type:int32_t)
                 energy_consumed           : Consumed energy, -1: autopilot does not provide energy consumption estimate [hJ] (type:int32_t)
                 battery_remaining         : Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery. [%] (type:int8_t)
-                time_remaining            : Remaining battery time, 0: autopilot does not provide remaining battery time estimate [s] (type:int32_t)
-                charge_state              : State for extent of discharge, provided by autopilot for warning or external reactions (type:uint8_t, values:MAV_BATTERY_CHARGE_STATE)
 
                 '''
-                return MAVLink_battery_status_message(id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining, time_remaining, charge_state)
+                return MAVLink_battery_status_message(id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining)
 
-        def battery_status_send(self, id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining, time_remaining=0, charge_state=0, force_mavlink1=False):
+        def battery_status_send(self, id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining, force_mavlink1=False):
                 '''
                 Battery information
 
@@ -13707,13 +12597,11 @@ class MAVLink(object):
                 current_consumed          : Consumed charge, -1: autopilot does not provide consumption estimate [mAh] (type:int32_t)
                 energy_consumed           : Consumed energy, -1: autopilot does not provide energy consumption estimate [hJ] (type:int32_t)
                 battery_remaining         : Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery. [%] (type:int8_t)
-                time_remaining            : Remaining battery time, 0: autopilot does not provide remaining battery time estimate [s] (type:int32_t)
-                charge_state              : State for extent of discharge, provided by autopilot for warning or external reactions (type:uint8_t, values:MAV_BATTERY_CHARGE_STATE)
 
                 '''
-                return self.send(self.battery_status_encode(id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining, time_remaining, charge_state), force_mavlink1=force_mavlink1)
+                return self.send(self.battery_status_encode(id, battery_function, type, temperature, voltages, current_battery, current_consumed, energy_consumed, battery_remaining), force_mavlink1=force_mavlink1)
 
-        def autopilot_version_encode(self, capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid, uid2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]):
+        def autopilot_version_encode(self, capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid):
                 '''
                 Version and capability of autopilot software
 
@@ -13728,12 +12616,11 @@ class MAVLink(object):
                 vendor_id                 : ID of the board vendor (type:uint16_t)
                 product_id                : ID of the product (type:uint16_t)
                 uid                       : UID if provided by hardware (see uid2) (type:uint64_t)
-                uid2                      : UID if provided by hardware (supersedes the uid field. If this is non-zero, use this field, otherwise use uid) (type:uint8_t)
 
                 '''
-                return MAVLink_autopilot_version_message(capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid, uid2)
+                return MAVLink_autopilot_version_message(capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid)
 
-        def autopilot_version_send(self, capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid, uid2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], force_mavlink1=False):
+        def autopilot_version_send(self, capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid, force_mavlink1=False):
                 '''
                 Version and capability of autopilot software
 
@@ -13748,34 +12635,11 @@ class MAVLink(object):
                 vendor_id                 : ID of the board vendor (type:uint16_t)
                 product_id                : ID of the product (type:uint16_t)
                 uid                       : UID if provided by hardware (see uid2) (type:uint64_t)
-                uid2                      : UID if provided by hardware (supersedes the uid field. If this is non-zero, use this field, otherwise use uid) (type:uint8_t)
 
                 '''
-                return self.send(self.autopilot_version_encode(capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid, uid2), force_mavlink1=force_mavlink1)
+                return self.send(self.autopilot_version_encode(capabilities, flight_sw_version, middleware_sw_version, os_sw_version, board_version, flight_custom_version, middleware_custom_version, os_custom_version, vendor_id, product_id, uid), force_mavlink1=force_mavlink1)
 
-        def landing_target_encode(self, time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y, x=0, y=0, z=0, q=[0,0,0,0], type=0, position_valid=0):
-                '''
-                The location of a landing area captured from a downward facing camera
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                target_num                : The ID of the target if multiple targets are present (type:uint8_t)
-                frame                     : Coordinate frame used for following fields. (type:uint8_t, values:MAV_FRAME)
-                angle_x                   : X-axis angular offset of the target from the center of the image [rad] (type:float)
-                angle_y                   : Y-axis angular offset of the target from the center of the image [rad] (type:float)
-                distance                  : Distance to the target from the vehicle [m] (type:float)
-                size_x                    : Size of target along x-axis [rad] (type:float)
-                size_y                    : Size of target along y-axis [rad] (type:float)
-                x                         : X Position of the landing target on MAV_FRAME [m] (type:float)
-                y                         : Y Position of the landing target on MAV_FRAME [m] (type:float)
-                z                         : Z Position of the landing target on MAV_FRAME [m] (type:float)
-                q                         : Quaternion of landing target orientation (w, x, y, z order, zero-rotation is 1, 0, 0, 0) (type:float)
-                type                      : Type of landing target (type:uint8_t, values:LANDING_TARGET_TYPE)
-                position_valid            : Boolean indicating known position (1) or default unknown position (0), for validation of positioning of the landing target (type:uint8_t)
-
-                '''
-                return MAVLink_landing_target_message(time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y, x, y, z, q, type, position_valid)
-
-        def landing_target_send(self, time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y, x=0, y=0, z=0, q=[0,0,0,0], type=0, position_valid=0, force_mavlink1=False):
+        def landing_target_encode(self, time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y):
                 '''
                 The location of a landing area captured from a downward facing camera
 
@@ -13787,15 +12651,25 @@ class MAVLink(object):
                 distance                  : Distance to the target from the vehicle [m] (type:float)
                 size_x                    : Size of target along x-axis [rad] (type:float)
                 size_y                    : Size of target along y-axis [rad] (type:float)
-                x                         : X Position of the landing target on MAV_FRAME [m] (type:float)
-                y                         : Y Position of the landing target on MAV_FRAME [m] (type:float)
-                z                         : Z Position of the landing target on MAV_FRAME [m] (type:float)
-                q                         : Quaternion of landing target orientation (w, x, y, z order, zero-rotation is 1, 0, 0, 0) (type:float)
-                type                      : Type of landing target (type:uint8_t, values:LANDING_TARGET_TYPE)
-                position_valid            : Boolean indicating known position (1) or default unknown position (0), for validation of positioning of the landing target (type:uint8_t)
 
                 '''
-                return self.send(self.landing_target_encode(time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y, x, y, z, q, type, position_valid), force_mavlink1=force_mavlink1)
+                return MAVLink_landing_target_message(time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y)
+
+        def landing_target_send(self, time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y, force_mavlink1=False):
+                '''
+                The location of a landing area captured from a downward facing camera
+
+                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
+                target_num                : The ID of the target if multiple targets are present (type:uint8_t)
+                frame                     : Coordinate frame used for following fields. (type:uint8_t, values:MAV_FRAME)
+                angle_x                   : X-axis angular offset of the target from the center of the image [rad] (type:float)
+                angle_y                   : Y-axis angular offset of the target from the center of the image [rad] (type:float)
+                distance                  : Distance to the target from the vehicle [m] (type:float)
+                size_x                    : Size of target along x-axis [rad] (type:float)
+                size_y                    : Size of target along y-axis [rad] (type:float)
+
+                '''
+                return self.send(self.landing_target_encode(time_usec, target_num, frame, angle_x, angle_y, distance, size_x, size_y), force_mavlink1=force_mavlink1)
 
         def estimator_status_encode(self, time_usec, flags, vel_ratio, pos_horiz_ratio, pos_vert_ratio, mag_ratio, hagl_ratio, tas_ratio, pos_horiz_accuracy, pos_vert_accuracy):
                 '''
@@ -14139,7 +13013,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.vibration_encode(time_usec, vibration_x, vibration_y, vibration_z, clipping_0, clipping_1, clipping_2), force_mavlink1=force_mavlink1)
 
-        def home_position_encode(self, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec=0):
+        def home_position_encode(self, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z):
                 '''
                 This message can be requested by sending the MAV_CMD_GET_HOME_POSITION
                 command. The position the system will return to and
@@ -14166,12 +13040,11 @@ class MAVLink(object):
                 approach_x                : Local X position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
                 approach_y                : Local Y position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
                 approach_z                : Local Z position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
 
                 '''
-                return MAVLink_home_position_message(latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec)
+                return MAVLink_home_position_message(latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z)
 
-        def home_position_send(self, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec=0, force_mavlink1=False):
+        def home_position_send(self, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, force_mavlink1=False):
                 '''
                 This message can be requested by sending the MAV_CMD_GET_HOME_POSITION
                 command. The position the system will return to and
@@ -14198,43 +13071,11 @@ class MAVLink(object):
                 approach_x                : Local X position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
                 approach_y                : Local Y position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
                 approach_z                : Local Z position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
 
                 '''
-                return self.send(self.home_position_encode(latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec), force_mavlink1=force_mavlink1)
+                return self.send(self.home_position_encode(latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z), force_mavlink1=force_mavlink1)
 
-        def set_home_position_encode(self, target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec=0):
-                '''
-                The position the system will return to and land on. The position is
-                set automatically by the system during the takeoff in
-                case it was not explicitly set by the operator before
-                or after. The global and local positions encode the
-                position in the respective coordinate frames, while
-                the q parameter encodes the orientation of the
-                surface. Under normal conditions it describes the
-                heading and terrain slope, which can be used by the
-                aircraft to adjust the approach. The approach 3D
-                vector describes the point to which the system should
-                fly in normal flight mode and then perform a landing
-                sequence along the vector.
-
-                target_system             : System ID. (type:uint8_t)
-                latitude                  : Latitude (WGS84) [degE7] (type:int32_t)
-                longitude                 : Longitude (WGS84) [degE7] (type:int32_t)
-                altitude                  : Altitude (AMSL). Positive for up. [mm] (type:int32_t)
-                x                         : Local X position of this position in the local coordinate frame [m] (type:float)
-                y                         : Local Y position of this position in the local coordinate frame [m] (type:float)
-                z                         : Local Z position of this position in the local coordinate frame [m] (type:float)
-                q                         : World to surface normal and heading transformation of the takeoff position. Used to indicate the heading and slope of the ground (type:float)
-                approach_x                : Local X position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
-                approach_y                : Local Y position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
-                approach_z                : Local Z position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-
-                '''
-                return MAVLink_set_home_position_message(target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec)
-
-        def set_home_position_send(self, target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec=0, force_mavlink1=False):
+        def set_home_position_encode(self, target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z):
                 '''
                 The position the system will return to and land on. The position is
                 set automatically by the system during the takeoff in
@@ -14260,10 +13101,39 @@ class MAVLink(object):
                 approach_x                : Local X position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
                 approach_y                : Local Y position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
                 approach_z                : Local Z position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
 
                 '''
-                return self.send(self.set_home_position_encode(target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, time_usec), force_mavlink1=force_mavlink1)
+                return MAVLink_set_home_position_message(target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z)
+
+        def set_home_position_send(self, target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z, force_mavlink1=False):
+                '''
+                The position the system will return to and land on. The position is
+                set automatically by the system during the takeoff in
+                case it was not explicitly set by the operator before
+                or after. The global and local positions encode the
+                position in the respective coordinate frames, while
+                the q parameter encodes the orientation of the
+                surface. Under normal conditions it describes the
+                heading and terrain slope, which can be used by the
+                aircraft to adjust the approach. The approach 3D
+                vector describes the point to which the system should
+                fly in normal flight mode and then perform a landing
+                sequence along the vector.
+
+                target_system             : System ID. (type:uint8_t)
+                latitude                  : Latitude (WGS84) [degE7] (type:int32_t)
+                longitude                 : Longitude (WGS84) [degE7] (type:int32_t)
+                altitude                  : Altitude (AMSL). Positive for up. [mm] (type:int32_t)
+                x                         : Local X position of this position in the local coordinate frame [m] (type:float)
+                y                         : Local Y position of this position in the local coordinate frame [m] (type:float)
+                z                         : Local Z position of this position in the local coordinate frame [m] (type:float)
+                q                         : World to surface normal and heading transformation of the takeoff position. Used to indicate the heading and slope of the ground (type:float)
+                approach_x                : Local X position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
+                approach_y                : Local Y position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
+                approach_z                : Local Z position of the end of the approach vector. Multicopters should set this position based on their takeoff path. Grass-landing fixed wing aircraft should set it the same way as multicopters. Runway-landing fixed wing aircraft should set it to the opposite direction of the takeoff, assuming the takeoff happened from the threshold / touchdown zone. [m] (type:float)
+
+                '''
+                return self.send(self.set_home_position_encode(target_system, latitude, longitude, altitude, x, y, z, q, approach_x, approach_y, approach_z), force_mavlink1=force_mavlink1)
 
         def message_interval_encode(self, message_id, interval_us):
                 '''
@@ -14572,882 +13442,4 @@ class MAVLink(object):
 
                 '''
                 return self.send(self.debug_encode(time_boot_ms, ind, value), force_mavlink1=force_mavlink1)
-
-        def setup_signing_encode(self, target_system, target_component, secret_key, initial_timestamp):
-                '''
-                Setup a MAVLink2 signing key. If called with secret_key of all zero
-                and zero initial_timestamp will disable signing
-
-                target_system             : system id of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                secret_key                : signing key (type:uint8_t)
-                initial_timestamp         : initial timestamp (type:uint64_t)
-
-                '''
-                return MAVLink_setup_signing_message(target_system, target_component, secret_key, initial_timestamp)
-
-        def setup_signing_send(self, target_system, target_component, secret_key, initial_timestamp, force_mavlink1=False):
-                '''
-                Setup a MAVLink2 signing key. If called with secret_key of all zero
-                and zero initial_timestamp will disable signing
-
-                target_system             : system id of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                secret_key                : signing key (type:uint8_t)
-                initial_timestamp         : initial timestamp (type:uint64_t)
-
-                '''
-                return self.send(self.setup_signing_encode(target_system, target_component, secret_key, initial_timestamp), force_mavlink1=force_mavlink1)
-
-        def button_change_encode(self, time_boot_ms, last_change_ms, state):
-                '''
-                Report button state change.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                last_change_ms            : Time of last change of button state. [ms] (type:uint32_t)
-                state                     : Bitmap for state of buttons. (type:uint8_t)
-
-                '''
-                return MAVLink_button_change_message(time_boot_ms, last_change_ms, state)
-
-        def button_change_send(self, time_boot_ms, last_change_ms, state, force_mavlink1=False):
-                '''
-                Report button state change.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                last_change_ms            : Time of last change of button state. [ms] (type:uint32_t)
-                state                     : Bitmap for state of buttons. (type:uint8_t)
-
-                '''
-                return self.send(self.button_change_encode(time_boot_ms, last_change_ms, state), force_mavlink1=force_mavlink1)
-
-        def play_tune_encode(self, target_system, target_component, tune):
-                '''
-                Control vehicle tone generation (buzzer)
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                tune                      : tune in board specific format (type:char)
-
-                '''
-                return MAVLink_play_tune_message(target_system, target_component, tune)
-
-        def play_tune_send(self, target_system, target_component, tune, force_mavlink1=False):
-                '''
-                Control vehicle tone generation (buzzer)
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                tune                      : tune in board specific format (type:char)
-
-                '''
-                return self.send(self.play_tune_encode(target_system, target_component, tune), force_mavlink1=force_mavlink1)
-
-        def camera_information_encode(self, time_boot_ms, vendor_name, model_name, firmware_version, focal_length, sensor_size_h, sensor_size_v, resolution_h, resolution_v, lens_id, flags, cam_definition_version, cam_definition_uri):
-                '''
-                Information about a camera
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                vendor_name               : Name of the camera vendor (type:uint8_t)
-                model_name                : Name of the camera model (type:uint8_t)
-                firmware_version          : Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major) (type:uint32_t)
-                focal_length              : Focal length [mm] (type:float)
-                sensor_size_h             : Image sensor size horizontal [mm] (type:float)
-                sensor_size_v             : Image sensor size vertical [mm] (type:float)
-                resolution_h              : Horizontal image resolution [pix] (type:uint16_t)
-                resolution_v              : Vertical image resolution [pix] (type:uint16_t)
-                lens_id                   : Reserved for a lens ID (type:uint8_t)
-                flags                     : Bitmap of camera capability flags. (type:uint32_t, values:CAMERA_CAP_FLAGS)
-                cam_definition_version        : Camera definition version (iteration) (type:uint16_t)
-                cam_definition_uri        : Camera definition URI (if any, otherwise only basic functions will be available). (type:char)
-
-                '''
-                return MAVLink_camera_information_message(time_boot_ms, vendor_name, model_name, firmware_version, focal_length, sensor_size_h, sensor_size_v, resolution_h, resolution_v, lens_id, flags, cam_definition_version, cam_definition_uri)
-
-        def camera_information_send(self, time_boot_ms, vendor_name, model_name, firmware_version, focal_length, sensor_size_h, sensor_size_v, resolution_h, resolution_v, lens_id, flags, cam_definition_version, cam_definition_uri, force_mavlink1=False):
-                '''
-                Information about a camera
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                vendor_name               : Name of the camera vendor (type:uint8_t)
-                model_name                : Name of the camera model (type:uint8_t)
-                firmware_version          : Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major) (type:uint32_t)
-                focal_length              : Focal length [mm] (type:float)
-                sensor_size_h             : Image sensor size horizontal [mm] (type:float)
-                sensor_size_v             : Image sensor size vertical [mm] (type:float)
-                resolution_h              : Horizontal image resolution [pix] (type:uint16_t)
-                resolution_v              : Vertical image resolution [pix] (type:uint16_t)
-                lens_id                   : Reserved for a lens ID (type:uint8_t)
-                flags                     : Bitmap of camera capability flags. (type:uint32_t, values:CAMERA_CAP_FLAGS)
-                cam_definition_version        : Camera definition version (iteration) (type:uint16_t)
-                cam_definition_uri        : Camera definition URI (if any, otherwise only basic functions will be available). (type:char)
-
-                '''
-                return self.send(self.camera_information_encode(time_boot_ms, vendor_name, model_name, firmware_version, focal_length, sensor_size_h, sensor_size_v, resolution_h, resolution_v, lens_id, flags, cam_definition_version, cam_definition_uri), force_mavlink1=force_mavlink1)
-
-        def camera_settings_encode(self, time_boot_ms, mode_id):
-                '''
-                Settings of a camera, can be requested using
-                MAV_CMD_REQUEST_CAMERA_SETTINGS.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                mode_id                   : Camera mode (type:uint8_t, values:CAMERA_MODE)
-
-                '''
-                return MAVLink_camera_settings_message(time_boot_ms, mode_id)
-
-        def camera_settings_send(self, time_boot_ms, mode_id, force_mavlink1=False):
-                '''
-                Settings of a camera, can be requested using
-                MAV_CMD_REQUEST_CAMERA_SETTINGS.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                mode_id                   : Camera mode (type:uint8_t, values:CAMERA_MODE)
-
-                '''
-                return self.send(self.camera_settings_encode(time_boot_ms, mode_id), force_mavlink1=force_mavlink1)
-
-        def storage_information_encode(self, time_boot_ms, storage_id, storage_count, status, total_capacity, used_capacity, available_capacity, read_speed, write_speed):
-                '''
-                Information about a storage medium.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                storage_id                : Storage ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                storage_count             : Number of storage devices (type:uint8_t)
-                status                    : Status of storage (0 not available, 1 unformatted, 2 formatted) (type:uint8_t)
-                total_capacity            : Total capacity. [MiB] (type:float)
-                used_capacity             : Used capacity. [MiB] (type:float)
-                available_capacity        : Available storage capacity. [MiB] (type:float)
-                read_speed                : Read speed. [MiB/s] (type:float)
-                write_speed               : Write speed. [MiB/s] (type:float)
-
-                '''
-                return MAVLink_storage_information_message(time_boot_ms, storage_id, storage_count, status, total_capacity, used_capacity, available_capacity, read_speed, write_speed)
-
-        def storage_information_send(self, time_boot_ms, storage_id, storage_count, status, total_capacity, used_capacity, available_capacity, read_speed, write_speed, force_mavlink1=False):
-                '''
-                Information about a storage medium.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                storage_id                : Storage ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                storage_count             : Number of storage devices (type:uint8_t)
-                status                    : Status of storage (0 not available, 1 unformatted, 2 formatted) (type:uint8_t)
-                total_capacity            : Total capacity. [MiB] (type:float)
-                used_capacity             : Used capacity. [MiB] (type:float)
-                available_capacity        : Available storage capacity. [MiB] (type:float)
-                read_speed                : Read speed. [MiB/s] (type:float)
-                write_speed               : Write speed. [MiB/s] (type:float)
-
-                '''
-                return self.send(self.storage_information_encode(time_boot_ms, storage_id, storage_count, status, total_capacity, used_capacity, available_capacity, read_speed, write_speed), force_mavlink1=force_mavlink1)
-
-        def camera_capture_status_encode(self, time_boot_ms, image_status, video_status, image_interval, recording_time_ms, available_capacity):
-                '''
-                Information about the status of a capture.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                image_status              : Current status of image capturing (0: idle, 1: capture in progress, 2: interval set but idle, 3: interval set and capture in progress) (type:uint8_t)
-                video_status              : Current status of video capturing (0: idle, 1: capture in progress) (type:uint8_t)
-                image_interval            : Image capture interval [s] (type:float)
-                recording_time_ms         : Time since recording started [ms] (type:uint32_t)
-                available_capacity        : Available storage capacity. [MiB] (type:float)
-
-                '''
-                return MAVLink_camera_capture_status_message(time_boot_ms, image_status, video_status, image_interval, recording_time_ms, available_capacity)
-
-        def camera_capture_status_send(self, time_boot_ms, image_status, video_status, image_interval, recording_time_ms, available_capacity, force_mavlink1=False):
-                '''
-                Information about the status of a capture.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                image_status              : Current status of image capturing (0: idle, 1: capture in progress, 2: interval set but idle, 3: interval set and capture in progress) (type:uint8_t)
-                video_status              : Current status of video capturing (0: idle, 1: capture in progress) (type:uint8_t)
-                image_interval            : Image capture interval [s] (type:float)
-                recording_time_ms         : Time since recording started [ms] (type:uint32_t)
-                available_capacity        : Available storage capacity. [MiB] (type:float)
-
-                '''
-                return self.send(self.camera_capture_status_encode(time_boot_ms, image_status, video_status, image_interval, recording_time_ms, available_capacity), force_mavlink1=force_mavlink1)
-
-        def camera_image_captured_encode(self, time_boot_ms, time_utc, camera_id, lat, lon, alt, relative_alt, q, image_index, capture_result, file_url):
-                '''
-                Information about a captured image
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                time_utc                  : Timestamp (time since UNIX epoch) in UTC. 0 for unknown. [us] (type:uint64_t)
-                camera_id                 : Camera ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                lat                       : Latitude where image was taken [degE7] (type:int32_t)
-                lon                       : Longitude where capture was taken [degE7] (type:int32_t)
-                alt                       : Altitude (AMSL) where image was taken [mm] (type:int32_t)
-                relative_alt              : Altitude above ground [mm] (type:int32_t)
-                q                         : Quaternion of camera orientation (w, x, y, z order, zero-rotation is 0, 0, 0, 0) (type:float)
-                image_index               : Zero based index of this image (image count since armed -1) (type:int32_t)
-                capture_result            : Boolean indicating success (1) or failure (0) while capturing this image. (type:int8_t)
-                file_url                  : URL of image taken. Either local storage or http://foo.jpg if camera provides an HTTP interface. (type:char)
-
-                '''
-                return MAVLink_camera_image_captured_message(time_boot_ms, time_utc, camera_id, lat, lon, alt, relative_alt, q, image_index, capture_result, file_url)
-
-        def camera_image_captured_send(self, time_boot_ms, time_utc, camera_id, lat, lon, alt, relative_alt, q, image_index, capture_result, file_url, force_mavlink1=False):
-                '''
-                Information about a captured image
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                time_utc                  : Timestamp (time since UNIX epoch) in UTC. 0 for unknown. [us] (type:uint64_t)
-                camera_id                 : Camera ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                lat                       : Latitude where image was taken [degE7] (type:int32_t)
-                lon                       : Longitude where capture was taken [degE7] (type:int32_t)
-                alt                       : Altitude (AMSL) where image was taken [mm] (type:int32_t)
-                relative_alt              : Altitude above ground [mm] (type:int32_t)
-                q                         : Quaternion of camera orientation (w, x, y, z order, zero-rotation is 0, 0, 0, 0) (type:float)
-                image_index               : Zero based index of this image (image count since armed -1) (type:int32_t)
-                capture_result            : Boolean indicating success (1) or failure (0) while capturing this image. (type:int8_t)
-                file_url                  : URL of image taken. Either local storage or http://foo.jpg if camera provides an HTTP interface. (type:char)
-
-                '''
-                return self.send(self.camera_image_captured_encode(time_boot_ms, time_utc, camera_id, lat, lon, alt, relative_alt, q, image_index, capture_result, file_url), force_mavlink1=force_mavlink1)
-
-        def flight_information_encode(self, time_boot_ms, arming_time_utc, takeoff_time_utc, flight_uuid):
-                '''
-                Information about flight since last arming.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                arming_time_utc           : Timestamp at arming (time since UNIX epoch) in UTC, 0 for unknown [us] (type:uint64_t)
-                takeoff_time_utc          : Timestamp at takeoff (time since UNIX epoch) in UTC, 0 for unknown [us] (type:uint64_t)
-                flight_uuid               : Universally unique identifier (UUID) of flight, should correspond to name of log files (type:uint64_t)
-
-                '''
-                return MAVLink_flight_information_message(time_boot_ms, arming_time_utc, takeoff_time_utc, flight_uuid)
-
-        def flight_information_send(self, time_boot_ms, arming_time_utc, takeoff_time_utc, flight_uuid, force_mavlink1=False):
-                '''
-                Information about flight since last arming.
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                arming_time_utc           : Timestamp at arming (time since UNIX epoch) in UTC, 0 for unknown [us] (type:uint64_t)
-                takeoff_time_utc          : Timestamp at takeoff (time since UNIX epoch) in UTC, 0 for unknown [us] (type:uint64_t)
-                flight_uuid               : Universally unique identifier (UUID) of flight, should correspond to name of log files (type:uint64_t)
-
-                '''
-                return self.send(self.flight_information_encode(time_boot_ms, arming_time_utc, takeoff_time_utc, flight_uuid), force_mavlink1=force_mavlink1)
-
-        def mount_orientation_encode(self, time_boot_ms, roll, pitch, yaw, yaw_absolute=0):
-                '''
-                Orientation of a mount
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                roll                      : Roll in global frame (set to NaN for invalid). [deg] (type:float)
-                pitch                     : Pitch in global frame (set to NaN for invalid). [deg] (type:float)
-                yaw                       : Yaw relative to vehicle(set to NaN for invalid). [deg] (type:float)
-                yaw_absolute              : Yaw in absolute frame, North is 0 (set to NaN for invalid). [deg] (type:float)
-
-                '''
-                return MAVLink_mount_orientation_message(time_boot_ms, roll, pitch, yaw, yaw_absolute)
-
-        def mount_orientation_send(self, time_boot_ms, roll, pitch, yaw, yaw_absolute=0, force_mavlink1=False):
-                '''
-                Orientation of a mount
-
-                time_boot_ms              : Timestamp (time since system boot). [ms] (type:uint32_t)
-                roll                      : Roll in global frame (set to NaN for invalid). [deg] (type:float)
-                pitch                     : Pitch in global frame (set to NaN for invalid). [deg] (type:float)
-                yaw                       : Yaw relative to vehicle(set to NaN for invalid). [deg] (type:float)
-                yaw_absolute              : Yaw in absolute frame, North is 0 (set to NaN for invalid). [deg] (type:float)
-
-                '''
-                return self.send(self.mount_orientation_encode(time_boot_ms, roll, pitch, yaw, yaw_absolute), force_mavlink1=force_mavlink1)
-
-        def logging_data_encode(self, target_system, target_component, sequence, length, first_message_offset, data):
-                '''
-                A message containing logged data (see also MAV_CMD_LOGGING_START)
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                sequence                  : sequence number (can wrap) (type:uint16_t)
-                length                    : data length [bytes] (type:uint8_t)
-                first_message_offset        : offset into data where first message starts. This can be used for recovery, when a previous message got lost (set to 255 if no start exists). [bytes] (type:uint8_t)
-                data                      : logged data (type:uint8_t)
-
-                '''
-                return MAVLink_logging_data_message(target_system, target_component, sequence, length, first_message_offset, data)
-
-        def logging_data_send(self, target_system, target_component, sequence, length, first_message_offset, data, force_mavlink1=False):
-                '''
-                A message containing logged data (see also MAV_CMD_LOGGING_START)
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                sequence                  : sequence number (can wrap) (type:uint16_t)
-                length                    : data length [bytes] (type:uint8_t)
-                first_message_offset        : offset into data where first message starts. This can be used for recovery, when a previous message got lost (set to 255 if no start exists). [bytes] (type:uint8_t)
-                data                      : logged data (type:uint8_t)
-
-                '''
-                return self.send(self.logging_data_encode(target_system, target_component, sequence, length, first_message_offset, data), force_mavlink1=force_mavlink1)
-
-        def logging_data_acked_encode(self, target_system, target_component, sequence, length, first_message_offset, data):
-                '''
-                A message containing logged data which requires a LOGGING_ACK to be
-                sent back
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                sequence                  : sequence number (can wrap) (type:uint16_t)
-                length                    : data length [bytes] (type:uint8_t)
-                first_message_offset        : offset into data where first message starts. This can be used for recovery, when a previous message got lost (set to 255 if no start exists). [bytes] (type:uint8_t)
-                data                      : logged data (type:uint8_t)
-
-                '''
-                return MAVLink_logging_data_acked_message(target_system, target_component, sequence, length, first_message_offset, data)
-
-        def logging_data_acked_send(self, target_system, target_component, sequence, length, first_message_offset, data, force_mavlink1=False):
-                '''
-                A message containing logged data which requires a LOGGING_ACK to be
-                sent back
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                sequence                  : sequence number (can wrap) (type:uint16_t)
-                length                    : data length [bytes] (type:uint8_t)
-                first_message_offset        : offset into data where first message starts. This can be used for recovery, when a previous message got lost (set to 255 if no start exists). [bytes] (type:uint8_t)
-                data                      : logged data (type:uint8_t)
-
-                '''
-                return self.send(self.logging_data_acked_encode(target_system, target_component, sequence, length, first_message_offset, data), force_mavlink1=force_mavlink1)
-
-        def logging_ack_encode(self, target_system, target_component, sequence):
-                '''
-                An ack for a LOGGING_DATA_ACKED message
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                sequence                  : sequence number (must match the one in LOGGING_DATA_ACKED) (type:uint16_t)
-
-                '''
-                return MAVLink_logging_ack_message(target_system, target_component, sequence)
-
-        def logging_ack_send(self, target_system, target_component, sequence, force_mavlink1=False):
-                '''
-                An ack for a LOGGING_DATA_ACKED message
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                sequence                  : sequence number (must match the one in LOGGING_DATA_ACKED) (type:uint16_t)
-
-                '''
-                return self.send(self.logging_ack_encode(target_system, target_component, sequence), force_mavlink1=force_mavlink1)
-
-        def video_stream_information_encode(self, camera_id, status, framerate, resolution_h, resolution_v, bitrate, rotation, uri):
-                '''
-                Information about video stream
-
-                camera_id                 : Camera ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                status                    : Current status of video streaming (0: not running, 1: in progress) (type:uint8_t)
-                framerate                 : Frame rate [Hz] (type:float)
-                resolution_h              : Horizontal resolution [pix] (type:uint16_t)
-                resolution_v              : Vertical resolution [pix] (type:uint16_t)
-                bitrate                   : Bit rate in bits per second [bits/s] (type:uint32_t)
-                rotation                  : Video image rotation clockwise [deg] (type:uint16_t)
-                uri                       : Video stream URI (type:char)
-
-                '''
-                return MAVLink_video_stream_information_message(camera_id, status, framerate, resolution_h, resolution_v, bitrate, rotation, uri)
-
-        def video_stream_information_send(self, camera_id, status, framerate, resolution_h, resolution_v, bitrate, rotation, uri, force_mavlink1=False):
-                '''
-                Information about video stream
-
-                camera_id                 : Camera ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                status                    : Current status of video streaming (0: not running, 1: in progress) (type:uint8_t)
-                framerate                 : Frame rate [Hz] (type:float)
-                resolution_h              : Horizontal resolution [pix] (type:uint16_t)
-                resolution_v              : Vertical resolution [pix] (type:uint16_t)
-                bitrate                   : Bit rate in bits per second [bits/s] (type:uint32_t)
-                rotation                  : Video image rotation clockwise [deg] (type:uint16_t)
-                uri                       : Video stream URI (type:char)
-
-                '''
-                return self.send(self.video_stream_information_encode(camera_id, status, framerate, resolution_h, resolution_v, bitrate, rotation, uri), force_mavlink1=force_mavlink1)
-
-        def set_video_stream_settings_encode(self, target_system, target_component, camera_id, framerate, resolution_h, resolution_v, bitrate, rotation, uri):
-                '''
-                Message that sets video stream settings
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                camera_id                 : Camera ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                framerate                 : Frame rate (set to -1 for highest framerate possible) [Hz] (type:float)
-                resolution_h              : Horizontal resolution (set to -1 for highest resolution possible) [pix] (type:uint16_t)
-                resolution_v              : Vertical resolution (set to -1 for highest resolution possible) [pix] (type:uint16_t)
-                bitrate                   : Bit rate (set to -1 for auto) [bits/s] (type:uint32_t)
-                rotation                  : Video image rotation clockwise (0-359 degrees) [deg] (type:uint16_t)
-                uri                       : Video stream URI (type:char)
-
-                '''
-                return MAVLink_set_video_stream_settings_message(target_system, target_component, camera_id, framerate, resolution_h, resolution_v, bitrate, rotation, uri)
-
-        def set_video_stream_settings_send(self, target_system, target_component, camera_id, framerate, resolution_h, resolution_v, bitrate, rotation, uri, force_mavlink1=False):
-                '''
-                Message that sets video stream settings
-
-                target_system             : system ID of the target (type:uint8_t)
-                target_component          : component ID of the target (type:uint8_t)
-                camera_id                 : Camera ID (1 for first, 2 for second, etc.) (type:uint8_t)
-                framerate                 : Frame rate (set to -1 for highest framerate possible) [Hz] (type:float)
-                resolution_h              : Horizontal resolution (set to -1 for highest resolution possible) [pix] (type:uint16_t)
-                resolution_v              : Vertical resolution (set to -1 for highest resolution possible) [pix] (type:uint16_t)
-                bitrate                   : Bit rate (set to -1 for auto) [bits/s] (type:uint32_t)
-                rotation                  : Video image rotation clockwise (0-359 degrees) [deg] (type:uint16_t)
-                uri                       : Video stream URI (type:char)
-
-                '''
-                return self.send(self.set_video_stream_settings_encode(target_system, target_component, camera_id, framerate, resolution_h, resolution_v, bitrate, rotation, uri), force_mavlink1=force_mavlink1)
-
-        def wifi_config_ap_encode(self, ssid, password):
-                '''
-                Configure AP SSID and Password.
-
-                ssid                      : Name of Wi-Fi network (SSID). Leave it blank to leave it unchanged. (type:char)
-                password                  : Password. Leave it blank for an open AP. (type:char)
-
-                '''
-                return MAVLink_wifi_config_ap_message(ssid, password)
-
-        def wifi_config_ap_send(self, ssid, password, force_mavlink1=False):
-                '''
-                Configure AP SSID and Password.
-
-                ssid                      : Name of Wi-Fi network (SSID). Leave it blank to leave it unchanged. (type:char)
-                password                  : Password. Leave it blank for an open AP. (type:char)
-
-                '''
-                return self.send(self.wifi_config_ap_encode(ssid, password), force_mavlink1=force_mavlink1)
-
-        def protocol_version_encode(self, version, min_version, max_version, spec_version_hash, library_version_hash):
-                '''
-                Version and capability of protocol version. This message is the
-                response to REQUEST_PROTOCOL_VERSION and is used as
-                part of the handshaking to establish which MAVLink
-                version should be used on the network. Every node
-                should respond to REQUEST_PROTOCOL_VERSION to enable
-                the handshaking. Library implementers should consider
-                adding this into the default decoding state machine to
-                allow the protocol core to respond directly.
-
-                version                   : Currently active MAVLink version number * 100: v1.0 is 100, v2.0 is 200, etc. (type:uint16_t)
-                min_version               : Minimum MAVLink version supported (type:uint16_t)
-                max_version               : Maximum MAVLink version supported (set to the same value as version by default) (type:uint16_t)
-                spec_version_hash         : The first 8 bytes (not characters printed in hex!) of the git hash. (type:uint8_t)
-                library_version_hash        : The first 8 bytes (not characters printed in hex!) of the git hash. (type:uint8_t)
-
-                '''
-                return MAVLink_protocol_version_message(version, min_version, max_version, spec_version_hash, library_version_hash)
-
-        def protocol_version_send(self, version, min_version, max_version, spec_version_hash, library_version_hash, force_mavlink1=False):
-                '''
-                Version and capability of protocol version. This message is the
-                response to REQUEST_PROTOCOL_VERSION and is used as
-                part of the handshaking to establish which MAVLink
-                version should be used on the network. Every node
-                should respond to REQUEST_PROTOCOL_VERSION to enable
-                the handshaking. Library implementers should consider
-                adding this into the default decoding state machine to
-                allow the protocol core to respond directly.
-
-                version                   : Currently active MAVLink version number * 100: v1.0 is 100, v2.0 is 200, etc. (type:uint16_t)
-                min_version               : Minimum MAVLink version supported (type:uint16_t)
-                max_version               : Maximum MAVLink version supported (set to the same value as version by default) (type:uint16_t)
-                spec_version_hash         : The first 8 bytes (not characters printed in hex!) of the git hash. (type:uint8_t)
-                library_version_hash        : The first 8 bytes (not characters printed in hex!) of the git hash. (type:uint8_t)
-
-                '''
-                return self.send(self.protocol_version_encode(version, min_version, max_version, spec_version_hash, library_version_hash), force_mavlink1=force_mavlink1)
-
-        def uavcan_node_status_encode(self, time_usec, uptime_sec, health, mode, sub_mode, vendor_specific_status_code):
-                '''
-                General status information of an UAVCAN node. Please refer to the
-                definition of the UAVCAN message
-                "uavcan.protocol.NodeStatus" for the background
-                information. The UAVCAN specification is available at
-                http://uavcan.org.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                uptime_sec                : Time since the start-up of the node. [s] (type:uint32_t)
-                health                    : Generalized node health status. (type:uint8_t, values:UAVCAN_NODE_HEALTH)
-                mode                      : Generalized operating mode. (type:uint8_t, values:UAVCAN_NODE_MODE)
-                sub_mode                  : Not used currently. (type:uint8_t)
-                vendor_specific_status_code        : Vendor-specific status information. (type:uint16_t)
-
-                '''
-                return MAVLink_uavcan_node_status_message(time_usec, uptime_sec, health, mode, sub_mode, vendor_specific_status_code)
-
-        def uavcan_node_status_send(self, time_usec, uptime_sec, health, mode, sub_mode, vendor_specific_status_code, force_mavlink1=False):
-                '''
-                General status information of an UAVCAN node. Please refer to the
-                definition of the UAVCAN message
-                "uavcan.protocol.NodeStatus" for the background
-                information. The UAVCAN specification is available at
-                http://uavcan.org.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                uptime_sec                : Time since the start-up of the node. [s] (type:uint32_t)
-                health                    : Generalized node health status. (type:uint8_t, values:UAVCAN_NODE_HEALTH)
-                mode                      : Generalized operating mode. (type:uint8_t, values:UAVCAN_NODE_MODE)
-                sub_mode                  : Not used currently. (type:uint8_t)
-                vendor_specific_status_code        : Vendor-specific status information. (type:uint16_t)
-
-                '''
-                return self.send(self.uavcan_node_status_encode(time_usec, uptime_sec, health, mode, sub_mode, vendor_specific_status_code), force_mavlink1=force_mavlink1)
-
-        def uavcan_node_info_encode(self, time_usec, uptime_sec, name, hw_version_major, hw_version_minor, hw_unique_id, sw_version_major, sw_version_minor, sw_vcs_commit):
-                '''
-                General information describing a particular UAVCAN node. Please refer
-                to the definition of the UAVCAN service
-                "uavcan.protocol.GetNodeInfo" for the background
-                information. This message should be emitted by the
-                system whenever a new node appears online, or an
-                existing node reboots. Additionally, it can be emitted
-                upon request from the other end of the MAVLink channel
-                (see MAV_CMD_UAVCAN_GET_NODE_INFO). It is also not
-                prohibited to emit this message unconditionally at a
-                low frequency. The UAVCAN specification is available
-                at http://uavcan.org.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                uptime_sec                : Time since the start-up of the node. [s] (type:uint32_t)
-                name                      : Node name string. For example, "sapog.px4.io". (type:char)
-                hw_version_major          : Hardware major version number. (type:uint8_t)
-                hw_version_minor          : Hardware minor version number. (type:uint8_t)
-                hw_unique_id              : Hardware unique 128-bit ID. (type:uint8_t)
-                sw_version_major          : Software major version number. (type:uint8_t)
-                sw_version_minor          : Software minor version number. (type:uint8_t)
-                sw_vcs_commit             : Version control system (VCS) revision identifier (e.g. git short commit hash). Zero if unknown. (type:uint32_t)
-
-                '''
-                return MAVLink_uavcan_node_info_message(time_usec, uptime_sec, name, hw_version_major, hw_version_minor, hw_unique_id, sw_version_major, sw_version_minor, sw_vcs_commit)
-
-        def uavcan_node_info_send(self, time_usec, uptime_sec, name, hw_version_major, hw_version_minor, hw_unique_id, sw_version_major, sw_version_minor, sw_vcs_commit, force_mavlink1=False):
-                '''
-                General information describing a particular UAVCAN node. Please refer
-                to the definition of the UAVCAN service
-                "uavcan.protocol.GetNodeInfo" for the background
-                information. This message should be emitted by the
-                system whenever a new node appears online, or an
-                existing node reboots. Additionally, it can be emitted
-                upon request from the other end of the MAVLink channel
-                (see MAV_CMD_UAVCAN_GET_NODE_INFO). It is also not
-                prohibited to emit this message unconditionally at a
-                low frequency. The UAVCAN specification is available
-                at http://uavcan.org.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                uptime_sec                : Time since the start-up of the node. [s] (type:uint32_t)
-                name                      : Node name string. For example, "sapog.px4.io". (type:char)
-                hw_version_major          : Hardware major version number. (type:uint8_t)
-                hw_version_minor          : Hardware minor version number. (type:uint8_t)
-                hw_unique_id              : Hardware unique 128-bit ID. (type:uint8_t)
-                sw_version_major          : Software major version number. (type:uint8_t)
-                sw_version_minor          : Software minor version number. (type:uint8_t)
-                sw_vcs_commit             : Version control system (VCS) revision identifier (e.g. git short commit hash). Zero if unknown. (type:uint32_t)
-
-                '''
-                return self.send(self.uavcan_node_info_encode(time_usec, uptime_sec, name, hw_version_major, hw_version_minor, hw_unique_id, sw_version_major, sw_version_minor, sw_vcs_commit), force_mavlink1=force_mavlink1)
-
-        def param_ext_request_read_encode(self, target_system, target_component, param_id, param_index):
-                '''
-                Request to read the value of a parameter with the either the param_id
-                string id or param_index.
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_index               : Parameter index. Set to -1 to use the Parameter ID field as identifier (else param_id will be ignored) (type:int16_t)
-
-                '''
-                return MAVLink_param_ext_request_read_message(target_system, target_component, param_id, param_index)
-
-        def param_ext_request_read_send(self, target_system, target_component, param_id, param_index, force_mavlink1=False):
-                '''
-                Request to read the value of a parameter with the either the param_id
-                string id or param_index.
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_index               : Parameter index. Set to -1 to use the Parameter ID field as identifier (else param_id will be ignored) (type:int16_t)
-
-                '''
-                return self.send(self.param_ext_request_read_encode(target_system, target_component, param_id, param_index), force_mavlink1=force_mavlink1)
-
-        def param_ext_request_list_encode(self, target_system, target_component):
-                '''
-                Request all parameters of this component. After this request, all
-                parameters are emitted.
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-
-                '''
-                return MAVLink_param_ext_request_list_message(target_system, target_component)
-
-        def param_ext_request_list_send(self, target_system, target_component, force_mavlink1=False):
-                '''
-                Request all parameters of this component. After this request, all
-                parameters are emitted.
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-
-                '''
-                return self.send(self.param_ext_request_list_encode(target_system, target_component), force_mavlink1=force_mavlink1)
-
-        def param_ext_value_encode(self, param_id, param_value, param_type, param_count, param_index):
-                '''
-                Emit the value of a parameter. The inclusion of param_count and
-                param_index in the message allows the recipient to
-                keep track of received parameters and allows them to
-                re-request missing parameters after a loss or timeout.
-
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_value               : Parameter value (type:char)
-                param_type                : Parameter type. (type:uint8_t, values:MAV_PARAM_EXT_TYPE)
-                param_count               : Total number of parameters (type:uint16_t)
-                param_index               : Index of this parameter (type:uint16_t)
-
-                '''
-                return MAVLink_param_ext_value_message(param_id, param_value, param_type, param_count, param_index)
-
-        def param_ext_value_send(self, param_id, param_value, param_type, param_count, param_index, force_mavlink1=False):
-                '''
-                Emit the value of a parameter. The inclusion of param_count and
-                param_index in the message allows the recipient to
-                keep track of received parameters and allows them to
-                re-request missing parameters after a loss or timeout.
-
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_value               : Parameter value (type:char)
-                param_type                : Parameter type. (type:uint8_t, values:MAV_PARAM_EXT_TYPE)
-                param_count               : Total number of parameters (type:uint16_t)
-                param_index               : Index of this parameter (type:uint16_t)
-
-                '''
-                return self.send(self.param_ext_value_encode(param_id, param_value, param_type, param_count, param_index), force_mavlink1=force_mavlink1)
-
-        def param_ext_set_encode(self, target_system, target_component, param_id, param_value, param_type):
-                '''
-                Set a parameter value. In order to deal with message loss (and
-                retransmission of PARAM_EXT_SET), when setting a
-                parameter value and the new value is the same as the
-                current value, you will immediately get a
-                PARAM_ACK_ACCEPTED response. If the current state is
-                PARAM_ACK_IN_PROGRESS, you will accordingly receive a
-                PARAM_ACK_IN_PROGRESS in response.
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_value               : Parameter value (type:char)
-                param_type                : Parameter type. (type:uint8_t, values:MAV_PARAM_EXT_TYPE)
-
-                '''
-                return MAVLink_param_ext_set_message(target_system, target_component, param_id, param_value, param_type)
-
-        def param_ext_set_send(self, target_system, target_component, param_id, param_value, param_type, force_mavlink1=False):
-                '''
-                Set a parameter value. In order to deal with message loss (and
-                retransmission of PARAM_EXT_SET), when setting a
-                parameter value and the new value is the same as the
-                current value, you will immediately get a
-                PARAM_ACK_ACCEPTED response. If the current state is
-                PARAM_ACK_IN_PROGRESS, you will accordingly receive a
-                PARAM_ACK_IN_PROGRESS in response.
-
-                target_system             : System ID (type:uint8_t)
-                target_component          : Component ID (type:uint8_t)
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_value               : Parameter value (type:char)
-                param_type                : Parameter type. (type:uint8_t, values:MAV_PARAM_EXT_TYPE)
-
-                '''
-                return self.send(self.param_ext_set_encode(target_system, target_component, param_id, param_value, param_type), force_mavlink1=force_mavlink1)
-
-        def param_ext_ack_encode(self, param_id, param_value, param_type, param_result):
-                '''
-                Response from a PARAM_EXT_SET message.
-
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_value               : Parameter value (new value if PARAM_ACK_ACCEPTED, current value otherwise) (type:char)
-                param_type                : Parameter type. (type:uint8_t, values:MAV_PARAM_EXT_TYPE)
-                param_result              : Result code. (type:uint8_t, values:PARAM_ACK)
-
-                '''
-                return MAVLink_param_ext_ack_message(param_id, param_value, param_type, param_result)
-
-        def param_ext_ack_send(self, param_id, param_value, param_type, param_result, force_mavlink1=False):
-                '''
-                Response from a PARAM_EXT_SET message.
-
-                param_id                  : Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string (type:char)
-                param_value               : Parameter value (new value if PARAM_ACK_ACCEPTED, current value otherwise) (type:char)
-                param_type                : Parameter type. (type:uint8_t, values:MAV_PARAM_EXT_TYPE)
-                param_result              : Result code. (type:uint8_t, values:PARAM_ACK)
-
-                '''
-                return self.send(self.param_ext_ack_encode(param_id, param_value, param_type, param_result), force_mavlink1=force_mavlink1)
-
-        def obstacle_distance_encode(self, time_usec, sensor_type, distances, increment, min_distance, max_distance):
-                '''
-                Obstacle distances in front of the sensor, starting from the left in
-                increment degrees to the right
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                sensor_type               : Class id of the distance sensor type. (type:uint8_t, values:MAV_DISTANCE_SENSOR)
-                distances                 : Distance of obstacles around the UAV with index 0 corresponding to local North. A value of 0 means that the obstacle is right in front of the sensor. A value of max_distance +1 means no obstacle is present. A value of UINT16_MAX for unknown/not used. In a array element, one unit corresponds to 1cm. [cm] (type:uint16_t)
-                increment                 : Angular width in degrees of each array element. [deg] (type:uint8_t)
-                min_distance              : Minimum distance the sensor can measure. [cm] (type:uint16_t)
-                max_distance              : Maximum distance the sensor can measure. [cm] (type:uint16_t)
-
-                '''
-                return MAVLink_obstacle_distance_message(time_usec, sensor_type, distances, increment, min_distance, max_distance)
-
-        def obstacle_distance_send(self, time_usec, sensor_type, distances, increment, min_distance, max_distance, force_mavlink1=False):
-                '''
-                Obstacle distances in front of the sensor, starting from the left in
-                increment degrees to the right
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                sensor_type               : Class id of the distance sensor type. (type:uint8_t, values:MAV_DISTANCE_SENSOR)
-                distances                 : Distance of obstacles around the UAV with index 0 corresponding to local North. A value of 0 means that the obstacle is right in front of the sensor. A value of max_distance +1 means no obstacle is present. A value of UINT16_MAX for unknown/not used. In a array element, one unit corresponds to 1cm. [cm] (type:uint16_t)
-                increment                 : Angular width in degrees of each array element. [deg] (type:uint8_t)
-                min_distance              : Minimum distance the sensor can measure. [cm] (type:uint16_t)
-                max_distance              : Maximum distance the sensor can measure. [cm] (type:uint16_t)
-
-                '''
-                return self.send(self.obstacle_distance_encode(time_usec, sensor_type, distances, increment, min_distance, max_distance), force_mavlink1=force_mavlink1)
-
-        def odometry_encode(self, time_usec, frame_id, child_frame_id, x, y, z, q, vx, vy, vz, rollspeed, pitchspeed, yawspeed, pose_covariance, twist_covariance):
-                '''
-                Odometry message to communicate odometry information with an external
-                interface. Fits ROS REP 147 standard for aerial
-                vehicles (http://www.ros.org/reps/rep-0147.html).
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                frame_id                  : Coordinate frame of reference for the pose data. (type:uint8_t, values:MAV_FRAME)
-                child_frame_id            : Coordinate frame of reference for the velocity in free space (twist) data. (type:uint8_t, values:MAV_FRAME)
-                x                         : X Position [m] (type:float)
-                y                         : Y Position [m] (type:float)
-                z                         : Z Position [m] (type:float)
-                q                         : Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation) (type:float)
-                vx                        : X linear speed [m/s] (type:float)
-                vy                        : Y linear speed [m/s] (type:float)
-                vz                        : Z linear speed [m/s] (type:float)
-                rollspeed                 : Roll angular speed [rad/s] (type:float)
-                pitchspeed                : Pitch angular speed [rad/s] (type:float)
-                yawspeed                  : Yaw angular speed [rad/s] (type:float)
-                pose_covariance           : Pose (states: x, y, z, roll, pitch, yaw) covariance matrix upper right triangle (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
-                twist_covariance          : Twist (states: vx, vy, vz, rollspeed, pitchspeed, yawspeed) covariance matrix upper right triangle (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
-
-                '''
-                return MAVLink_odometry_message(time_usec, frame_id, child_frame_id, x, y, z, q, vx, vy, vz, rollspeed, pitchspeed, yawspeed, pose_covariance, twist_covariance)
-
-        def odometry_send(self, time_usec, frame_id, child_frame_id, x, y, z, q, vx, vy, vz, rollspeed, pitchspeed, yawspeed, pose_covariance, twist_covariance, force_mavlink1=False):
-                '''
-                Odometry message to communicate odometry information with an external
-                interface. Fits ROS REP 147 standard for aerial
-                vehicles (http://www.ros.org/reps/rep-0147.html).
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                frame_id                  : Coordinate frame of reference for the pose data. (type:uint8_t, values:MAV_FRAME)
-                child_frame_id            : Coordinate frame of reference for the velocity in free space (twist) data. (type:uint8_t, values:MAV_FRAME)
-                x                         : X Position [m] (type:float)
-                y                         : Y Position [m] (type:float)
-                z                         : Z Position [m] (type:float)
-                q                         : Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation) (type:float)
-                vx                        : X linear speed [m/s] (type:float)
-                vy                        : Y linear speed [m/s] (type:float)
-                vz                        : Z linear speed [m/s] (type:float)
-                rollspeed                 : Roll angular speed [rad/s] (type:float)
-                pitchspeed                : Pitch angular speed [rad/s] (type:float)
-                yawspeed                  : Yaw angular speed [rad/s] (type:float)
-                pose_covariance           : Pose (states: x, y, z, roll, pitch, yaw) covariance matrix upper right triangle (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
-                twist_covariance          : Twist (states: vx, vy, vz, rollspeed, pitchspeed, yawspeed) covariance matrix upper right triangle (first six entries are the first ROW, next five entries are the second ROW, etc.) (type:float)
-
-                '''
-                return self.send(self.odometry_encode(time_usec, frame_id, child_frame_id, x, y, z, q, vx, vy, vz, rollspeed, pitchspeed, yawspeed, pose_covariance, twist_covariance), force_mavlink1=force_mavlink1)
-
-        def trajectory_representation_waypoints_encode(self, time_usec, valid_points, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, acc_x, acc_y, acc_z, pos_yaw, vel_yaw):
-                '''
-                Describe a trajectory using an array of up-to 5 waypoints in the local
-                frame.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                valid_points              : Number of valid points (up-to 5 waypoints are possible) (type:uint8_t)
-                pos_x                     : X-coordinate of waypoint, set to NaN if not being used [m] (type:float)
-                pos_y                     : Y-coordinate of waypoint, set to NaN if not being used [m] (type:float)
-                pos_z                     : Z-coordinate of waypoint, set to NaN if not being used [m] (type:float)
-                vel_x                     : X-velocity of waypoint, set to NaN if not being used [m/s] (type:float)
-                vel_y                     : Y-velocity of waypoint, set to NaN if not being used [m/s] (type:float)
-                vel_z                     : Z-velocity of waypoint, set to NaN if not being used [m/s] (type:float)
-                acc_x                     : X-acceleration of waypoint, set to NaN if not being used [m/s/s] (type:float)
-                acc_y                     : Y-acceleration of waypoint, set to NaN if not being used [m/s/s] (type:float)
-                acc_z                     : Z-acceleration of waypoint, set to NaN if not being used [m/s/s] (type:float)
-                pos_yaw                   : Yaw angle, set to NaN if not being used [rad] (type:float)
-                vel_yaw                   : Yaw rate, set to NaN if not being used [rad/s] (type:float)
-
-                '''
-                return MAVLink_trajectory_representation_waypoints_message(time_usec, valid_points, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, acc_x, acc_y, acc_z, pos_yaw, vel_yaw)
-
-        def trajectory_representation_waypoints_send(self, time_usec, valid_points, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, acc_x, acc_y, acc_z, pos_yaw, vel_yaw, force_mavlink1=False):
-                '''
-                Describe a trajectory using an array of up-to 5 waypoints in the local
-                frame.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                valid_points              : Number of valid points (up-to 5 waypoints are possible) (type:uint8_t)
-                pos_x                     : X-coordinate of waypoint, set to NaN if not being used [m] (type:float)
-                pos_y                     : Y-coordinate of waypoint, set to NaN if not being used [m] (type:float)
-                pos_z                     : Z-coordinate of waypoint, set to NaN if not being used [m] (type:float)
-                vel_x                     : X-velocity of waypoint, set to NaN if not being used [m/s] (type:float)
-                vel_y                     : Y-velocity of waypoint, set to NaN if not being used [m/s] (type:float)
-                vel_z                     : Z-velocity of waypoint, set to NaN if not being used [m/s] (type:float)
-                acc_x                     : X-acceleration of waypoint, set to NaN if not being used [m/s/s] (type:float)
-                acc_y                     : Y-acceleration of waypoint, set to NaN if not being used [m/s/s] (type:float)
-                acc_z                     : Z-acceleration of waypoint, set to NaN if not being used [m/s/s] (type:float)
-                pos_yaw                   : Yaw angle, set to NaN if not being used [rad] (type:float)
-                vel_yaw                   : Yaw rate, set to NaN if not being used [rad/s] (type:float)
-
-                '''
-                return self.send(self.trajectory_representation_waypoints_encode(time_usec, valid_points, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, acc_x, acc_y, acc_z, pos_yaw, vel_yaw), force_mavlink1=force_mavlink1)
-
-        def trajectory_representation_bezier_encode(self, time_usec, valid_points, pos_x, pos_y, pos_z, delta, pos_yaw):
-                '''
-                Describe a trajectory using an array of up-to 5 bezier points in the
-                local frame.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                valid_points              : Number of valid points (up-to 5 waypoints are possible) (type:uint8_t)
-                pos_x                     : X-coordinate of starting bezier point, set to NaN if not being used [m] (type:float)
-                pos_y                     : Y-coordinate of starting bezier point, set to NaN if not being used [m] (type:float)
-                pos_z                     : Z-coordinate of starting bezier point, set to NaN if not being used [m] (type:float)
-                delta                     : Bezier time horizon, set to NaN if velocity/acceleration should not be incorporated [s] (type:float)
-                pos_yaw                   : Yaw, set to NaN for unchanged [rad] (type:float)
-
-                '''
-                return MAVLink_trajectory_representation_bezier_message(time_usec, valid_points, pos_x, pos_y, pos_z, delta, pos_yaw)
-
-        def trajectory_representation_bezier_send(self, time_usec, valid_points, pos_x, pos_y, pos_z, delta, pos_yaw, force_mavlink1=False):
-                '''
-                Describe a trajectory using an array of up-to 5 bezier points in the
-                local frame.
-
-                time_usec                 : Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number. [us] (type:uint64_t)
-                valid_points              : Number of valid points (up-to 5 waypoints are possible) (type:uint8_t)
-                pos_x                     : X-coordinate of starting bezier point, set to NaN if not being used [m] (type:float)
-                pos_y                     : Y-coordinate of starting bezier point, set to NaN if not being used [m] (type:float)
-                pos_z                     : Z-coordinate of starting bezier point, set to NaN if not being used [m] (type:float)
-                delta                     : Bezier time horizon, set to NaN if velocity/acceleration should not be incorporated [s] (type:float)
-                pos_yaw                   : Yaw, set to NaN for unchanged [rad] (type:float)
-
-                '''
-                return self.send(self.trajectory_representation_bezier_encode(time_usec, valid_points, pos_x, pos_y, pos_z, delta, pos_yaw), force_mavlink1=force_mavlink1)
 
