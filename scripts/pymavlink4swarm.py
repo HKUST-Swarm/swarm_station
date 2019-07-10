@@ -3107,18 +3107,18 @@ class MAVLink_node_realtime_info_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_NODE_REALTIME_INFO
         name = 'NODE_REALTIME_INFO'
-        fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'yaw', 'remote_distance']
-        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'remote_distance', 'odom_vaild']
-        fieldtypes = ['int32_t', 'uint8_t', 'float', 'float', 'float', 'int16_t', 'uint16_t']
-        format = '<ifffh10HB'
-        native_format = bytearray('<ifffhHB', 'ascii')
-        orders = [0, 6, 1, 2, 3, 4, 5]
-        lengths = [1, 1, 1, 1, 1, 10, 1]
-        array_lengths = [0, 0, 0, 0, 0, 10, 0]
-        crc_extra = 163
-        unpacker = struct.Struct('<ifffh10HB')
+        fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'yaw', 'remote_distance']
+        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'yaw', 'remote_distance', 'odom_vaild']
+        fieldtypes = ['int32_t', 'uint8_t', 'float', 'float', 'float', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t']
+        format = '<ifffhhhh10HB'
+        native_format = bytearray('<ifffhhhhHB', 'ascii')
+        orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 10, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
+        crc_extra = 61
+        unpacker = struct.Struct('<ifffhhhh10HB')
 
-        def __init__(self, lps_time, odom_vaild, x, y, z, yaw, remote_distance):
+        def __init__(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance):
                 MAVLink_message.__init__(self, MAVLink_node_realtime_info_message.id, MAVLink_node_realtime_info_message.name)
                 self._fieldnames = MAVLink_node_realtime_info_message.fieldnames
                 self.lps_time = lps_time
@@ -3126,11 +3126,14 @@ class MAVLink_node_realtime_info_message(MAVLink_message):
                 self.x = x
                 self.y = y
                 self.z = z
+                self.vx = vx
+                self.vy = vy
+                self.vz = vz
                 self.yaw = yaw
                 self.remote_distance = remote_distance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 163, struct.pack('<ifffh10HB', self.lps_time, self.x, self.y, self.z, self.yaw, self.remote_distance[0], self.remote_distance[1], self.remote_distance[2], self.remote_distance[3], self.remote_distance[4], self.remote_distance[5], self.remote_distance[6], self.remote_distance[7], self.remote_distance[8], self.remote_distance[9], self.odom_vaild), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 61, struct.pack('<ifffhhhh10HB', self.lps_time, self.x, self.y, self.z, self.vx, self.vy, self.vz, self.yaw, self.remote_distance[0], self.remote_distance[1], self.remote_distance[2], self.remote_distance[3], self.remote_distance[4], self.remote_distance[5], self.remote_distance[6], self.remote_distance[7], self.remote_distance[8], self.remote_distance[9], self.odom_vaild), force_mavlink1=force_mavlink1)
 
 class MAVLink_node_relative_fused_message(MAVLink_message):
         '''
@@ -8425,35 +8428,41 @@ class MAVLink(object):
                 m._crc = crc
                 m._header = MAVLink_header(msgId, incompat_flags, compat_flags, mlen, seq, srcSystem, srcComponent)
                 return m
-        def node_realtime_info_encode(self, lps_time, odom_vaild, x, y, z, yaw, remote_distance):
+        def node_realtime_info_encode(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance):
                 '''
                 
 
                 lps_time                  : LPS_TIME [ms] (type:int32_t)
                 odom_vaild                : If odometry is vaild (type:uint8_t)
-                x                         : X Position [mm] (type:float)
-                y                         : Y Position [mm] (type:float)
-                z                         : Z Position [mm] (type:float)
+                x                         : X Position [m] (type:float)
+                y                         : Y Position [m] (type:float)
+                z                         : Z Position [m] (type:float)
+                vx                        : X velocity [cm/s] (type:int16_t)
+                vy                        : Y Velocity [cm/s] (type:int16_t)
+                vz                        : Z Velocity [cm/x] (type:int16_t)
                 yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
                 remote_distance           : Distance to Remote Drone*1000 [m] (type:uint16_t)
 
                 '''
-                return MAVLink_node_realtime_info_message(lps_time, odom_vaild, x, y, z, yaw, remote_distance)
+                return MAVLink_node_realtime_info_message(lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance)
 
-        def node_realtime_info_send(self, lps_time, odom_vaild, x, y, z, yaw, remote_distance, force_mavlink1=False):
+        def node_realtime_info_send(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance, force_mavlink1=False):
                 '''
                 
 
                 lps_time                  : LPS_TIME [ms] (type:int32_t)
                 odom_vaild                : If odometry is vaild (type:uint8_t)
-                x                         : X Position [mm] (type:float)
-                y                         : Y Position [mm] (type:float)
-                z                         : Z Position [mm] (type:float)
+                x                         : X Position [m] (type:float)
+                y                         : Y Position [m] (type:float)
+                z                         : Z Position [m] (type:float)
+                vx                        : X velocity [cm/s] (type:int16_t)
+                vy                        : Y Velocity [cm/s] (type:int16_t)
+                vz                        : Z Velocity [cm/x] (type:int16_t)
                 yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
                 remote_distance           : Distance to Remote Drone*1000 [m] (type:uint16_t)
 
                 '''
-                return self.send(self.node_realtime_info_encode(lps_time, odom_vaild, x, y, z, yaw, remote_distance), force_mavlink1=force_mavlink1)
+                return self.send(self.node_realtime_info_encode(lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance), force_mavlink1=force_mavlink1)
 
         def node_relative_fused_encode(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset):
                 '''

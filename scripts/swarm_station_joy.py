@@ -27,6 +27,7 @@ class fifo(object):
 
 class SwarmCommander():
     def __init__(self):
+        self.node_msg_count = {}
         f = fifo()
         self.self_id = 7
 
@@ -38,7 +39,7 @@ class SwarmCommander():
 
         self.remote_node_vo_pose_pubs = {}
 
-        self.incoming_data_sub = rospy.Subscriber("/uwb_node/incoming_broadcast_data", incoming_broadcast_data, self.on_remote_data, queue_size=1)
+        self.incoming_data_sub = rospy.Subscriber("/uwb_node/incoming_broadcast_data", incoming_broadcast_data, self.on_remote_data, queue_size=100)
 
         self.joysub = rospy.Subscriber("/joy", Joy, self.on_joy_message, queue_size=1, tcp_nodelay=True)
 
@@ -201,7 +202,7 @@ class SwarmCommander():
 
 
 
-    
+
     def on_remote_data(self, data):
         """
         Header header
@@ -292,6 +293,9 @@ class SwarmCommander():
                 if msg is not None:
                     if msg.get_type() == "DRONE_STATUS":
                         self.on_drone_status(_id, msg, now_lps)
+                    else:
+                        pass
+                        # print(msg)
                     # return
         except Exception as inst:
             print(inst)

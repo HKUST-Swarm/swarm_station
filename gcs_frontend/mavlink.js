@@ -16,11 +16,6 @@ Buffer.prototype.toByteArray = function () {
   return Array.prototype.slice.call(this, 0)
 }
 
-Base64toBuffer = function (b64string) {
-    buf = Buffer.from(b64string, 'base64');
-    return buf;
-} 
-
 mavlink = function(){};
 
 // Implement the X25CRC function (present in the Python version through the mavutil.py package)
@@ -1388,19 +1383,22 @@ mavlink.messages = {};
                 x                         : X Position (float)
                 y                         : Y Position (float)
                 z                         : Z Position (float)
+                vx                        : X velocity (int16_t)
+                vy                        : Y Velocity (int16_t)
+                vz                        : Z Velocity (int16_t)
                 yaw                       : Yaw angle rad*1000 (int16_t)
                 remote_distance           : Distance to Remote Drone*1000 (uint16_t)
 
 */
-mavlink.messages.node_realtime_info = function(lps_time, odom_vaild, x, y, z, yaw, remote_distance) {
+mavlink.messages.node_realtime_info = function(lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance) {
 
-    this.format = '<ifffh10HB';
+    this.format = '<ifffhhhh10HB';
     this.id = mavlink.MAVLINK_MSG_ID_NODE_REALTIME_INFO;
-    this.order_map = [0, 6, 1, 2, 3, 4, 5];
-    this.crc_extra = 163;
+    this.order_map = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8];
+    this.crc_extra = 61;
     this.name = 'NODE_REALTIME_INFO';
 
-    this.fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'yaw', 'remote_distance'];
+    this.fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'yaw', 'remote_distance'];
 
 
     this.set(arguments);
@@ -1410,7 +1408,7 @@ mavlink.messages.node_realtime_info = function(lps_time, odom_vaild, x, y, z, ya
 mavlink.messages.node_realtime_info.prototype = new mavlink.message;
 
 mavlink.messages.node_realtime_info.prototype.pack = function(mav) {
-    return mavlink.message.prototype.pack.call(this, mav, this.crc_extra, jspack.Pack(this.format, [ this.lps_time, this.x, this.y, this.z, this.yaw, this.remote_distance, this.odom_vaild]));
+    return mavlink.message.prototype.pack.call(this, mav, this.crc_extra, jspack.Pack(this.format, [ this.lps_time, this.x, this.y, this.z, this.vx, this.vy, this.vz, this.yaw, this.remote_distance, this.odom_vaild]));
 }
 
 /* 
@@ -6408,7 +6406,7 @@ mavlink.messages.debug.prototype.pack = function(mav) {
 
 
 mavlink.map = {
-        200: { format: '<ifffh10HB', type: mavlink.messages.node_realtime_info, order_map: [0, 6, 1, 2, 3, 4, 5], crc_extra: 163 },
+        200: { format: '<ifffhhhh10HB', type: mavlink.messages.node_realtime_info, order_map: [0, 9, 1, 2, 3, 4, 5, 6, 7, 8], crc_extra: 61 },
         201: { format: '<ihhhhB', type: mavlink.messages.node_relative_fused, order_map: [0, 5, 1, 2, 3, 4], crc_extra: 164 },
         202: { format: '<iiiiiiiiiiibB', type: mavlink.messages.swarm_remote_command, order_map: [0, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], crc_extra: 125 },
         203: { format: '<ihhhhb', type: mavlink.messages.node_detected, order_map: [0, 5, 1, 2, 3, 4], crc_extra: 94 },
