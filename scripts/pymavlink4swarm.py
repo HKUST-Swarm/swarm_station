@@ -2963,6 +2963,7 @@ MAVLINK_MSG_ID_SWARM_REMOTE_COMMAND = 202
 MAVLINK_MSG_ID_NODE_DETECTED = 203
 MAVLINK_MSG_ID_DRONE_STATUS = 204
 MAVLINK_MSG_ID_DRONE_ODOM_GT = 205
+MAVLINK_MSG_ID_DRONE_POSE_GT = 206
 MAVLINK_MSG_ID_HEARTBEAT = 0
 MAVLINK_MSG_ID_SYS_STATUS = 1
 MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -3303,6 +3304,36 @@ class MAVLink_drone_odom_gt_message(MAVLink_message):
 
         def pack(self, mav, force_mavlink1=False):
                 return MAVLink_message.pack(self, mav, 225, struct.pack('<ihhhhhhhhhhb', self.lps_time, self.x, self.y, self.z, self.q0, self.q1, self.q2, self.q3, self.vx, self.vy, self.vz, self.source_id), force_mavlink1=force_mavlink1)
+
+class MAVLink_drone_pose_gt_message(MAVLink_message):
+        '''
+
+        '''
+        id = MAVLINK_MSG_ID_DRONE_POSE_GT
+        name = 'DRONE_POSE_GT'
+        fieldnames = ['lps_time', 'source_id', 'x', 'y', 'z', 'yaw']
+        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'source_id']
+        fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        format = '<ihhhhb'
+        native_format = bytearray('<ihhhhb', 'ascii')
+        orders = [0, 5, 1, 2, 3, 4]
+        lengths = [1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0]
+        crc_extra = 241
+        unpacker = struct.Struct('<ihhhhb')
+
+        def __init__(self, lps_time, source_id, x, y, z, yaw):
+                MAVLink_message.__init__(self, MAVLink_drone_pose_gt_message.id, MAVLink_drone_pose_gt_message.name)
+                self._fieldnames = MAVLink_drone_pose_gt_message.fieldnames
+                self.lps_time = lps_time
+                self.source_id = source_id
+                self.x = x
+                self.y = y
+                self.z = z
+                self.yaw = yaw
+
+        def pack(self, mav, force_mavlink1=False):
+                return MAVLink_message.pack(self, mav, 241, struct.pack('<ihhhhb', self.lps_time, self.x, self.y, self.z, self.yaw, self.source_id), force_mavlink1=force_mavlink1)
 
 class MAVLink_heartbeat_message(MAVLink_message):
         '''
@@ -7892,6 +7923,7 @@ mavlink_map = {
         MAVLINK_MSG_ID_NODE_DETECTED : MAVLink_node_detected_message,
         MAVLINK_MSG_ID_DRONE_STATUS : MAVLink_drone_status_message,
         MAVLINK_MSG_ID_DRONE_ODOM_GT : MAVLink_drone_odom_gt_message,
+        MAVLINK_MSG_ID_DRONE_POSE_GT : MAVLink_drone_pose_gt_message,
         MAVLINK_MSG_ID_HEARTBEAT : MAVLink_heartbeat_message,
         MAVLINK_MSG_ID_SYS_STATUS : MAVLink_sys_status_message,
         MAVLINK_MSG_ID_SYSTEM_TIME : MAVLink_system_time_message,
@@ -8641,6 +8673,34 @@ class MAVLink(object):
 
                 '''
                 return self.send(self.drone_odom_gt_encode(lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz), force_mavlink1=force_mavlink1)
+
+        def drone_pose_gt_encode(self, lps_time, source_id, x, y, z, yaw):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                source_id                 : Source ID of drone (type:int8_t)
+                x                         : X Position*1000 [m] (type:int16_t)
+                y                         : Y Position*1000 [m] (type:int16_t)
+                z                         : Z Position*1000 [m] (type:int16_t)
+                yaw                       : Yaw*1000 [rad*1000] (type:int16_t)
+
+                '''
+                return MAVLink_drone_pose_gt_message(lps_time, source_id, x, y, z, yaw)
+
+        def drone_pose_gt_send(self, lps_time, source_id, x, y, z, yaw, force_mavlink1=False):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                source_id                 : Source ID of drone (type:int8_t)
+                x                         : X Position*1000 [m] (type:int16_t)
+                y                         : Y Position*1000 [m] (type:int16_t)
+                z                         : Z Position*1000 [m] (type:int16_t)
+                yaw                       : Yaw*1000 [rad*1000] (type:int16_t)
+
+                '''
+                return self.send(self.drone_pose_gt_encode(lps_time, source_id, x, y, z, yaw), force_mavlink1=force_mavlink1)
 
         def heartbeat_encode(self, type, autopilot, base_mode, custom_mode, system_status, mavlink_version=3):
                 '''

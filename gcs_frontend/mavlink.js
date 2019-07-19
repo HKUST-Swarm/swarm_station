@@ -1235,6 +1235,7 @@ mavlink.MAVLINK_MSG_ID_SWARM_REMOTE_COMMAND = 202
 mavlink.MAVLINK_MSG_ID_NODE_DETECTED = 203
 mavlink.MAVLINK_MSG_ID_DRONE_STATUS = 204
 mavlink.MAVLINK_MSG_ID_DRONE_ODOM_GT = 205
+mavlink.MAVLINK_MSG_ID_DRONE_POSE_GT = 206
 mavlink.MAVLINK_MSG_ID_HEARTBEAT = 0
 mavlink.MAVLINK_MSG_ID_SYS_STATUS = 1
 mavlink.MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -1588,6 +1589,38 @@ mavlink.messages.drone_odom_gt.prototype = new mavlink.message;
 
 mavlink.messages.drone_odom_gt.prototype.pack = function(mav) {
     return mavlink.message.prototype.pack.call(this, mav, this.crc_extra, jspack.Pack(this.format, [ this.lps_time, this.x, this.y, this.z, this.q0, this.q1, this.q2, this.q3, this.vx, this.vy, this.vz, this.source_id]));
+}
+
+/* 
+
+
+                lps_time                  : LPS_TIME (int32_t)
+                source_id                 : Source ID of drone (int8_t)
+                x                         : X Position*1000 (int16_t)
+                y                         : Y Position*1000 (int16_t)
+                z                         : Z Position*1000 (int16_t)
+                yaw                       : Yaw*1000 (int16_t)
+
+*/
+mavlink.messages.drone_pose_gt = function(lps_time, source_id, x, y, z, yaw) {
+
+    this.format = '<ihhhhb';
+    this.id = mavlink.MAVLINK_MSG_ID_DRONE_POSE_GT;
+    this.order_map = [0, 5, 1, 2, 3, 4];
+    this.crc_extra = 241;
+    this.name = 'DRONE_POSE_GT';
+
+    this.fieldnames = ['lps_time', 'source_id', 'x', 'y', 'z', 'yaw'];
+
+
+    this.set(arguments);
+
+}
+        
+mavlink.messages.drone_pose_gt.prototype = new mavlink.message;
+
+mavlink.messages.drone_pose_gt.prototype.pack = function(mav) {
+    return mavlink.message.prototype.pack.call(this, mav, this.crc_extra, jspack.Pack(this.format, [ this.lps_time, this.x, this.y, this.z, this.yaw, this.source_id]));
 }
 
 /* 
@@ -6412,6 +6445,7 @@ mavlink.map = {
         203: { format: '<ihhhhb', type: mavlink.messages.node_detected, order_map: [0, 5, 1, 2, 3, 4], crc_extra: 94 },
         204: { format: '<iffffBBBBBBB', type: mavlink.messages.drone_status, order_map: [0, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4], crc_extra: 58 },
         205: { format: '<ihhhhhhhhhhb', type: mavlink.messages.drone_odom_gt, order_map: [0, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], crc_extra: 225 },
+        206: { format: '<ihhhhb', type: mavlink.messages.drone_pose_gt, order_map: [0, 5, 1, 2, 3, 4], crc_extra: 241 },
         0: { format: '<IBBBBB', type: mavlink.messages.heartbeat, order_map: [1, 2, 3, 0, 4, 5], crc_extra: 50 },
         1: { format: '<IIIHHhHHHHHHb', type: mavlink.messages.sys_status, order_map: [0, 1, 2, 3, 4, 5, 12, 6, 7, 8, 9, 10, 11], crc_extra: 124 },
         2: { format: '<QI', type: mavlink.messages.system_time, order_map: [0, 1], crc_extra: 137 },

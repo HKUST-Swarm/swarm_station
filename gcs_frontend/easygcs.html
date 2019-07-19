@@ -158,7 +158,7 @@
   <div style="position: fixed; right: 5%; bottom: 5%; width: 20%; height:25%; z-index:1000; opacity: 0.9; background: gray">
     <h4>Command Aera:    <span id="select_id" style="color:red">All</span></h4>
     <button type="button" class="btn btn-lg btn-primary" id="takeoff">Takeoff</button>
-    <button type="button" class="btn btn-primary btn-lg" >Landing</button>
+    <button type="button" class="btn btn-primary btn-lg" id="landing">Landing</button>
     <hr/>
     <button type="button" class="btn btn-lg btn-secondary" >Mission A</button>
     <button type="button" class="btn btn-secondary btn-lg" >Mission B</button>
@@ -167,8 +167,9 @@
   </div>
   <script>
     var select_id = -1;
+    var _lps_time = 0;
     var ros = new ROSLIB.Ros({
-      url: "ws://localhost:9090"
+      url: "ws://" + location.hostname + ":9090"
     });
     ros.on("connection", function () {
       console.log("Connected to websocket server.");
@@ -195,7 +196,7 @@
         }
         $("#avail_remote_nodes").html(avail);
       }
-
+      lps_time = msg.sys_time;
     });
 
     var incoming_data_listener = new ROSLIB.Topic({
@@ -252,16 +253,22 @@
           warn_battery_level(_id, status.bat_vol);
         }
         $("#bat"+_id).css("color", "red");
+      } else {
+        $("#bat"+_id).css("color", "green");
       }
 
       if (!status.vo_valid) {
-        if (warn_bat_count ++ % 20 == 0) {
+        if (warn_bat_count ++ % 20 == 1) {
           console.log("vo");
           warn_vo_(_id);
         }
           $("#x"+_id).css("color", "red");
           $("#y"+_id).css("color", "red");
           $("#z"+_id).css("color", "red");
+      } else {
+          $("#x"+_id).css("color", "green");
+          $("#y"+_id).css("color", "green");
+          $("#z"+_id).css("color", "green");
       }
 
     }
@@ -326,12 +333,48 @@
       update_cmd_select(-1);
     });
 
+    function takeoff_cmd() {
+      var takeoff_cmd = 5;
+      var scmd = new mavlink.messages.swarm_remote_command (lps_time, select_id, takeoff_cmd, 10000
+      , 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      return scmd.pack(mav);
+    }
+
+    function landing_cmd() {
+      var landing_cmd = 6;
+      var scmd = new mavlink.messages.swarm_remote_command (lps_time, select_id, landing_cmd, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      return scmd.pack(mav);
+    }
+
+    var send_uwb_msg = new ROSLIB.Topic({
+       ros : ros,
+       name : '/uwb_node/send_broadcast_data',
+       messageType : 'inf_uwb_ros/data_buffer'
+     });
+
     $("#takeoff").on("click", function() {
       if (confirm('Takeoff; Right? ID'+select_id)) {
         //Send takeoff command here
+        // _buf = data_buffer()
+        // _buf.data = buf
+        // self.uwb_pub.publish(_buf)
+        var _data = takeoff_cmd();
+        // console.log(_data);
+        var msg = new ROSLIB.Message({data : _data});
+        // console.log(msg);
+        send_uwb_msg.publish(msg);
       } else {
       }
     });
+
+    $("#landing").on("click", function() {
+        var _data = landing_cmd();
+        // console.log(_data);
+        var msg = new ROSLIB.Message({data : _data});
+        console.log(msg);
+        send_uwb_msg.publish(msg);
+    });
+
     /*
     var viewer = new ROS3D.Viewer({
       divID : 'urdf',
