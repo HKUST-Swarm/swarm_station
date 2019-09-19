@@ -1550,7 +1550,6 @@ enums['MAV_CMD'][223].param[2] = '''0: Warm start, 1:Cold start. Controls use of
 enums['MAV_CMD'][223].param[3] = '''Height delay (meters). This is for commanding engine start only after the vehicle has gained the specified height. Used in VTOL vehicles during takeoff to start engine after the aircraft is off the ground. Zero for no delay.'''
 enums['MAV_CMD'][223].param[4] = '''Empty'''
 enums['MAV_CMD'][223].param[5] = '''Empty'''
-enums['MAV_CMD'][223].param[5] = '''Empty'''
 enums['MAV_CMD'][223].param[6] = '''Empty'''
 enums['MAV_CMD'][223].param[7] = '''Empty'''
 MAV_CMD_DO_SET_MISSION_CURRENT = 224 # Set the mission item with sequence number seq as current item. This
@@ -1562,7 +1561,6 @@ enums['MAV_CMD'][224].param[1] = '''Mission sequence value to set'''
 enums['MAV_CMD'][224].param[2] = '''Empty'''
 enums['MAV_CMD'][224].param[3] = '''Empty'''
 enums['MAV_CMD'][224].param[4] = '''Empty'''
-enums['MAV_CMD'][224].param[5] = '''Empty'''
 enums['MAV_CMD'][224].param[5] = '''Empty'''
 enums['MAV_CMD'][224].param[6] = '''Empty'''
 enums['MAV_CMD'][224].param[7] = '''Empty'''
@@ -1641,9 +1639,20 @@ MAV_CMD_MISSION_START = 300 # start running a mission
 enums['MAV_CMD'][300] = EnumEntry('MAV_CMD_MISSION_START', '''start running a mission''')
 enums['MAV_CMD'][300].param[1] = '''first_item: the first mission item to run'''
 enums['MAV_CMD'][300].param[2] = '''last_item:  the last mission item to run (after this item is run, the mission ends)'''
+enums['MAV_CMD'][300].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][300].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][300].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][300].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][300].param[7] = '''Reserved (default:0)'''
 MAV_CMD_COMPONENT_ARM_DISARM = 400 # Arms / Disarms a component
 enums['MAV_CMD'][400] = EnumEntry('MAV_CMD_COMPONENT_ARM_DISARM', '''Arms / Disarms a component''')
 enums['MAV_CMD'][400].param[1] = '''1 to arm, 0 to disarm'''
+enums['MAV_CMD'][400].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD'][400].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][400].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][400].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][400].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][400].param[7] = '''Reserved (default:0)'''
 MAV_CMD_GET_HOME_POSITION = 410 # Request the home position from the vehicle.
 enums['MAV_CMD'][410] = EnumEntry('MAV_CMD_GET_HOME_POSITION', '''Request the home position from the vehicle.''')
 enums['MAV_CMD'][410].param[1] = '''Reserved'''
@@ -1657,31 +1666,67 @@ MAV_CMD_START_RX_PAIR = 500 # Starts receiver pairing
 enums['MAV_CMD'][500] = EnumEntry('MAV_CMD_START_RX_PAIR', '''Starts receiver pairing''')
 enums['MAV_CMD'][500].param[1] = '''0:Spektrum'''
 enums['MAV_CMD'][500].param[2] = '''RC type (see RC_TYPE enum)'''
+enums['MAV_CMD'][500].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][500].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][500].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][500].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][500].param[7] = '''Reserved (default:0)'''
 MAV_CMD_GET_MESSAGE_INTERVAL = 510 # Request the interval between messages for a particular MAVLink message
                         # ID
 enums['MAV_CMD'][510] = EnumEntry('MAV_CMD_GET_MESSAGE_INTERVAL', '''Request the interval between messages for a particular MAVLink message ID''')
 enums['MAV_CMD'][510].param[1] = '''The MAVLink message ID'''
+enums['MAV_CMD'][510].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD'][510].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][510].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][510].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][510].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][510].param[7] = '''Reserved (default:0)'''
 MAV_CMD_SET_MESSAGE_INTERVAL = 511 # Set the interval between messages for a particular MAVLink message ID.
                         # This interface replaces REQUEST_DATA_STREAM
 enums['MAV_CMD'][511] = EnumEntry('MAV_CMD_SET_MESSAGE_INTERVAL', '''Set the interval between messages for a particular MAVLink message ID. This interface replaces REQUEST_DATA_STREAM''')
 enums['MAV_CMD'][511].param[1] = '''The MAVLink message ID'''
 enums['MAV_CMD'][511].param[2] = '''The interval between two messages, in microseconds. Set to -1 to disable and 0 to request default rate.'''
+enums['MAV_CMD'][511].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][511].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][511].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][511].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][511].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_PROTOCOL_VERSION = 519 # Request MAVLink protocol version compatibility
 enums['MAV_CMD'][519] = EnumEntry('MAV_CMD_REQUEST_PROTOCOL_VERSION', '''Request MAVLink protocol version compatibility''')
 enums['MAV_CMD'][519].param[1] = '''1: Request supported protocol versions by all nodes on the network'''
 enums['MAV_CMD'][519].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][519].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][519].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][519].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][519].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][519].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES = 520 # Request autopilot capabilities
 enums['MAV_CMD'][520] = EnumEntry('MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES', '''Request autopilot capabilities''')
 enums['MAV_CMD'][520].param[1] = '''1: Request autopilot version'''
 enums['MAV_CMD'][520].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][520].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][520].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][520].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][520].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][520].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_CAMERA_INFORMATION = 521 # Request camera information (CAMERA_INFORMATION).
 enums['MAV_CMD'][521] = EnumEntry('MAV_CMD_REQUEST_CAMERA_INFORMATION', '''Request camera information (CAMERA_INFORMATION).''')
 enums['MAV_CMD'][521].param[1] = '''0: No action 1: Request camera capabilities'''
 enums['MAV_CMD'][521].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][521].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][521].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][521].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][521].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][521].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_CAMERA_SETTINGS = 522 # Request camera settings (CAMERA_SETTINGS).
 enums['MAV_CMD'][522] = EnumEntry('MAV_CMD_REQUEST_CAMERA_SETTINGS', '''Request camera settings (CAMERA_SETTINGS).''')
 enums['MAV_CMD'][522].param[1] = '''0: No Action 1: Request camera settings'''
 enums['MAV_CMD'][522].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][522].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][522].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][522].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][522].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][522].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_STORAGE_INFORMATION = 525 # Request storage information (STORAGE_INFORMATION). Use the command's
                         # target_component to target a specific
                         # component's storage.
@@ -1689,6 +1734,10 @@ enums['MAV_CMD'][525] = EnumEntry('MAV_CMD_REQUEST_STORAGE_INFORMATION', '''Requ
 enums['MAV_CMD'][525].param[1] = '''Storage ID (0 for all, 1 for first, 2 for second, etc.)'''
 enums['MAV_CMD'][525].param[2] = '''0: No Action 1: Request storage information'''
 enums['MAV_CMD'][525].param[3] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][525].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][525].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][525].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][525].param[7] = '''Reserved (default:0)'''
 MAV_CMD_STORAGE_FORMAT = 526 # Format a storage medium. Once format is complete, a
                         # STORAGE_INFORMATION message is sent. Use the
                         # command's target_component to target a
@@ -1697,23 +1746,46 @@ enums['MAV_CMD'][526] = EnumEntry('MAV_CMD_STORAGE_FORMAT', '''Format a storage 
 enums['MAV_CMD'][526].param[1] = '''Storage ID (1 for first, 2 for second, etc.)'''
 enums['MAV_CMD'][526].param[2] = '''0: No action 1: Format storage'''
 enums['MAV_CMD'][526].param[3] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][526].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][526].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][526].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][526].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS = 527 # Request camera capture status (CAMERA_CAPTURE_STATUS)
 enums['MAV_CMD'][527] = EnumEntry('MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS', '''Request camera capture status (CAMERA_CAPTURE_STATUS)''')
 enums['MAV_CMD'][527].param[1] = '''0: No Action 1: Request camera capture status'''
 enums['MAV_CMD'][527].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][527].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][527].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][527].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][527].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][527].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_FLIGHT_INFORMATION = 528 # Request flight information (FLIGHT_INFORMATION)
 enums['MAV_CMD'][528] = EnumEntry('MAV_CMD_REQUEST_FLIGHT_INFORMATION', '''Request flight information (FLIGHT_INFORMATION)''')
 enums['MAV_CMD'][528].param[1] = '''1: Request flight information'''
 enums['MAV_CMD'][528].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][528].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][528].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][528].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][528].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][528].param[7] = '''Reserved (default:0)'''
 MAV_CMD_RESET_CAMERA_SETTINGS = 529 # Reset all camera settings to Factory Default
 enums['MAV_CMD'][529] = EnumEntry('MAV_CMD_RESET_CAMERA_SETTINGS', '''Reset all camera settings to Factory Default''')
 enums['MAV_CMD'][529].param[1] = '''0: No Action 1: Reset all settings'''
 enums['MAV_CMD'][529].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][529].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][529].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][529].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][529].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][529].param[7] = '''Reserved (default:0)'''
 MAV_CMD_SET_CAMERA_MODE = 530 # Set camera running mode. Use NAN for reserved values.
 enums['MAV_CMD'][530] = EnumEntry('MAV_CMD_SET_CAMERA_MODE', '''Set camera running mode. Use NAN for reserved values.''')
 enums['MAV_CMD'][530].param[1] = '''Reserved (Set to 0)'''
 enums['MAV_CMD'][530].param[2] = '''Camera mode (see CAMERA_MODE enum)'''
 enums['MAV_CMD'][530].param[3] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][530].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][530].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][530].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][530].param[7] = '''Reserved (default:0)'''
 MAV_CMD_IMAGE_START_CAPTURE = 2000 # Start image capture sequence. Sends CAMERA_IMAGE_CAPTURED after each
                         # capture. Use NAN for reserved values.
 enums['MAV_CMD'][2000] = EnumEntry('MAV_CMD_IMAGE_START_CAPTURE', '''Start image capture sequence. Sends CAMERA_IMAGE_CAPTURED after each capture. Use NAN for reserved values.''')
@@ -1722,42 +1794,81 @@ enums['MAV_CMD'][2000].param[2] = '''Duration between two consecutive pictures (
 enums['MAV_CMD'][2000].param[3] = '''Number of images to capture total - 0 for unlimited capture'''
 enums['MAV_CMD'][2000].param[4] = '''Capture sequence (ID to prevent double captures when a command is retransmitted, 0: unused, >= 1: used)'''
 enums['MAV_CMD'][2000].param[5] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][2000].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2000].param[7] = '''Reserved (default:0)'''
 MAV_CMD_IMAGE_STOP_CAPTURE = 2001 # Stop image capture sequence Use NAN for reserved values.
 enums['MAV_CMD'][2001] = EnumEntry('MAV_CMD_IMAGE_STOP_CAPTURE', '''Stop image capture sequence Use NAN for reserved values.''')
 enums['MAV_CMD'][2001].param[1] = '''Reserved (Set to 0)'''
 enums['MAV_CMD'][2001].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][2001].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2001].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2001].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2001].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2001].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE = 2002 # Re-request a CAMERA_IMAGE_CAPTURE packet. Use NAN for reserved values.
 enums['MAV_CMD'][2002] = EnumEntry('MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE', '''Re-request a CAMERA_IMAGE_CAPTURE packet. Use NAN for reserved values.''')
 enums['MAV_CMD'][2002].param[1] = '''Sequence number for missing CAMERA_IMAGE_CAPTURE packet'''
 enums['MAV_CMD'][2002].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][2002].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2002].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2002].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2002].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2002].param[7] = '''Reserved (default:0)'''
 MAV_CMD_DO_TRIGGER_CONTROL = 2003 # Enable or disable on-board camera triggering system.
 enums['MAV_CMD'][2003] = EnumEntry('MAV_CMD_DO_TRIGGER_CONTROL', '''Enable or disable on-board camera triggering system.''')
 enums['MAV_CMD'][2003].param[1] = '''Trigger enable/disable (0 for disable, 1 for start), -1 to ignore'''
 enums['MAV_CMD'][2003].param[2] = '''1 to reset the trigger sequence, -1 or 0 to ignore'''
 enums['MAV_CMD'][2003].param[3] = '''1 to pause triggering, but without switching the camera off or retracting it. -1 to ignore'''
+enums['MAV_CMD'][2003].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2003].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2003].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2003].param[7] = '''Reserved (default:0)'''
 MAV_CMD_VIDEO_START_CAPTURE = 2500 # Starts video capture (recording). Use NAN for reserved values.
 enums['MAV_CMD'][2500] = EnumEntry('MAV_CMD_VIDEO_START_CAPTURE', '''Starts video capture (recording). Use NAN for reserved values.''')
 enums['MAV_CMD'][2500].param[1] = '''Reserved (Set to 0)'''
 enums['MAV_CMD'][2500].param[2] = '''Frequency CAMERA_CAPTURE_STATUS messages should be sent while recording (0 for no messages, otherwise frequency in Hz)'''
 enums['MAV_CMD'][2500].param[3] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][2500].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2500].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2500].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2500].param[7] = '''Reserved (default:0)'''
 MAV_CMD_VIDEO_STOP_CAPTURE = 2501 # Stop the current video capture (recording). Use NAN for reserved
                         # values.
 enums['MAV_CMD'][2501] = EnumEntry('MAV_CMD_VIDEO_STOP_CAPTURE', '''Stop the current video capture (recording). Use NAN for reserved values.''')
 enums['MAV_CMD'][2501].param[1] = '''Reserved (Set to 0)'''
 enums['MAV_CMD'][2501].param[2] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][2501].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2501].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2501].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2501].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2501].param[7] = '''Reserved (default:0)'''
 MAV_CMD_VIDEO_START_STREAMING = 2502 # Start video streaming
 enums['MAV_CMD'][2502] = EnumEntry('MAV_CMD_VIDEO_START_STREAMING', '''Start video streaming''')
 enums['MAV_CMD'][2502].param[1] = '''Camera ID (0 for all cameras, 1 for first, 2 for second, etc.)'''
 enums['MAV_CMD'][2502].param[2] = '''Reserved'''
+enums['MAV_CMD'][2502].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2502].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2502].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2502].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2502].param[7] = '''Reserved (default:0)'''
 MAV_CMD_VIDEO_STOP_STREAMING = 2503 # Stop the current video streaming
 enums['MAV_CMD'][2503] = EnumEntry('MAV_CMD_VIDEO_STOP_STREAMING', '''Stop the current video streaming''')
 enums['MAV_CMD'][2503].param[1] = '''Camera ID (0 for all cameras, 1 for first, 2 for second, etc.)'''
 enums['MAV_CMD'][2503].param[2] = '''Reserved'''
+enums['MAV_CMD'][2503].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2503].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2503].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2503].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2503].param[7] = '''Reserved (default:0)'''
 MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION = 2504 # Request video stream information (VIDEO_STREAM_INFORMATION)
 enums['MAV_CMD'][2504] = EnumEntry('MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION', '''Request video stream information (VIDEO_STREAM_INFORMATION)''')
 enums['MAV_CMD'][2504].param[1] = '''Camera ID (0 for all cameras, 1 for first, 2 for second, etc.)'''
 enums['MAV_CMD'][2504].param[2] = '''0: No Action 1: Request video stream information'''
 enums['MAV_CMD'][2504].param[3] = '''Reserved (all remaining params)'''
+enums['MAV_CMD'][2504].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2504].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2504].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2504].param[7] = '''Reserved (default:0)'''
 MAV_CMD_LOGGING_START = 2510 # Request to start streaming logging data over MAVLink (see also
                         # LOGGING_DATA message)
 enums['MAV_CMD'][2510] = EnumEntry('MAV_CMD_LOGGING_START', '''Request to start streaming logging data over MAVLink (see also LOGGING_DATA message)''')
@@ -1801,9 +1912,18 @@ enums['MAV_CMD'][2800].param[1] = '''Viewing angle horizontal of the panorama (i
 enums['MAV_CMD'][2800].param[2] = '''Viewing angle vertical of panorama (in degrees)'''
 enums['MAV_CMD'][2800].param[3] = '''Speed of the horizontal rotation (in degrees per second)'''
 enums['MAV_CMD'][2800].param[4] = '''Speed of the vertical rotation (in degrees per second)'''
+enums['MAV_CMD'][2800].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2800].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][2800].param[7] = '''Reserved (default:0)'''
 MAV_CMD_DO_VTOL_TRANSITION = 3000 # Request VTOL transition
 enums['MAV_CMD'][3000] = EnumEntry('MAV_CMD_DO_VTOL_TRANSITION', '''Request VTOL transition''')
 enums['MAV_CMD'][3000].param[1] = '''The target VTOL state, as defined by ENUM MAV_VTOL_STATE. Only MAV_VTOL_STATE_MC and MAV_VTOL_STATE_FW can be used.'''
+enums['MAV_CMD'][3000].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3000].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3000].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3000].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3000].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3000].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ARM_AUTHORIZATION_REQUEST = 3001 # Request authorization to arm the vehicle to a external entity, the arm
                         # authorizer is responsible to request all
                         # data that is needs from the vehicle before
@@ -1816,12 +1936,25 @@ MAV_CMD_ARM_AUTHORIZATION_REQUEST = 3001 # Request authorization to arm the vehi
 enums['MAV_CMD'][3001] = EnumEntry('MAV_CMD_ARM_AUTHORIZATION_REQUEST', '''Request authorization to arm the vehicle to a external entity, the arm authorizer is responsible to request all data that is needs from the vehicle before authorize or deny the request. If approved the progress of command_ack message should be set with period of time that this authorization is valid in seconds or in case it was denied it should be set with one of the reasons in ARM_AUTH_DENIED_REASON.
         ''')
 enums['MAV_CMD'][3001].param[1] = '''Vehicle system id, this way ground station can request arm authorization on behalf of any vehicle'''
+enums['MAV_CMD'][3001].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3001].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3001].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3001].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3001].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][3001].param[7] = '''Reserved (default:0)'''
 MAV_CMD_SET_GUIDED_SUBMODE_STANDARD = 4000 # This command sets the submode to standard guided when vehicle is in
                         # guided mode. The vehicle holds position and
                         # altitude and the user can input the desired
                         # velocities along all three axes.
 enums['MAV_CMD'][4000] = EnumEntry('MAV_CMD_SET_GUIDED_SUBMODE_STANDARD', '''This command sets the submode to standard guided when vehicle is in guided mode. The vehicle holds position and altitude and the user can input the desired velocities along all three axes.
                   ''')
+enums['MAV_CMD'][4000].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD'][4000].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD'][4000].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD'][4000].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD'][4000].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD'][4000].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD'][4000].param[7] = '''Reserved (default:0)'''
 MAV_CMD_SET_GUIDED_SUBMODE_CIRCLE = 4001 # This command sets submode circle when vehicle is in guided mode.
                         # Vehicle flies along a circle facing the
                         # center of the circle. The user can input the
@@ -1836,6 +1969,7 @@ enums['MAV_CMD'][4001].param[3] = '''User defined'''
 enums['MAV_CMD'][4001].param[4] = '''User defined'''
 enums['MAV_CMD'][4001].param[5] = '''Unscaled target latitude of center of circle in CIRCLE_MODE'''
 enums['MAV_CMD'][4001].param[6] = '''Unscaled target longitude of center of circle in CIRCLE_MODE'''
+enums['MAV_CMD'][4001].param[7] = '''Reserved (default:0)'''
 MAV_CMD_CONDITION_GATE = 4501 # Delay mission state machine until gate has been reached.
 enums['MAV_CMD'][4501] = EnumEntry('MAV_CMD_CONDITION_GATE', '''Delay mission state machine until gate has been reached.''')
 enums['MAV_CMD'][4501].param[1] = '''Geometry: 0: orthogonal to path between previous and next waypoint.'''
@@ -2149,28 +2283,91 @@ enums['MAV_ROI'][5] = EnumEntry('MAV_ROI_ENUM_END', '''''')
 enums['MAV_CMD_ACK'] = {}
 MAV_CMD_ACK_OK = 1 # Command / mission item is ok.
 enums['MAV_CMD_ACK'][1] = EnumEntry('MAV_CMD_ACK_OK', '''Command / mission item is ok.''')
+enums['MAV_CMD_ACK'][1].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][1].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][1].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][1].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][1].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][1].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][1].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_FAIL = 2 # Generic error message if none of the other reasons fails or if no
                         # detailed error reporting is implemented.
 enums['MAV_CMD_ACK'][2] = EnumEntry('MAV_CMD_ACK_ERR_FAIL', '''Generic error message if none of the other reasons fails or if no detailed error reporting is implemented.''')
+enums['MAV_CMD_ACK'][2].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][2].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][2].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][2].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][2].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][2].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][2].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_ACCESS_DENIED = 3 # The system is refusing to accept this command from this source /
                         # communication partner.
 enums['MAV_CMD_ACK'][3] = EnumEntry('MAV_CMD_ACK_ERR_ACCESS_DENIED', '''The system is refusing to accept this command from this source / communication partner.''')
+enums['MAV_CMD_ACK'][3].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][3].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][3].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][3].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][3].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][3].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][3].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_NOT_SUPPORTED = 4 # Command or mission item is not supported, other commands would be
                         # accepted.
 enums['MAV_CMD_ACK'][4] = EnumEntry('MAV_CMD_ACK_ERR_NOT_SUPPORTED', '''Command or mission item is not supported, other commands would be accepted.''')
+enums['MAV_CMD_ACK'][4].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][4].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][4].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][4].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][4].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][4].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][4].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_COORDINATE_FRAME_NOT_SUPPORTED = 5 # The coordinate frame of this command / mission item is not supported.
 enums['MAV_CMD_ACK'][5] = EnumEntry('MAV_CMD_ACK_ERR_COORDINATE_FRAME_NOT_SUPPORTED', '''The coordinate frame of this command / mission item is not supported.''')
+enums['MAV_CMD_ACK'][5].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][5].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][5].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][5].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][5].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][5].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][5].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_COORDINATES_OUT_OF_RANGE = 6 # The coordinate frame of this command is ok, but he coordinate values
                         # exceed the safety limits of this system.
                         # This is a generic error, please use the more
                         # specific error messages below if possible.
 enums['MAV_CMD_ACK'][6] = EnumEntry('MAV_CMD_ACK_ERR_COORDINATES_OUT_OF_RANGE', '''The coordinate frame of this command is ok, but he coordinate values exceed the safety limits of this system. This is a generic error, please use the more specific error messages below if possible.''')
+enums['MAV_CMD_ACK'][6].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][6].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][6].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][6].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][6].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][6].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][6].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_X_LAT_OUT_OF_RANGE = 7 # The X or latitude value is out of range.
 enums['MAV_CMD_ACK'][7] = EnumEntry('MAV_CMD_ACK_ERR_X_LAT_OUT_OF_RANGE', '''The X or latitude value is out of range.''')
+enums['MAV_CMD_ACK'][7].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][7].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][7].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][7].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][7].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][7].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][7].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_Y_LON_OUT_OF_RANGE = 8 # The Y or longitude value is out of range.
 enums['MAV_CMD_ACK'][8] = EnumEntry('MAV_CMD_ACK_ERR_Y_LON_OUT_OF_RANGE', '''The Y or longitude value is out of range.''')
+enums['MAV_CMD_ACK'][8].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][8].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][8].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][8].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][8].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][8].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][8].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ERR_Z_ALT_OUT_OF_RANGE = 9 # The Z or altitude value is out of range.
 enums['MAV_CMD_ACK'][9] = EnumEntry('MAV_CMD_ACK_ERR_Z_ALT_OUT_OF_RANGE', '''The Z or altitude value is out of range.''')
+enums['MAV_CMD_ACK'][9].param[1] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][9].param[2] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][9].param[3] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][9].param[4] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][9].param[5] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][9].param[6] = '''Reserved (default:0)'''
+enums['MAV_CMD_ACK'][9].param[7] = '''Reserved (default:0)'''
 MAV_CMD_ACK_ENUM_END = 10 # 
 enums['MAV_CMD_ACK'][10] = EnumEntry('MAV_CMD_ACK_ENUM_END', '''''')
 
@@ -2964,6 +3161,9 @@ MAVLINK_MSG_ID_NODE_DETECTED = 203
 MAVLINK_MSG_ID_DRONE_STATUS = 204
 MAVLINK_MSG_ID_DRONE_ODOM_GT = 205
 MAVLINK_MSG_ID_DRONE_POSE_GT = 206
+MAVLINK_MSG_ID_NODE_LOCAL_FUSED = 207
+MAVLINK_MSG_ID_NODE_BASED_FUSED = 208
+MAVLINK_MSG_ID_NODE_DETECTED_2D = 209
 MAVLINK_MSG_ID_HEARTBEAT = 0
 MAVLINK_MSG_ID_SYS_STATUS = 1
 MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -3111,6 +3311,9 @@ class MAVLink_node_realtime_info_message(MAVLink_message):
         fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'yaw', 'remote_distance']
         ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'yaw', 'remote_distance', 'odom_vaild']
         fieldtypes = ['int32_t', 'uint8_t', 'float', 'float', 'float', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "vx": "cm/s", "vy": "cm/s", "vz": "cm/x", "yaw": "rad", "remote_distance": "m"}
         format = '<ifffhhhh10HB'
         native_format = bytearray('<ifffhhhhHB', 'ascii')
         orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -3142,18 +3345,21 @@ class MAVLink_node_relative_fused_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_NODE_RELATIVE_FUSED
         name = 'NODE_RELATIVE_FUSED'
-        fieldnames = ['lps_time', 'target_id', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset']
-        ordered_fieldnames = ['lps_time', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset', 'target_id']
-        fieldtypes = ['int32_t', 'uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
-        format = '<ihhhhB'
-        native_format = bytearray('<ihhhhB', 'ascii')
-        orders = [0, 5, 1, 2, 3, 4]
-        lengths = [1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0]
-        crc_extra = 164
-        unpacker = struct.Struct('<ihhhhB')
+        fieldnames = ['lps_time', 'target_id', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset', 'cov_x', 'cov_y', 'cov_z', 'cov_yaw']
+        ordered_fieldnames = ['lps_time', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset', 'cov_x', 'cov_y', 'cov_z', 'cov_yaw', 'target_id']
+        fieldtypes = ['int32_t', 'uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "rel_x": "m", "rel_y": "m", "rel_z": "m", "rel_yaw_offset": "rad", "cov_x": "m", "cov_y": "m", "cov_z": "m", "cov_yaw": "rad"}
+        format = '<ihhhhhhhhB'
+        native_format = bytearray('<ihhhhhhhhB', 'ascii')
+        orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 236
+        unpacker = struct.Struct('<ihhhhhhhhB')
 
-        def __init__(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset):
+        def __init__(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw):
                 MAVLink_message.__init__(self, MAVLink_node_relative_fused_message.id, MAVLink_node_relative_fused_message.name)
                 self._fieldnames = MAVLink_node_relative_fused_message.fieldnames
                 self.lps_time = lps_time
@@ -3162,9 +3368,13 @@ class MAVLink_node_relative_fused_message(MAVLink_message):
                 self.rel_y = rel_y
                 self.rel_z = rel_z
                 self.rel_yaw_offset = rel_yaw_offset
+                self.cov_x = cov_x
+                self.cov_y = cov_y
+                self.cov_z = cov_z
+                self.cov_yaw = cov_yaw
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 164, struct.pack('<ihhhhB', self.lps_time, self.rel_x, self.rel_y, self.rel_z, self.rel_yaw_offset, self.target_id), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 236, struct.pack('<ihhhhhhhhB', self.lps_time, self.rel_x, self.rel_y, self.rel_z, self.rel_yaw_offset, self.cov_x, self.cov_y, self.cov_z, self.cov_yaw, self.target_id), force_mavlink1=force_mavlink1)
 
 class MAVLink_swarm_remote_command_message(MAVLink_message):
         '''
@@ -3175,6 +3385,9 @@ class MAVLink_swarm_remote_command_message(MAVLink_message):
         fieldnames = ['lps_time', 'target_id', 'command_type', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10']
         ordered_fieldnames = ['lps_time', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'param8', 'param9', 'param10', 'target_id', 'command_type']
         fieldtypes = ['int32_t', 'int8_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "command_type": "m", "param1": "m", "param2": "m", "param3": "m", "param4": "m", "param5": "m", "param6": "m", "param7": "m", "param8": "m", "param9": "m", "param10": "m"}
         format = '<iiiiiiiiiiibB'
         native_format = bytearray('<iiiiiiiiiiibB', 'ascii')
         orders = [0, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -3212,6 +3425,9 @@ class MAVLink_node_detected_message(MAVLink_message):
         fieldnames = ['lps_time', 'target_id', 'x', 'y', 'z', 'yaw']
         ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'target_id']
         fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "yaw": "rad"}
         format = '<ihhhhb'
         native_format = bytearray('<ihhhhb', 'ascii')
         orders = [0, 5, 1, 2, 3, 4]
@@ -3239,24 +3455,28 @@ class MAVLink_drone_status_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_DRONE_STATUS
         name = 'DRONE_STATUS'
-        fieldnames = ['lps_time', 'flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid', 'bat_vol', 'x', 'y', 'z']
-        ordered_fieldnames = ['lps_time', 'bat_vol', 'x', 'y', 'z', 'flight_status', 'control_auth', 'commander_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid']
-        fieldtypes = ['int32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float']
-        format = '<iffffBBBBBBB'
-        native_format = bytearray('<iffffBBBBBBB', 'ascii')
-        orders = [0, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 58
-        unpacker = struct.Struct('<iffffBBBBBBB')
+        fieldnames = ['lps_time', 'flight_status', 'control_auth', 'commander_mode', 'input_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid', 'bat_vol', 'x', 'y', 'z', 'yaw']
+        ordered_fieldnames = ['lps_time', 'bat_vol', 'x', 'y', 'z', 'yaw', 'flight_status', 'control_auth', 'commander_mode', 'input_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid']
+        fieldtypes = ['int32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "yaw": "deg"}
+        format = '<ifffffBBBBBBBB'
+        native_format = bytearray('<ifffffBBBBBBBB', 'ascii')
+        orders = [0, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 124
+        unpacker = struct.Struct('<ifffffBBBBBBBB')
 
-        def __init__(self, lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
+        def __init__(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw):
                 MAVLink_message.__init__(self, MAVLink_drone_status_message.id, MAVLink_drone_status_message.name)
                 self._fieldnames = MAVLink_drone_status_message.fieldnames
                 self.lps_time = lps_time
                 self.flight_status = flight_status
                 self.control_auth = control_auth
                 self.commander_mode = commander_mode
+                self.input_mode = input_mode
                 self.rc_valid = rc_valid
                 self.onboard_cmd_valid = onboard_cmd_valid
                 self.sdk_valid = sdk_valid
@@ -3265,9 +3485,10 @@ class MAVLink_drone_status_message(MAVLink_message):
                 self.x = x
                 self.y = y
                 self.z = z
+                self.yaw = yaw
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 58, struct.pack('<iffffBBBBBBB', self.lps_time, self.bat_vol, self.x, self.y, self.z, self.flight_status, self.control_auth, self.commander_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.vo_valid), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 124, struct.pack('<ifffffBBBBBBBB', self.lps_time, self.bat_vol, self.x, self.y, self.z, self.yaw, self.flight_status, self.control_auth, self.commander_mode, self.input_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.vo_valid), force_mavlink1=force_mavlink1)
 
 class MAVLink_drone_odom_gt_message(MAVLink_message):
         '''
@@ -3278,6 +3499,9 @@ class MAVLink_drone_odom_gt_message(MAVLink_message):
         fieldnames = ['lps_time', 'source_id', 'x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz']
         ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'q0', 'q1', 'q2', 'q3', 'vx', 'vy', 'vz', 'source_id']
         fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "q0": "m", "q1": "m", "q2": "m", "q3": "m", "vx": "m", "vy": "m", "vz": "m"}
         format = '<ihhhhhhhhhhb'
         native_format = bytearray('<ihhhhhhhhhhb', 'ascii')
         orders = [0, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -3314,6 +3538,9 @@ class MAVLink_drone_pose_gt_message(MAVLink_message):
         fieldnames = ['lps_time', 'source_id', 'x', 'y', 'z', 'yaw']
         ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'source_id']
         fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "yaw": "rad*1000"}
         format = '<ihhhhb'
         native_format = bytearray('<ihhhhb', 'ascii')
         orders = [0, 5, 1, 2, 3, 4]
@@ -3335,6 +3562,112 @@ class MAVLink_drone_pose_gt_message(MAVLink_message):
         def pack(self, mav, force_mavlink1=False):
                 return MAVLink_message.pack(self, mav, 241, struct.pack('<ihhhhb', self.lps_time, self.x, self.y, self.z, self.yaw, self.source_id), force_mavlink1=force_mavlink1)
 
+class MAVLink_node_local_fused_message(MAVLink_message):
+        '''
+
+        '''
+        id = MAVLINK_MSG_ID_NODE_LOCAL_FUSED
+        name = 'NODE_LOCAL_FUSED'
+        fieldnames = ['lps_time', 'target_id', 'x', 'y', 'z', 'yaw', 'cov_x', 'cov_y', 'cov_z', 'cov_yaw']
+        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'cov_x', 'cov_y', 'cov_z', 'cov_yaw', 'target_id']
+        fieldtypes = ['int32_t', 'uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "yaw": "rad", "cov_x": "m", "cov_y": "m", "cov_z": "m", "cov_yaw": "rad"}
+        format = '<ihhhhhhhhB'
+        native_format = bytearray('<ihhhhhhhhB', 'ascii')
+        orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 225
+        unpacker = struct.Struct('<ihhhhhhhhB')
+
+        def __init__(self, lps_time, target_id, x, y, z, yaw, cov_x, cov_y, cov_z, cov_yaw):
+                MAVLink_message.__init__(self, MAVLink_node_local_fused_message.id, MAVLink_node_local_fused_message.name)
+                self._fieldnames = MAVLink_node_local_fused_message.fieldnames
+                self.lps_time = lps_time
+                self.target_id = target_id
+                self.x = x
+                self.y = y
+                self.z = z
+                self.yaw = yaw
+                self.cov_x = cov_x
+                self.cov_y = cov_y
+                self.cov_z = cov_z
+                self.cov_yaw = cov_yaw
+
+        def pack(self, mav, force_mavlink1=False):
+                return MAVLink_message.pack(self, mav, 225, struct.pack('<ihhhhhhhhB', self.lps_time, self.x, self.y, self.z, self.yaw, self.cov_x, self.cov_y, self.cov_z, self.cov_yaw, self.target_id), force_mavlink1=force_mavlink1)
+
+class MAVLink_node_based_fused_message(MAVLink_message):
+        '''
+
+        '''
+        id = MAVLINK_MSG_ID_NODE_BASED_FUSED
+        name = 'NODE_BASED_FUSED'
+        fieldnames = ['lps_time', 'target_id', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset', 'cov_x', 'cov_y', 'cov_z', 'cov_yaw']
+        ordered_fieldnames = ['lps_time', 'rel_x', 'rel_y', 'rel_z', 'rel_yaw_offset', 'cov_x', 'cov_y', 'cov_z', 'cov_yaw', 'target_id']
+        fieldtypes = ['int32_t', 'uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "rel_x": "m", "rel_y": "m", "rel_z": "m", "rel_yaw_offset": "rad", "cov_x": "m", "cov_y": "m", "cov_z": "m", "cov_yaw": "rad"}
+        format = '<ihhhhhhhhB'
+        native_format = bytearray('<ihhhhhhhhB', 'ascii')
+        orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 216
+        unpacker = struct.Struct('<ihhhhhhhhB')
+
+        def __init__(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw):
+                MAVLink_message.__init__(self, MAVLink_node_based_fused_message.id, MAVLink_node_based_fused_message.name)
+                self._fieldnames = MAVLink_node_based_fused_message.fieldnames
+                self.lps_time = lps_time
+                self.target_id = target_id
+                self.rel_x = rel_x
+                self.rel_y = rel_y
+                self.rel_z = rel_z
+                self.rel_yaw_offset = rel_yaw_offset
+                self.cov_x = cov_x
+                self.cov_y = cov_y
+                self.cov_z = cov_z
+                self.cov_yaw = cov_yaw
+
+        def pack(self, mav, force_mavlink1=False):
+                return MAVLink_message.pack(self, mav, 216, struct.pack('<ihhhhhhhhB', self.lps_time, self.rel_x, self.rel_y, self.rel_z, self.rel_yaw_offset, self.cov_x, self.cov_y, self.cov_z, self.cov_yaw, self.target_id), force_mavlink1=force_mavlink1)
+
+class MAVLink_node_detected_2d_message(MAVLink_message):
+        '''
+
+        '''
+        id = MAVLINK_MSG_ID_NODE_DETECTED_2D
+        name = 'NODE_DETECTED_2D'
+        fieldnames = ['lps_time', 'target_id', 'DY', 'DZ', 'yaw']
+        ordered_fieldnames = ['lps_time', 'DY', 'DZ', 'yaw', 'target_id']
+        fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lps_time": "ms", "DY": "m", "DZ": "m", "yaw": "m"}
+        format = '<ihhhb'
+        native_format = bytearray('<ihhhb', 'ascii')
+        orders = [0, 4, 1, 2, 3]
+        lengths = [1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0]
+        crc_extra = 90
+        unpacker = struct.Struct('<ihhhb')
+
+        def __init__(self, lps_time, target_id, DY, DZ, yaw):
+                MAVLink_message.__init__(self, MAVLink_node_detected_2d_message.id, MAVLink_node_detected_2d_message.name)
+                self._fieldnames = MAVLink_node_detected_2d_message.fieldnames
+                self.lps_time = lps_time
+                self.target_id = target_id
+                self.DY = DY
+                self.DZ = DZ
+                self.yaw = yaw
+
+        def pack(self, mav, force_mavlink1=False):
+                return MAVLink_message.pack(self, mav, 90, struct.pack('<ihhhb', self.lps_time, self.DY, self.DZ, self.yaw, self.target_id), force_mavlink1=force_mavlink1)
+
 class MAVLink_heartbeat_message(MAVLink_message):
         '''
         The heartbeat message shows that a system is present and
@@ -3348,6 +3681,9 @@ class MAVLink_heartbeat_message(MAVLink_message):
         fieldnames = ['type', 'autopilot', 'base_mode', 'custom_mode', 'system_status', 'mavlink_version']
         ordered_fieldnames = ['custom_mode', 'type', 'autopilot', 'base_mode', 'system_status', 'mavlink_version']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint32_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {"base_mode": "bitmask"}
+        fieldenums_by_name = {"type": "MAV_TYPE", "autopilot": "MAV_AUTOPILOT", "base_mode": "MAV_MODE_FLAG", "system_status": "MAV_STATE"}
+        fieldunits_by_name = {}
         format = '<IBBBBB'
         native_format = bytearray('<IBBBBB', 'ascii')
         orders = [1, 2, 3, 0, 4, 5]
@@ -3393,6 +3729,9 @@ class MAVLink_sys_status_message(MAVLink_message):
         fieldnames = ['onboard_control_sensors_present', 'onboard_control_sensors_enabled', 'onboard_control_sensors_health', 'load', 'voltage_battery', 'current_battery', 'battery_remaining', 'drop_rate_comm', 'errors_comm', 'errors_count1', 'errors_count2', 'errors_count3', 'errors_count4']
         ordered_fieldnames = ['onboard_control_sensors_present', 'onboard_control_sensors_enabled', 'onboard_control_sensors_health', 'load', 'voltage_battery', 'current_battery', 'drop_rate_comm', 'errors_comm', 'errors_count1', 'errors_count2', 'errors_count3', 'errors_count4', 'battery_remaining']
         fieldtypes = ['uint32_t', 'uint32_t', 'uint32_t', 'uint16_t', 'uint16_t', 'int16_t', 'int8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {"onboard_control_sensors_present": "bitmask", "onboard_control_sensors_enabled": "bitmask", "onboard_control_sensors_health": "bitmask"}
+        fieldenums_by_name = {"onboard_control_sensors_present": "MAV_SYS_STATUS_SENSOR", "onboard_control_sensors_enabled": "MAV_SYS_STATUS_SENSOR", "onboard_control_sensors_health": "MAV_SYS_STATUS_SENSOR"}
+        fieldunits_by_name = {"load": "d%", "voltage_battery": "mV", "current_battery": "cA", "battery_remaining": "%", "drop_rate_comm": "c%"}
         format = '<IIIHHhHHHHHHb'
         native_format = bytearray('<IIIHHhHHHHHHb', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 12, 6, 7, 8, 9, 10, 11]
@@ -3431,6 +3770,9 @@ class MAVLink_system_time_message(MAVLink_message):
         fieldnames = ['time_unix_usec', 'time_boot_ms']
         ordered_fieldnames = ['time_unix_usec', 'time_boot_ms']
         fieldtypes = ['uint64_t', 'uint32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_unix_usec": "us", "time_boot_ms": "ms"}
         format = '<QI'
         native_format = bytearray('<QI', 'ascii')
         orders = [0, 1]
@@ -3459,6 +3801,9 @@ class MAVLink_ping_message(MAVLink_message):
         fieldnames = ['time_usec', 'seq', 'target_system', 'target_component']
         ordered_fieldnames = ['time_usec', 'seq', 'target_system', 'target_component']
         fieldtypes = ['uint64_t', 'uint32_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<QIBB'
         native_format = bytearray('<QIBB', 'ascii')
         orders = [0, 1, 2, 3]
@@ -3487,6 +3832,9 @@ class MAVLink_change_operator_control_message(MAVLink_message):
         fieldnames = ['target_system', 'control_request', 'version', 'passkey']
         ordered_fieldnames = ['target_system', 'control_request', 'version', 'passkey']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'char']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"version": "rad"}
         format = '<BBB25s'
         native_format = bytearray('<BBBc', 'ascii')
         orders = [0, 1, 2, 3]
@@ -3515,6 +3863,9 @@ class MAVLink_change_operator_control_ack_message(MAVLink_message):
         fieldnames = ['gcs_system_id', 'control_request', 'ack']
         ordered_fieldnames = ['gcs_system_id', 'control_request', 'ack']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BBB'
         native_format = bytearray('<BBB', 'ascii')
         orders = [0, 1, 2]
@@ -3545,6 +3896,9 @@ class MAVLink_auth_key_message(MAVLink_message):
         fieldnames = ['key']
         ordered_fieldnames = ['key']
         fieldtypes = ['char']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<32s'
         native_format = bytearray('<c', 'ascii')
         orders = [0]
@@ -3572,6 +3926,9 @@ class MAVLink_set_mode_message(MAVLink_message):
         fieldnames = ['target_system', 'base_mode', 'custom_mode']
         ordered_fieldnames = ['custom_mode', 'target_system', 'base_mode']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"base_mode": "MAV_MODE"}
+        fieldunits_by_name = {}
         format = '<IBB'
         native_format = bytearray('<IBB', 'ascii')
         orders = [1, 2, 0]
@@ -3606,6 +3963,9 @@ class MAVLink_param_request_read_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'param_id', 'param_index']
         ordered_fieldnames = ['param_index', 'target_system', 'target_component', 'param_id']
         fieldtypes = ['uint8_t', 'uint8_t', 'char', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<hBB16s'
         native_format = bytearray('<hBBc', 'ascii')
         orders = [1, 2, 3, 0]
@@ -3635,6 +3995,9 @@ class MAVLink_param_request_list_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component']
         ordered_fieldnames = ['target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BB'
         native_format = bytearray('<BB', 'ascii')
         orders = [0, 1]
@@ -3664,6 +4027,9 @@ class MAVLink_param_value_message(MAVLink_message):
         fieldnames = ['param_id', 'param_value', 'param_type', 'param_count', 'param_index']
         ordered_fieldnames = ['param_value', 'param_count', 'param_index', 'param_id', 'param_type']
         fieldtypes = ['char', 'float', 'uint8_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"param_type": "MAV_PARAM_TYPE"}
+        fieldunits_by_name = {}
         format = '<fHH16sB'
         native_format = bytearray('<fHHcB', 'ascii')
         orders = [3, 0, 4, 1, 2]
@@ -3702,6 +4068,9 @@ class MAVLink_param_set_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'param_id', 'param_value', 'param_type']
         ordered_fieldnames = ['param_value', 'target_system', 'target_component', 'param_id', 'param_type']
         fieldtypes = ['uint8_t', 'uint8_t', 'char', 'float', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"param_type": "MAV_PARAM_TYPE"}
+        fieldunits_by_name = {}
         format = '<fBB16sB'
         native_format = bytearray('<fBBcB', 'ascii')
         orders = [1, 2, 3, 0, 4]
@@ -3734,6 +4103,9 @@ class MAVLink_gps_raw_int_message(MAVLink_message):
         fieldnames = ['time_usec', 'fix_type', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'cog', 'satellites_visible']
         ordered_fieldnames = ['time_usec', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'cog', 'fix_type', 'satellites_visible']
         fieldtypes = ['uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"fix_type": "GPS_FIX_TYPE"}
+        fieldunits_by_name = {"time_usec": "us", "lat": "degE7", "lon": "degE7", "alt": "mm", "vel": "cm/s", "cog": "cdeg"}
         format = '<QiiiHHHHBB'
         native_format = bytearray('<QiiiHHHHBB', 'ascii')
         orders = [0, 8, 1, 2, 3, 4, 5, 6, 7, 9]
@@ -3772,6 +4144,9 @@ class MAVLink_gps_status_message(MAVLink_message):
         fieldnames = ['satellites_visible', 'satellite_prn', 'satellite_used', 'satellite_elevation', 'satellite_azimuth', 'satellite_snr']
         ordered_fieldnames = ['satellites_visible', 'satellite_prn', 'satellite_used', 'satellite_elevation', 'satellite_azimuth', 'satellite_snr']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"satellite_elevation": "deg", "satellite_azimuth": "deg", "satellite_snr": "dB"}
         format = '<B20B20B20B20B20B'
         native_format = bytearray('<BBBBBB', 'ascii')
         orders = [0, 1, 2, 3, 4, 5]
@@ -3804,6 +4179,9 @@ class MAVLink_scaled_imu_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         ordered_fieldnames = ['time_boot_ms', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         fieldtypes = ['uint32_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "xacc": "mG", "yacc": "mG", "zacc": "mG", "xgyro": "mrad/s", "ygyro": "mrad/s", "zgyro": "mrad/s", "xmag": "mT", "ymag": "mT", "zmag": "mT"}
         format = '<Ihhhhhhhhh'
         native_format = bytearray('<Ihhhhhhhhh', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -3840,6 +4218,9 @@ class MAVLink_raw_imu_message(MAVLink_message):
         fieldnames = ['time_usec', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         ordered_fieldnames = ['time_usec', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         fieldtypes = ['uint64_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<Qhhhhhhhhh'
         native_format = bytearray('<Qhhhhhhhhh', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -3876,6 +4257,9 @@ class MAVLink_raw_pressure_message(MAVLink_message):
         fieldnames = ['time_usec', 'press_abs', 'press_diff1', 'press_diff2', 'temperature']
         ordered_fieldnames = ['time_usec', 'press_abs', 'press_diff1', 'press_diff2', 'temperature']
         fieldtypes = ['uint64_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<Qhhhh'
         native_format = bytearray('<Qhhhh', 'ascii')
         orders = [0, 1, 2, 3, 4]
@@ -3907,6 +4291,9 @@ class MAVLink_scaled_pressure_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'press_abs', 'press_diff', 'temperature']
         ordered_fieldnames = ['time_boot_ms', 'press_abs', 'press_diff', 'temperature']
         fieldtypes = ['uint32_t', 'float', 'float', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "press_abs": "hPa", "press_diff": "hPa", "temperature": "cdegC"}
         format = '<Iffh'
         native_format = bytearray('<Iffh', 'ascii')
         orders = [0, 1, 2, 3]
@@ -3936,6 +4323,9 @@ class MAVLink_attitude_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'roll', 'pitch', 'yaw', 'rollspeed', 'pitchspeed', 'yawspeed']
         ordered_fieldnames = ['time_boot_ms', 'roll', 'pitch', 'yaw', 'rollspeed', 'pitchspeed', 'yawspeed']
         fieldtypes = ['uint32_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "roll": "rad", "pitch": "rad", "yaw": "rad", "rollspeed": "rad/s", "pitchspeed": "rad/s", "yawspeed": "rad/s"}
         format = '<Iffffff'
         native_format = bytearray('<Iffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -3970,6 +4360,9 @@ class MAVLink_attitude_quaternion_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'q1', 'q2', 'q3', 'q4', 'rollspeed', 'pitchspeed', 'yawspeed']
         ordered_fieldnames = ['time_boot_ms', 'q1', 'q2', 'q3', 'q4', 'rollspeed', 'pitchspeed', 'yawspeed']
         fieldtypes = ['uint32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "rollspeed": "rad/s", "pitchspeed": "rad/s", "yawspeed": "rad/s"}
         format = '<Ifffffff'
         native_format = bytearray('<Ifffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7]
@@ -4004,6 +4397,9 @@ class MAVLink_local_position_ned_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'x', 'y', 'z', 'vx', 'vy', 'vz']
         ordered_fieldnames = ['time_boot_ms', 'x', 'y', 'z', 'vx', 'vy', 'vz']
         fieldtypes = ['uint32_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "x": "m", "y": "m", "z": "m", "vx": "m/s", "vy": "m/s", "vz": "m/s"}
         format = '<Iffffff'
         native_format = bytearray('<Iffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -4038,6 +4434,9 @@ class MAVLink_global_position_int_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'hdg']
         ordered_fieldnames = ['time_boot_ms', 'lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'hdg']
         fieldtypes = ['uint32_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "lat": "degE7", "lon": "degE7", "alt": "mm", "relative_alt": "mm", "vx": "cm/s", "vy": "cm/s", "vz": "cm/s", "hdg": "cdeg"}
         format = '<IiiiihhhH'
         native_format = bytearray('<IiiiihhhH', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -4073,6 +4472,9 @@ class MAVLink_rc_channels_scaled_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'port', 'chan1_scaled', 'chan2_scaled', 'chan3_scaled', 'chan4_scaled', 'chan5_scaled', 'chan6_scaled', 'chan7_scaled', 'chan8_scaled', 'rssi']
         ordered_fieldnames = ['time_boot_ms', 'chan1_scaled', 'chan2_scaled', 'chan3_scaled', 'chan4_scaled', 'chan5_scaled', 'chan6_scaled', 'chan7_scaled', 'chan8_scaled', 'port', 'rssi']
         fieldtypes = ['uint32_t', 'uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "rssi": "%"}
         format = '<IhhhhhhhhBB'
         native_format = bytearray('<IhhhhhhhhBB', 'ascii')
         orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 10]
@@ -4112,6 +4514,9 @@ class MAVLink_rc_channels_raw_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'port', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'rssi']
         ordered_fieldnames = ['time_boot_ms', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'port', 'rssi']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "chan1_raw": "us", "chan2_raw": "us", "chan3_raw": "us", "chan4_raw": "us", "chan5_raw": "us", "chan6_raw": "us", "chan7_raw": "us", "chan8_raw": "us", "rssi": "%"}
         format = '<IHHHHHHHHBB'
         native_format = bytearray('<IHHHHHHHHBB', 'ascii')
         orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 10]
@@ -4150,6 +4555,9 @@ class MAVLink_servo_output_raw_message(MAVLink_message):
         fieldnames = ['time_usec', 'port', 'servo1_raw', 'servo2_raw', 'servo3_raw', 'servo4_raw', 'servo5_raw', 'servo6_raw', 'servo7_raw', 'servo8_raw']
         ordered_fieldnames = ['time_usec', 'servo1_raw', 'servo2_raw', 'servo3_raw', 'servo4_raw', 'servo5_raw', 'servo6_raw', 'servo7_raw', 'servo8_raw', 'port']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "servo1_raw": "us", "servo2_raw": "us", "servo3_raw": "us", "servo4_raw": "us", "servo5_raw": "us", "servo6_raw": "us", "servo7_raw": "us", "servo8_raw": "us"}
         format = '<IHHHHHHHHB'
         native_format = bytearray('<IHHHHHHHHB', 'ascii')
         orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -4186,6 +4594,9 @@ class MAVLink_mission_request_partial_list_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'start_index', 'end_index']
         ordered_fieldnames = ['start_index', 'end_index', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<hhBB'
         native_format = bytearray('<hhBB', 'ascii')
         orders = [2, 3, 0, 1]
@@ -4217,6 +4628,9 @@ class MAVLink_mission_write_partial_list_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'start_index', 'end_index']
         ordered_fieldnames = ['start_index', 'end_index', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<hhBB'
         native_format = bytearray('<hhBB', 'ascii')
         orders = [2, 3, 0, 1]
@@ -4251,6 +4665,9 @@ class MAVLink_mission_item_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'seq', 'frame', 'command', 'current', 'autocontinue', 'param1', 'param2', 'param3', 'param4', 'x', 'y', 'z']
         ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'seq', 'command', 'target_system', 'target_component', 'frame', 'current', 'autocontinue']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"frame": "MAV_FRAME", "command": "MAV_CMD"}
+        fieldunits_by_name = {}
         format = '<fffffffHHBBBBB'
         native_format = bytearray('<fffffffHHBBBBB', 'ascii')
         orders = [9, 10, 7, 11, 8, 12, 13, 0, 1, 2, 3, 4, 5, 6]
@@ -4292,6 +4709,9 @@ class MAVLink_mission_request_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'seq']
         ordered_fieldnames = ['seq', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<HBB'
         native_format = bytearray('<HBB', 'ascii')
         orders = [1, 2, 0]
@@ -4322,6 +4742,9 @@ class MAVLink_mission_set_current_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'seq']
         ordered_fieldnames = ['seq', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<HBB'
         native_format = bytearray('<HBB', 'ascii')
         orders = [1, 2, 0]
@@ -4351,6 +4774,9 @@ class MAVLink_mission_current_message(MAVLink_message):
         fieldnames = ['seq']
         ordered_fieldnames = ['seq']
         fieldtypes = ['uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<H'
         native_format = bytearray('<H', 'ascii')
         orders = [0]
@@ -4377,6 +4803,9 @@ class MAVLink_mission_request_list_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component']
         ordered_fieldnames = ['target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BB'
         native_format = bytearray('<BB', 'ascii')
         orders = [0, 1]
@@ -4406,6 +4835,9 @@ class MAVLink_mission_count_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'count']
         ordered_fieldnames = ['count', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<HBB'
         native_format = bytearray('<HBB', 'ascii')
         orders = [1, 2, 0]
@@ -4433,6 +4865,9 @@ class MAVLink_mission_clear_all_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component']
         ordered_fieldnames = ['target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BB'
         native_format = bytearray('<BB', 'ascii')
         orders = [0, 1]
@@ -4461,6 +4896,9 @@ class MAVLink_mission_item_reached_message(MAVLink_message):
         fieldnames = ['seq']
         ordered_fieldnames = ['seq']
         fieldtypes = ['uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<H'
         native_format = bytearray('<H', 'ascii')
         orders = [0]
@@ -4488,6 +4926,9 @@ class MAVLink_mission_ack_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'type']
         ordered_fieldnames = ['target_system', 'target_component', 'type']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"type": "MAV_MISSION_RESULT"}
+        fieldunits_by_name = {}
         format = '<BBB'
         native_format = bytearray('<BBB', 'ascii')
         orders = [0, 1, 2]
@@ -4519,6 +4960,9 @@ class MAVLink_set_gps_global_origin_message(MAVLink_message):
         fieldnames = ['target_system', 'latitude', 'longitude', 'altitude']
         ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'target_system']
         fieldtypes = ['uint8_t', 'int32_t', 'int32_t', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"latitude": "degE7", "longitude": "degE7", "altitude": "mm"}
         format = '<iiiB'
         native_format = bytearray('<iiiB', 'ascii')
         orders = [3, 0, 1, 2]
@@ -4548,6 +4992,9 @@ class MAVLink_gps_global_origin_message(MAVLink_message):
         fieldnames = ['latitude', 'longitude', 'altitude']
         ordered_fieldnames = ['latitude', 'longitude', 'altitude']
         fieldtypes = ['int32_t', 'int32_t', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"latitude": "degE7", "longitude": "degE7", "altitude": "mm"}
         format = '<iii'
         native_format = bytearray('<iii', 'ascii')
         orders = [0, 1, 2]
@@ -4576,6 +5023,9 @@ class MAVLink_param_map_rc_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'param_id', 'param_index', 'parameter_rc_channel_index', 'param_value0', 'scale', 'param_value_min', 'param_value_max']
         ordered_fieldnames = ['param_value0', 'scale', 'param_value_min', 'param_value_max', 'param_index', 'target_system', 'target_component', 'param_id', 'parameter_rc_channel_index']
         fieldtypes = ['uint8_t', 'uint8_t', 'char', 'int16_t', 'uint8_t', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<ffffhBB16sB'
         native_format = bytearray('<ffffhBBcB', 'ascii')
         orders = [5, 6, 7, 4, 8, 0, 1, 2, 3]
@@ -4612,6 +5062,9 @@ class MAVLink_mission_request_int_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'seq']
         ordered_fieldnames = ['seq', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<HBB'
         native_format = bytearray('<HBB', 'ascii')
         orders = [1, 2, 0]
@@ -4643,6 +5096,9 @@ class MAVLink_safety_set_allowed_area_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'frame', 'p1x', 'p1y', 'p1z', 'p2x', 'p2y', 'p2z']
         ordered_fieldnames = ['p1x', 'p1y', 'p1z', 'p2x', 'p2y', 'p2z', 'target_system', 'target_component', 'frame']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"frame": "MAV_FRAME"}
+        fieldunits_by_name = {"p1x": "m", "p1y": "m", "p1z": "m", "p2x": "m", "p2y": "m", "p2z": "m"}
         format = '<ffffffBBB'
         native_format = bytearray('<ffffffBBB', 'ascii')
         orders = [6, 7, 8, 0, 1, 2, 3, 4, 5]
@@ -4676,6 +5132,9 @@ class MAVLink_safety_allowed_area_message(MAVLink_message):
         fieldnames = ['frame', 'p1x', 'p1y', 'p1z', 'p2x', 'p2y', 'p2z']
         ordered_fieldnames = ['p1x', 'p1y', 'p1z', 'p2x', 'p2y', 'p2z', 'frame']
         fieldtypes = ['uint8_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"frame": "MAV_FRAME"}
+        fieldunits_by_name = {"p1x": "m", "p1y": "m", "p1z": "m", "p2x": "m", "p2y": "m", "p2z": "m"}
         format = '<ffffffB'
         native_format = bytearray('<ffffffB', 'ascii')
         orders = [6, 0, 1, 2, 3, 4, 5]
@@ -4710,6 +5169,9 @@ class MAVLink_attitude_quaternion_cov_message(MAVLink_message):
         fieldnames = ['time_usec', 'q', 'rollspeed', 'pitchspeed', 'yawspeed', 'covariance']
         ordered_fieldnames = ['time_usec', 'q', 'rollspeed', 'pitchspeed', 'yawspeed', 'covariance']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "rollspeed": "rad/s", "pitchspeed": "rad/s", "yawspeed": "rad/s"}
         format = '<Q4ffff9f'
         native_format = bytearray('<Qfffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5]
@@ -4741,6 +5203,9 @@ class MAVLink_nav_controller_output_message(MAVLink_message):
         fieldnames = ['nav_roll', 'nav_pitch', 'nav_bearing', 'target_bearing', 'wp_dist', 'alt_error', 'aspd_error', 'xtrack_error']
         ordered_fieldnames = ['nav_roll', 'nav_pitch', 'alt_error', 'aspd_error', 'xtrack_error', 'nav_bearing', 'target_bearing', 'wp_dist']
         fieldtypes = ['float', 'float', 'int16_t', 'int16_t', 'uint16_t', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"nav_roll": "deg", "nav_pitch": "deg", "nav_bearing": "deg", "target_bearing": "deg", "wp_dist": "m", "alt_error": "m", "aspd_error": "m/s", "xtrack_error": "m"}
         format = '<fffffhhH'
         native_format = bytearray('<fffffhhH', 'ascii')
         orders = [0, 1, 5, 6, 7, 2, 3, 4]
@@ -4780,6 +5245,9 @@ class MAVLink_global_position_int_cov_message(MAVLink_message):
         fieldnames = ['time_usec', 'estimator_type', 'lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'covariance']
         ordered_fieldnames = ['time_usec', 'lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'covariance', 'estimator_type']
         fieldtypes = ['uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"estimator_type": "MAV_ESTIMATOR_TYPE"}
+        fieldunits_by_name = {"time_usec": "us", "lat": "degE7", "lon": "degE7", "alt": "mm", "relative_alt": "mm", "vx": "m/s", "vy": "m/s", "vz": "m/s"}
         format = '<Qiiiifff36fB'
         native_format = bytearray('<QiiiiffffB', 'ascii')
         orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -4816,6 +5284,9 @@ class MAVLink_local_position_ned_cov_message(MAVLink_message):
         fieldnames = ['time_usec', 'estimator_type', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'ax', 'ay', 'az', 'covariance']
         ordered_fieldnames = ['time_usec', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'ax', 'ay', 'az', 'covariance', 'estimator_type']
         fieldtypes = ['uint64_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"estimator_type": "MAV_ESTIMATOR_TYPE"}
+        fieldunits_by_name = {"time_usec": "us", "x": "m", "y": "m", "z": "m", "vx": "m/s", "vy": "m/s", "vz": "m/s", "ax": "m/s/s", "ay": "m/s/s", "az": "m/s/s"}
         format = '<Qfffffffff45fB'
         native_format = bytearray('<QffffffffffB', 'ascii')
         orders = [0, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -4856,6 +5327,9 @@ class MAVLink_rc_channels_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'chancount', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'chan9_raw', 'chan10_raw', 'chan11_raw', 'chan12_raw', 'chan13_raw', 'chan14_raw', 'chan15_raw', 'chan16_raw', 'chan17_raw', 'chan18_raw', 'rssi']
         ordered_fieldnames = ['time_boot_ms', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'chan9_raw', 'chan10_raw', 'chan11_raw', 'chan12_raw', 'chan13_raw', 'chan14_raw', 'chan15_raw', 'chan16_raw', 'chan17_raw', 'chan18_raw', 'chancount', 'rssi']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "chan1_raw": "us", "chan2_raw": "us", "chan3_raw": "us", "chan4_raw": "us", "chan5_raw": "us", "chan6_raw": "us", "chan7_raw": "us", "chan8_raw": "us", "chan9_raw": "us", "chan10_raw": "us", "chan11_raw": "us", "chan12_raw": "us", "chan13_raw": "us", "chan14_raw": "us", "chan15_raw": "us", "chan16_raw": "us", "chan17_raw": "us", "chan18_raw": "us", "rssi": "%"}
         format = '<IHHHHHHHHHHHHHHHHHHBB'
         native_format = bytearray('<IHHHHHHHHHHHHHHHHHHBB', 'ascii')
         orders = [0, 19, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20]
@@ -4901,6 +5375,9 @@ class MAVLink_request_data_stream_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'req_stream_id', 'req_message_rate', 'start_stop']
         ordered_fieldnames = ['req_message_rate', 'target_system', 'target_component', 'req_stream_id', 'start_stop']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"req_message_rate": "Hz"}
         format = '<HBBBB'
         native_format = bytearray('<HBBBB', 'ascii')
         orders = [1, 2, 3, 0, 4]
@@ -4930,6 +5407,9 @@ class MAVLink_data_stream_message(MAVLink_message):
         fieldnames = ['stream_id', 'message_rate', 'on_off']
         ordered_fieldnames = ['message_rate', 'stream_id', 'on_off']
         fieldtypes = ['uint8_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"message_rate": "Hz"}
         format = '<HBB'
         native_format = bytearray('<HBB', 'ascii')
         orders = [1, 0, 2]
@@ -4960,6 +5440,9 @@ class MAVLink_manual_control_message(MAVLink_message):
         fieldnames = ['target', 'x', 'y', 'z', 'r', 'buttons']
         ordered_fieldnames = ['x', 'y', 'z', 'r', 'buttons', 'target']
         fieldtypes = ['uint8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<hhhhHB'
         native_format = bytearray('<hhhhHB', 'ascii')
         orders = [5, 0, 1, 2, 3, 4]
@@ -4996,6 +5479,9 @@ class MAVLink_rc_channels_override_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw']
         ordered_fieldnames = ['chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"chan1_raw": "us", "chan2_raw": "us", "chan3_raw": "us", "chan4_raw": "us", "chan5_raw": "us", "chan6_raw": "us", "chan7_raw": "us", "chan8_raw": "us"}
         format = '<HHHHHHHHBB'
         native_format = bytearray('<HHHHHHHHBB', 'ascii')
         orders = [8, 9, 0, 1, 2, 3, 4, 5, 6, 7]
@@ -5036,6 +5522,9 @@ class MAVLink_mission_item_int_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'seq', 'frame', 'command', 'current', 'autocontinue', 'param1', 'param2', 'param3', 'param4', 'x', 'y', 'z']
         ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'seq', 'command', 'target_system', 'target_component', 'frame', 'current', 'autocontinue']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'int32_t', 'int32_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"frame": "MAV_FRAME", "command": "MAV_CMD"}
+        fieldunits_by_name = {}
         format = '<ffffiifHHBBBBB'
         native_format = bytearray('<ffffiifHHBBBBB', 'ascii')
         orders = [9, 10, 7, 11, 8, 12, 13, 0, 1, 2, 3, 4, 5, 6]
@@ -5074,6 +5563,9 @@ class MAVLink_vfr_hud_message(MAVLink_message):
         fieldnames = ['airspeed', 'groundspeed', 'heading', 'throttle', 'alt', 'climb']
         ordered_fieldnames = ['airspeed', 'groundspeed', 'alt', 'climb', 'heading', 'throttle']
         fieldtypes = ['float', 'float', 'int16_t', 'uint16_t', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"airspeed": "m/s", "groundspeed": "m/s", "heading": "deg", "throttle": "%", "alt": "m", "climb": "m/s"}
         format = '<ffffhH'
         native_format = bytearray('<ffffhH', 'ascii')
         orders = [0, 1, 4, 5, 2, 3]
@@ -5105,6 +5597,9 @@ class MAVLink_command_int_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'frame', 'command', 'current', 'autocontinue', 'param1', 'param2', 'param3', 'param4', 'x', 'y', 'z']
         ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'x', 'y', 'z', 'command', 'target_system', 'target_component', 'frame', 'current', 'autocontinue']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'int32_t', 'int32_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"frame": "MAV_FRAME", "command": "MAV_CMD"}
+        fieldunits_by_name = {}
         format = '<ffffiifHBBBBB'
         native_format = bytearray('<ffffiifHBBBBB', 'ascii')
         orders = [8, 9, 10, 7, 11, 12, 0, 1, 2, 3, 4, 5, 6]
@@ -5142,6 +5637,9 @@ class MAVLink_command_long_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'command', 'confirmation', 'param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7']
         ordered_fieldnames = ['param1', 'param2', 'param3', 'param4', 'param5', 'param6', 'param7', 'command', 'target_system', 'target_component', 'confirmation']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"command": "MAV_CMD"}
+        fieldunits_by_name = {}
         format = '<fffffffHBBB'
         native_format = bytearray('<fffffffHBBB', 'ascii')
         orders = [8, 9, 7, 10, 0, 1, 2, 3, 4, 5, 6]
@@ -5178,6 +5676,9 @@ class MAVLink_command_ack_message(MAVLink_message):
         fieldnames = ['command', 'result']
         ordered_fieldnames = ['command', 'result']
         fieldtypes = ['uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"command": "MAV_CMD", "result": "MAV_RESULT"}
+        fieldunits_by_name = {}
         format = '<HB'
         native_format = bytearray('<HB', 'ascii')
         orders = [0, 1]
@@ -5204,6 +5705,9 @@ class MAVLink_manual_setpoint_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'roll', 'pitch', 'yaw', 'thrust', 'mode_switch', 'manual_override_switch']
         ordered_fieldnames = ['time_boot_ms', 'roll', 'pitch', 'yaw', 'thrust', 'mode_switch', 'manual_override_switch']
         fieldtypes = ['uint32_t', 'float', 'float', 'float', 'float', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "roll": "rad/s", "pitch": "rad/s", "yaw": "rad/s"}
         format = '<IffffBB'
         native_format = bytearray('<IffffBB', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -5237,6 +5741,9 @@ class MAVLink_set_attitude_target_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'target_system', 'target_component', 'type_mask', 'q', 'body_roll_rate', 'body_pitch_rate', 'body_yaw_rate', 'thrust']
         ordered_fieldnames = ['time_boot_ms', 'q', 'body_roll_rate', 'body_pitch_rate', 'body_yaw_rate', 'thrust', 'target_system', 'target_component', 'type_mask']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "body_roll_rate": "rad/s", "body_pitch_rate": "rad/s", "body_yaw_rate": "rad/s"}
         format = '<I4fffffBBB'
         native_format = bytearray('<IfffffBBB', 'ascii')
         orders = [0, 6, 7, 8, 1, 2, 3, 4, 5]
@@ -5273,6 +5780,9 @@ class MAVLink_attitude_target_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'type_mask', 'q', 'body_roll_rate', 'body_pitch_rate', 'body_yaw_rate', 'thrust']
         ordered_fieldnames = ['time_boot_ms', 'q', 'body_roll_rate', 'body_pitch_rate', 'body_yaw_rate', 'thrust', 'type_mask']
         fieldtypes = ['uint32_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {"type_mask": "bitmask"}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "body_roll_rate": "rad/s", "body_pitch_rate": "rad/s", "body_yaw_rate": "rad/s"}
         format = '<I4fffffB'
         native_format = bytearray('<IfffffB', 'ascii')
         orders = [0, 6, 1, 2, 3, 4, 5]
@@ -5306,6 +5816,9 @@ class MAVLink_set_position_target_local_ned_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'target_system', 'target_component', 'coordinate_frame', 'type_mask', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate']
         ordered_fieldnames = ['time_boot_ms', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate', 'type_mask', 'target_system', 'target_component', 'coordinate_frame']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {"type_mask": "bitmask"}
+        fieldenums_by_name = {"coordinate_frame": "MAV_FRAME"}
+        fieldunits_by_name = {"time_boot_ms": "ms", "x": "m", "y": "m", "z": "m", "vx": "m/s", "vy": "m/s", "vz": "m/s", "afx": "m/s/s", "afy": "m/s/s", "afz": "m/s/s", "yaw": "rad", "yaw_rate": "rad/s"}
         format = '<IfffffffffffHBBB'
         native_format = bytearray('<IfffffffffffHBBB', 'ascii')
         orders = [0, 13, 14, 15, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -5349,6 +5862,9 @@ class MAVLink_position_target_local_ned_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'coordinate_frame', 'type_mask', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate']
         ordered_fieldnames = ['time_boot_ms', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate', 'type_mask', 'coordinate_frame']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {"type_mask": "bitmask"}
+        fieldenums_by_name = {"coordinate_frame": "MAV_FRAME"}
+        fieldunits_by_name = {"time_boot_ms": "ms", "x": "m", "y": "m", "z": "m", "vx": "m/s", "vy": "m/s", "vz": "m/s", "afx": "m/s/s", "afy": "m/s/s", "afz": "m/s/s", "yaw": "rad", "yaw_rate": "rad/s"}
         format = '<IfffffffffffHB'
         native_format = bytearray('<IfffffffffffHB', 'ascii')
         orders = [0, 13, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -5390,6 +5906,9 @@ class MAVLink_set_position_target_global_int_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'target_system', 'target_component', 'coordinate_frame', 'type_mask', 'lat_int', 'lon_int', 'alt', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate']
         ordered_fieldnames = ['time_boot_ms', 'lat_int', 'lon_int', 'alt', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate', 'type_mask', 'target_system', 'target_component', 'coordinate_frame']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {"type_mask": "bitmask"}
+        fieldenums_by_name = {"coordinate_frame": "MAV_FRAME"}
+        fieldunits_by_name = {"time_boot_ms": "ms", "lat_int": "degE7", "lon_int": "degE7", "alt": "m", "vx": "m/s", "vy": "m/s", "vz": "m/s", "afx": "m/s/s", "afy": "m/s/s", "afz": "m/s/s", "yaw": "rad", "yaw_rate": "rad/s"}
         format = '<IiifffffffffHBBB'
         native_format = bytearray('<IiifffffffffHBBB', 'ascii')
         orders = [0, 13, 14, 15, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -5433,6 +5952,9 @@ class MAVLink_position_target_global_int_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'coordinate_frame', 'type_mask', 'lat_int', 'lon_int', 'alt', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate']
         ordered_fieldnames = ['time_boot_ms', 'lat_int', 'lon_int', 'alt', 'vx', 'vy', 'vz', 'afx', 'afy', 'afz', 'yaw', 'yaw_rate', 'type_mask', 'coordinate_frame']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {"type_mask": "bitmask"}
+        fieldenums_by_name = {"coordinate_frame": "MAV_FRAME"}
+        fieldunits_by_name = {"time_boot_ms": "ms", "lat_int": "degE7", "lon_int": "degE7", "alt": "m", "vx": "m/s", "vy": "m/s", "vz": "m/s", "afx": "m/s/s", "afy": "m/s/s", "afz": "m/s/s", "yaw": "rad", "yaw_rate": "rad/s"}
         format = '<IiifffffffffHB'
         native_format = bytearray('<IiifffffffffHB', 'ascii')
         orders = [0, 13, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -5474,6 +5996,9 @@ class MAVLink_local_position_ned_system_global_offset_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         ordered_fieldnames = ['time_boot_ms', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         fieldtypes = ['uint32_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "x": "m", "y": "m", "z": "m", "roll": "rad", "pitch": "rad", "yaw": "rad"}
         format = '<Iffffff'
         native_format = bytearray('<Iffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -5507,6 +6032,9 @@ class MAVLink_hil_state_message(MAVLink_message):
         fieldnames = ['time_usec', 'roll', 'pitch', 'yaw', 'rollspeed', 'pitchspeed', 'yawspeed', 'lat', 'lon', 'alt', 'vx', 'vy', 'vz', 'xacc', 'yacc', 'zacc']
         ordered_fieldnames = ['time_usec', 'roll', 'pitch', 'yaw', 'rollspeed', 'pitchspeed', 'yawspeed', 'lat', 'lon', 'alt', 'vx', 'vy', 'vz', 'xacc', 'yacc', 'zacc']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'int32_t', 'int32_t', 'int32_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "roll": "rad", "pitch": "rad", "yaw": "rad", "rollspeed": "rad/s", "pitchspeed": "rad/s", "yawspeed": "rad/s", "lat": "degE7", "lon": "degE7", "alt": "mm", "vx": "cm/s", "vy": "cm/s", "vz": "cm/s", "xacc": "mG", "yacc": "mG", "zacc": "mG"}
         format = '<Qffffffiiihhhhhh'
         native_format = bytearray('<Qffffffiiihhhhhh', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -5548,6 +6076,9 @@ class MAVLink_hil_controls_message(MAVLink_message):
         fieldnames = ['time_usec', 'roll_ailerons', 'pitch_elevator', 'yaw_rudder', 'throttle', 'aux1', 'aux2', 'aux3', 'aux4', 'mode', 'nav_mode']
         ordered_fieldnames = ['time_usec', 'roll_ailerons', 'pitch_elevator', 'yaw_rudder', 'throttle', 'aux1', 'aux2', 'aux3', 'aux4', 'mode', 'nav_mode']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"mode": "MAV_MODE"}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<QffffffffBB'
         native_format = bytearray('<QffffffffBB', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -5586,6 +6117,9 @@ class MAVLink_hil_rc_inputs_raw_message(MAVLink_message):
         fieldnames = ['time_usec', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'chan9_raw', 'chan10_raw', 'chan11_raw', 'chan12_raw', 'rssi']
         ordered_fieldnames = ['time_usec', 'chan1_raw', 'chan2_raw', 'chan3_raw', 'chan4_raw', 'chan5_raw', 'chan6_raw', 'chan7_raw', 'chan8_raw', 'chan9_raw', 'chan10_raw', 'chan11_raw', 'chan12_raw', 'rssi']
         fieldtypes = ['uint64_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "chan1_raw": "us", "chan2_raw": "us", "chan3_raw": "us", "chan4_raw": "us", "chan5_raw": "us", "chan6_raw": "us", "chan7_raw": "us", "chan8_raw": "us", "chan9_raw": "us", "chan10_raw": "us", "chan11_raw": "us", "chan12_raw": "us"}
         format = '<QHHHHHHHHHHHHB'
         native_format = bytearray('<QHHHHHHHHHHHHB', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
@@ -5625,6 +6159,9 @@ class MAVLink_hil_actuator_controls_message(MAVLink_message):
         fieldnames = ['time_usec', 'controls', 'mode', 'flags']
         ordered_fieldnames = ['time_usec', 'flags', 'controls', 'mode']
         fieldtypes = ['uint64_t', 'float', 'uint8_t', 'uint64_t']
+        fielddisplays_by_name = {"flags": "bitmask"}
+        fieldenums_by_name = {"mode": "MAV_MODE"}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<QQ16fB'
         native_format = bytearray('<QQfB', 'ascii')
         orders = [0, 2, 3, 1]
@@ -5653,6 +6190,9 @@ class MAVLink_optical_flow_message(MAVLink_message):
         fieldnames = ['time_usec', 'sensor_id', 'flow_x', 'flow_y', 'flow_comp_m_x', 'flow_comp_m_y', 'quality', 'ground_distance']
         ordered_fieldnames = ['time_usec', 'flow_comp_m_x', 'flow_comp_m_y', 'ground_distance', 'flow_x', 'flow_y', 'sensor_id', 'quality']
         fieldtypes = ['uint64_t', 'uint8_t', 'int16_t', 'int16_t', 'float', 'float', 'uint8_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "flow_x": "dpix", "flow_y": "dpix", "flow_comp_m_x": "m", "flow_comp_m_y": "m", "ground_distance": "m"}
         format = '<QfffhhBB'
         native_format = bytearray('<QfffhhBB', 'ascii')
         orders = [0, 6, 4, 5, 1, 2, 7, 3]
@@ -5685,6 +6225,9 @@ class MAVLink_global_vision_position_estimate_message(MAVLink_message):
         fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"usec": "us", "x": "m", "y": "m", "z": "m", "roll": "rad", "pitch": "rad", "yaw": "rad"}
         format = '<Qffffff'
         native_format = bytearray('<Qffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -5716,6 +6259,9 @@ class MAVLink_vision_position_estimate_message(MAVLink_message):
         fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"usec": "us", "x": "m", "y": "m", "z": "m", "roll": "rad", "pitch": "rad", "yaw": "rad"}
         format = '<Qffffff'
         native_format = bytearray('<Qffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -5747,6 +6293,9 @@ class MAVLink_vision_speed_estimate_message(MAVLink_message):
         fieldnames = ['usec', 'x', 'y', 'z']
         ordered_fieldnames = ['usec', 'x', 'y', 'z']
         fieldtypes = ['uint64_t', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"usec": "us", "x": "m/s", "y": "m/s", "z": "m/s"}
         format = '<Qfff'
         native_format = bytearray('<Qfff', 'ascii')
         orders = [0, 1, 2, 3]
@@ -5775,6 +6324,9 @@ class MAVLink_vicon_position_estimate_message(MAVLink_message):
         fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         ordered_fieldnames = ['usec', 'x', 'y', 'z', 'roll', 'pitch', 'yaw']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"usec": "us", "x": "m", "y": "m", "z": "m", "roll": "rad", "pitch": "rad", "yaw": "rad"}
         format = '<Qffffff'
         native_format = bytearray('<Qffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -5806,6 +6358,9 @@ class MAVLink_highres_imu_message(MAVLink_message):
         fieldnames = ['time_usec', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag', 'abs_pressure', 'diff_pressure', 'pressure_alt', 'temperature', 'fields_updated']
         ordered_fieldnames = ['time_usec', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag', 'abs_pressure', 'diff_pressure', 'pressure_alt', 'temperature', 'fields_updated']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint16_t']
+        fielddisplays_by_name = {"fields_updated": "bitmask"}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "xacc": "m/s/s", "yacc": "m/s/s", "zacc": "m/s/s", "xgyro": "rad/s", "ygyro": "rad/s", "zgyro": "rad/s", "xmag": "gauss", "ymag": "gauss", "zmag": "gauss", "abs_pressure": "mbar", "diff_pressure": "mbar", "temperature": "degC"}
         format = '<QfffffffffffffH'
         native_format = bytearray('<QfffffffffffffH', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -5846,6 +6401,9 @@ class MAVLink_optical_flow_rad_message(MAVLink_message):
         fieldnames = ['time_usec', 'sensor_id', 'integration_time_us', 'integrated_x', 'integrated_y', 'integrated_xgyro', 'integrated_ygyro', 'integrated_zgyro', 'temperature', 'quality', 'time_delta_distance_us', 'distance']
         ordered_fieldnames = ['time_usec', 'integration_time_us', 'integrated_x', 'integrated_y', 'integrated_xgyro', 'integrated_ygyro', 'integrated_zgyro', 'time_delta_distance_us', 'distance', 'temperature', 'sensor_id', 'quality']
         fieldtypes = ['uint64_t', 'uint8_t', 'uint32_t', 'float', 'float', 'float', 'float', 'float', 'int16_t', 'uint8_t', 'uint32_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "integration_time_us": "us", "integrated_x": "rad", "integrated_y": "rad", "integrated_xgyro": "rad", "integrated_ygyro": "rad", "integrated_zgyro": "rad", "temperature": "cdegC", "time_delta_distance_us": "us", "distance": "m"}
         format = '<QIfffffIfhBB'
         native_format = bytearray('<QIfffffIfhBB', 'ascii')
         orders = [0, 10, 1, 2, 3, 4, 5, 6, 9, 11, 7, 8]
@@ -5882,6 +6440,9 @@ class MAVLink_hil_sensor_message(MAVLink_message):
         fieldnames = ['time_usec', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag', 'abs_pressure', 'diff_pressure', 'pressure_alt', 'temperature', 'fields_updated']
         ordered_fieldnames = ['time_usec', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag', 'abs_pressure', 'diff_pressure', 'pressure_alt', 'temperature', 'fields_updated']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint32_t']
+        fielddisplays_by_name = {"fields_updated": "bitmask"}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "xacc": "m/s/s", "yacc": "m/s/s", "zacc": "m/s/s", "xgyro": "rad/s", "ygyro": "rad/s", "zgyro": "rad/s", "xmag": "gauss", "ymag": "gauss", "zmag": "gauss", "abs_pressure": "mbar", "diff_pressure": "mbar", "temperature": "degC"}
         format = '<QfffffffffffffI'
         native_format = bytearray('<QfffffffffffffI', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -5921,6 +6482,9 @@ class MAVLink_sim_state_message(MAVLink_message):
         fieldnames = ['q1', 'q2', 'q3', 'q4', 'roll', 'pitch', 'yaw', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'lat', 'lon', 'alt', 'std_dev_horz', 'std_dev_vert', 'vn', 've', 'vd']
         ordered_fieldnames = ['q1', 'q2', 'q3', 'q4', 'roll', 'pitch', 'yaw', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'lat', 'lon', 'alt', 'std_dev_horz', 'std_dev_vert', 'vn', 've', 'vd']
         fieldtypes = ['float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"xacc": "m/s/s", "yacc": "m/s/s", "zacc": "m/s/s", "xgyro": "rad/s", "ygyro": "rad/s", "zgyro": "rad/s", "lat": "deg", "lon": "deg", "alt": "m", "vn": "m/s", "ve": "m/s", "vd": "m/s"}
         format = '<fffffffffffffffffffff'
         native_format = bytearray('<fffffffffffffffffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
@@ -5966,6 +6530,9 @@ class MAVLink_radio_status_message(MAVLink_message):
         fieldnames = ['rssi', 'remrssi', 'txbuf', 'noise', 'remnoise', 'rxerrors', 'fixed']
         ordered_fieldnames = ['rxerrors', 'fixed', 'rssi', 'remrssi', 'txbuf', 'noise', 'remnoise']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"txbuf": "%"}
         format = '<HHBBBBB'
         native_format = bytearray('<HHBBBBB', 'ascii')
         orders = [2, 3, 4, 5, 6, 0, 1]
@@ -5997,6 +6564,9 @@ class MAVLink_file_transfer_protocol_message(MAVLink_message):
         fieldnames = ['target_network', 'target_system', 'target_component', 'payload']
         ordered_fieldnames = ['target_network', 'target_system', 'target_component', 'payload']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BBB251B'
         native_format = bytearray('<BBBB', 'ascii')
         orders = [0, 1, 2, 3]
@@ -6025,6 +6595,9 @@ class MAVLink_timesync_message(MAVLink_message):
         fieldnames = ['tc1', 'ts1']
         ordered_fieldnames = ['tc1', 'ts1']
         fieldtypes = ['int64_t', 'int64_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<qq'
         native_format = bytearray('<qq', 'ascii')
         orders = [0, 1]
@@ -6051,6 +6624,9 @@ class MAVLink_camera_trigger_message(MAVLink_message):
         fieldnames = ['time_usec', 'seq']
         ordered_fieldnames = ['time_usec', 'seq']
         fieldtypes = ['uint64_t', 'uint32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<QI'
         native_format = bytearray('<QI', 'ascii')
         orders = [0, 1]
@@ -6080,6 +6656,9 @@ class MAVLink_hil_gps_message(MAVLink_message):
         fieldnames = ['time_usec', 'fix_type', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'vn', 've', 'vd', 'cog', 'satellites_visible']
         ordered_fieldnames = ['time_usec', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'vn', 've', 'vd', 'cog', 'fix_type', 'satellites_visible']
         fieldtypes = ['uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint16_t', 'uint16_t', 'uint16_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "lat": "degE7", "lon": "degE7", "alt": "mm", "eph": "cm", "epv": "cm", "vel": "cm/s", "vn": "cm/s", "ve": "cm/s", "vd": "cm/s", "cog": "cdeg"}
         format = '<QiiiHHHhhhHBB'
         native_format = bytearray('<QiiiHHHhhhHBB', 'ascii')
         orders = [0, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
@@ -6118,6 +6697,9 @@ class MAVLink_hil_optical_flow_message(MAVLink_message):
         fieldnames = ['time_usec', 'sensor_id', 'integration_time_us', 'integrated_x', 'integrated_y', 'integrated_xgyro', 'integrated_ygyro', 'integrated_zgyro', 'temperature', 'quality', 'time_delta_distance_us', 'distance']
         ordered_fieldnames = ['time_usec', 'integration_time_us', 'integrated_x', 'integrated_y', 'integrated_xgyro', 'integrated_ygyro', 'integrated_zgyro', 'time_delta_distance_us', 'distance', 'temperature', 'sensor_id', 'quality']
         fieldtypes = ['uint64_t', 'uint8_t', 'uint32_t', 'float', 'float', 'float', 'float', 'float', 'int16_t', 'uint8_t', 'uint32_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "integration_time_us": "us", "integrated_x": "rad", "integrated_y": "rad", "integrated_xgyro": "rad", "integrated_ygyro": "rad", "integrated_zgyro": "rad", "temperature": "cdegC", "time_delta_distance_us": "us", "distance": "m"}
         format = '<QIfffffIfhBB'
         native_format = bytearray('<QIfffffIfhBB', 'ascii')
         orders = [0, 10, 1, 2, 3, 4, 5, 6, 9, 11, 7, 8]
@@ -6157,6 +6739,9 @@ class MAVLink_hil_state_quaternion_message(MAVLink_message):
         fieldnames = ['time_usec', 'attitude_quaternion', 'rollspeed', 'pitchspeed', 'yawspeed', 'lat', 'lon', 'alt', 'vx', 'vy', 'vz', 'ind_airspeed', 'true_airspeed', 'xacc', 'yacc', 'zacc']
         ordered_fieldnames = ['time_usec', 'attitude_quaternion', 'rollspeed', 'pitchspeed', 'yawspeed', 'lat', 'lon', 'alt', 'vx', 'vy', 'vz', 'ind_airspeed', 'true_airspeed', 'xacc', 'yacc', 'zacc']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'int32_t', 'int32_t', 'int32_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t', 'uint16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "rollspeed": "rad/s", "pitchspeed": "rad/s", "yawspeed": "rad/s", "lat": "degE7", "lon": "degE7", "alt": "mm", "vx": "cm/s", "vy": "cm/s", "vz": "cm/s", "ind_airspeed": "cm/s", "true_airspeed": "cm/s", "xacc": "mG", "yacc": "mG", "zacc": "mG"}
         format = '<Q4ffffiiihhhHHhhh'
         native_format = bytearray('<QffffiiihhhHHhhh', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -6199,6 +6784,9 @@ class MAVLink_scaled_imu2_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         ordered_fieldnames = ['time_boot_ms', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         fieldtypes = ['uint32_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "xacc": "mG", "yacc": "mG", "zacc": "mG", "xgyro": "mrad/s", "ygyro": "mrad/s", "zgyro": "mrad/s", "xmag": "mT", "ymag": "mT", "zmag": "mT"}
         format = '<Ihhhhhhhhh'
         native_format = bytearray('<Ihhhhhhhhh', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -6234,6 +6822,9 @@ class MAVLink_log_request_list_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'start', 'end']
         ordered_fieldnames = ['start', 'end', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<HHBB'
         native_format = bytearray('<HHBB', 'ascii')
         orders = [2, 3, 0, 1]
@@ -6262,6 +6853,9 @@ class MAVLink_log_entry_message(MAVLink_message):
         fieldnames = ['id', 'num_logs', 'last_log_num', 'time_utc', 'size']
         ordered_fieldnames = ['time_utc', 'size', 'id', 'num_logs', 'last_log_num']
         fieldtypes = ['uint16_t', 'uint16_t', 'uint16_t', 'uint32_t', 'uint32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_utc": "s", "size": "bytes"}
         format = '<IIHHH'
         native_format = bytearray('<IIHHH', 'ascii')
         orders = [2, 3, 4, 0, 1]
@@ -6291,6 +6885,9 @@ class MAVLink_log_request_data_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'id', 'ofs', 'count']
         ordered_fieldnames = ['ofs', 'count', 'id', 'target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"count": "bytes"}
         format = '<IIHBB'
         native_format = bytearray('<IIHBB', 'ascii')
         orders = [3, 4, 2, 0, 1]
@@ -6320,6 +6917,9 @@ class MAVLink_log_data_message(MAVLink_message):
         fieldnames = ['id', 'ofs', 'count', 'data']
         ordered_fieldnames = ['ofs', 'id', 'count', 'data']
         fieldtypes = ['uint16_t', 'uint32_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"count": "bytes"}
         format = '<IHB90B'
         native_format = bytearray('<IHBB', 'ascii')
         orders = [1, 0, 2, 3]
@@ -6348,6 +6948,9 @@ class MAVLink_log_erase_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component']
         ordered_fieldnames = ['target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BB'
         native_format = bytearray('<BB', 'ascii')
         orders = [0, 1]
@@ -6374,6 +6977,9 @@ class MAVLink_log_request_end_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component']
         ordered_fieldnames = ['target_system', 'target_component']
         fieldtypes = ['uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BB'
         native_format = bytearray('<BB', 'ascii')
         orders = [0, 1]
@@ -6400,6 +7006,9 @@ class MAVLink_gps_inject_data_message(MAVLink_message):
         fieldnames = ['target_system', 'target_component', 'len', 'data']
         ordered_fieldnames = ['target_system', 'target_component', 'len', 'data']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"len": "bytes"}
         format = '<BBB110B'
         native_format = bytearray('<BBBB', 'ascii')
         orders = [0, 1, 2, 3]
@@ -6428,6 +7037,9 @@ class MAVLink_gps2_raw_message(MAVLink_message):
         fieldnames = ['time_usec', 'fix_type', 'lat', 'lon', 'alt', 'eph', 'epv', 'vel', 'cog', 'satellites_visible', 'dgps_numch', 'dgps_age']
         ordered_fieldnames = ['time_usec', 'lat', 'lon', 'alt', 'dgps_age', 'eph', 'epv', 'vel', 'cog', 'fix_type', 'satellites_visible', 'dgps_numch']
         fieldtypes = ['uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t', 'uint8_t', 'uint32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"fix_type": "GPS_FIX_TYPE"}
+        fieldunits_by_name = {"time_usec": "us", "lat": "degE7", "lon": "degE7", "alt": "mm", "eph": "cm", "epv": "cm", "vel": "cm/s", "cog": "cdeg", "dgps_age": "ms"}
         format = '<QiiiIHHHHBBB'
         native_format = bytearray('<QiiiIHHHHBBB', 'ascii')
         orders = [0, 9, 1, 2, 3, 5, 6, 7, 8, 10, 11, 4]
@@ -6464,6 +7076,9 @@ class MAVLink_power_status_message(MAVLink_message):
         fieldnames = ['Vcc', 'Vservo', 'flags']
         ordered_fieldnames = ['Vcc', 'Vservo', 'flags']
         fieldtypes = ['uint16_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {"flags": "bitmask"}
+        fieldenums_by_name = {"flags": "MAV_POWER_STATUS"}
+        fieldunits_by_name = {"Vcc": "mV", "Vservo": "mV"}
         format = '<HHH'
         native_format = bytearray('<HHH', 'ascii')
         orders = [0, 1, 2]
@@ -6495,6 +7110,9 @@ class MAVLink_serial_control_message(MAVLink_message):
         fieldnames = ['device', 'flags', 'timeout', 'baudrate', 'count', 'data']
         ordered_fieldnames = ['baudrate', 'timeout', 'device', 'flags', 'count', 'data']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {"flags": "bitmask"}
+        fieldenums_by_name = {"device": "SERIAL_CONTROL_DEV", "flags": "SERIAL_CONTROL_FLAG"}
+        fieldunits_by_name = {"timeout": "ms", "baudrate": "bits/s", "count": "bytes"}
         format = '<IHBBB70B'
         native_format = bytearray('<IHBBBB', 'ascii')
         orders = [2, 3, 1, 0, 4, 5]
@@ -6526,6 +7144,9 @@ class MAVLink_gps_rtk_message(MAVLink_message):
         fieldnames = ['time_last_baseline_ms', 'rtk_receiver_id', 'wn', 'tow', 'rtk_health', 'rtk_rate', 'nsats', 'baseline_coords_type', 'baseline_a_mm', 'baseline_b_mm', 'baseline_c_mm', 'accuracy', 'iar_num_hypotheses']
         ordered_fieldnames = ['time_last_baseline_ms', 'tow', 'baseline_a_mm', 'baseline_b_mm', 'baseline_c_mm', 'accuracy', 'iar_num_hypotheses', 'wn', 'rtk_receiver_id', 'rtk_health', 'rtk_rate', 'nsats', 'baseline_coords_type']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint32_t', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"baseline_coords_type": "RTK_BASELINE_COORDINATE_SYSTEM"}
+        fieldunits_by_name = {"time_last_baseline_ms": "ms", "tow": "ms", "rtk_rate": "Hz", "baseline_a_mm": "mm", "baseline_b_mm": "mm", "baseline_c_mm": "mm"}
         format = '<IIiiiIiHBBBBB'
         native_format = bytearray('<IIiiiIiHBBBBB', 'ascii')
         orders = [0, 8, 7, 1, 9, 10, 11, 12, 2, 3, 4, 5, 6]
@@ -6564,6 +7185,9 @@ class MAVLink_gps2_rtk_message(MAVLink_message):
         fieldnames = ['time_last_baseline_ms', 'rtk_receiver_id', 'wn', 'tow', 'rtk_health', 'rtk_rate', 'nsats', 'baseline_coords_type', 'baseline_a_mm', 'baseline_b_mm', 'baseline_c_mm', 'accuracy', 'iar_num_hypotheses']
         ordered_fieldnames = ['time_last_baseline_ms', 'tow', 'baseline_a_mm', 'baseline_b_mm', 'baseline_c_mm', 'accuracy', 'iar_num_hypotheses', 'wn', 'rtk_receiver_id', 'rtk_health', 'rtk_rate', 'nsats', 'baseline_coords_type']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'int32_t', 'int32_t', 'int32_t', 'uint32_t', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"baseline_coords_type": "RTK_BASELINE_COORDINATE_SYSTEM"}
+        fieldunits_by_name = {"time_last_baseline_ms": "ms", "tow": "ms", "rtk_rate": "Hz", "baseline_a_mm": "mm", "baseline_b_mm": "mm", "baseline_c_mm": "mm"}
         format = '<IIiiiIiHBBBBB'
         native_format = bytearray('<IIiiiIiHBBBBB', 'ascii')
         orders = [0, 8, 7, 1, 9, 10, 11, 12, 2, 3, 4, 5, 6]
@@ -6602,6 +7226,9 @@ class MAVLink_scaled_imu3_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         ordered_fieldnames = ['time_boot_ms', 'xacc', 'yacc', 'zacc', 'xgyro', 'ygyro', 'zgyro', 'xmag', 'ymag', 'zmag']
         fieldtypes = ['uint32_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "xacc": "mG", "yacc": "mG", "zacc": "mG", "xgyro": "mrad/s", "ygyro": "mrad/s", "zgyro": "mrad/s", "xmag": "mT", "ymag": "mT", "zmag": "mT"}
         format = '<Ihhhhhhhhh'
         native_format = bytearray('<Ihhhhhhhhh', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -6636,6 +7263,9 @@ class MAVLink_data_transmission_handshake_message(MAVLink_message):
         fieldnames = ['type', 'size', 'width', 'height', 'packets', 'payload', 'jpg_quality']
         ordered_fieldnames = ['size', 'width', 'height', 'packets', 'type', 'payload', 'jpg_quality']
         fieldtypes = ['uint8_t', 'uint32_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"type": "DATA_TYPES"}
+        fieldunits_by_name = {"size": "bytes", "payload": "bytes", "jpg_quality": "%"}
         format = '<IHHHBBB'
         native_format = bytearray('<IHHHBBB', 'ascii')
         orders = [4, 0, 1, 2, 3, 5, 6]
@@ -6667,6 +7297,9 @@ class MAVLink_encapsulated_data_message(MAVLink_message):
         fieldnames = ['seqnr', 'data']
         ordered_fieldnames = ['seqnr', 'data']
         fieldtypes = ['uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<H253B'
         native_format = bytearray('<HB', 'ascii')
         orders = [0, 1]
@@ -6693,6 +7326,9 @@ class MAVLink_distance_sensor_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'min_distance', 'max_distance', 'current_distance', 'type', 'id', 'orientation', 'covariance']
         ordered_fieldnames = ['time_boot_ms', 'min_distance', 'max_distance', 'current_distance', 'type', 'id', 'orientation', 'covariance']
         fieldtypes = ['uint32_t', 'uint16_t', 'uint16_t', 'uint16_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"type": "MAV_DISTANCE_SENSOR", "orientation": "MAV_SENSOR_ORIENTATION"}
+        fieldunits_by_name = {"time_boot_ms": "ms", "min_distance": "cm", "max_distance": "cm", "current_distance": "cm", "covariance": "cm"}
         format = '<IHHHBBBB'
         native_format = bytearray('<IHHHBBBB', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7]
@@ -6725,6 +7361,9 @@ class MAVLink_terrain_request_message(MAVLink_message):
         fieldnames = ['lat', 'lon', 'grid_spacing', 'mask']
         ordered_fieldnames = ['mask', 'lat', 'lon', 'grid_spacing']
         fieldtypes = ['int32_t', 'int32_t', 'uint16_t', 'uint64_t']
+        fielddisplays_by_name = {"mask": "bitmask"}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lat": "degE7", "lon": "degE7", "grid_spacing": "m"}
         format = '<QiiH'
         native_format = bytearray('<QiiH', 'ascii')
         orders = [1, 2, 3, 0]
@@ -6754,6 +7393,9 @@ class MAVLink_terrain_data_message(MAVLink_message):
         fieldnames = ['lat', 'lon', 'grid_spacing', 'gridbit', 'data']
         ordered_fieldnames = ['lat', 'lon', 'grid_spacing', 'data', 'gridbit']
         fieldtypes = ['int32_t', 'int32_t', 'uint16_t', 'uint8_t', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lat": "degE7", "lon": "degE7", "grid_spacing": "m", "data": "m"}
         format = '<iiH16hB'
         native_format = bytearray('<iiHhB', 'ascii')
         orders = [0, 1, 2, 4, 3]
@@ -6785,6 +7427,9 @@ class MAVLink_terrain_check_message(MAVLink_message):
         fieldnames = ['lat', 'lon']
         ordered_fieldnames = ['lat', 'lon']
         fieldtypes = ['int32_t', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lat": "degE7", "lon": "degE7"}
         format = '<ii'
         native_format = bytearray('<ii', 'ascii')
         orders = [0, 1]
@@ -6811,6 +7456,9 @@ class MAVLink_terrain_report_message(MAVLink_message):
         fieldnames = ['lat', 'lon', 'spacing', 'terrain_height', 'current_height', 'pending', 'loaded']
         ordered_fieldnames = ['lat', 'lon', 'terrain_height', 'current_height', 'spacing', 'pending', 'loaded']
         fieldtypes = ['int32_t', 'int32_t', 'uint16_t', 'float', 'float', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"lat": "degE7", "lon": "degE7", "terrain_height": "m", "current_height": "m"}
         format = '<iiffHHH'
         native_format = bytearray('<iiffHHH', 'ascii')
         orders = [0, 1, 4, 2, 3, 5, 6]
@@ -6842,6 +7490,9 @@ class MAVLink_scaled_pressure2_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'press_abs', 'press_diff', 'temperature']
         ordered_fieldnames = ['time_boot_ms', 'press_abs', 'press_diff', 'temperature']
         fieldtypes = ['uint32_t', 'float', 'float', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "press_abs": "hPa", "press_diff": "hPa", "temperature": "cdegC"}
         format = '<Iffh'
         native_format = bytearray('<Iffh', 'ascii')
         orders = [0, 1, 2, 3]
@@ -6870,6 +7521,9 @@ class MAVLink_att_pos_mocap_message(MAVLink_message):
         fieldnames = ['time_usec', 'q', 'x', 'y', 'z']
         ordered_fieldnames = ['time_usec', 'q', 'x', 'y', 'z']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "x": "m", "y": "m", "z": "m"}
         format = '<Q4ffff'
         native_format = bytearray('<Qffff', 'ascii')
         orders = [0, 1, 2, 3, 4]
@@ -6899,6 +7553,9 @@ class MAVLink_set_actuator_control_target_message(MAVLink_message):
         fieldnames = ['time_usec', 'group_mlx', 'target_system', 'target_component', 'controls']
         ordered_fieldnames = ['time_usec', 'controls', 'group_mlx', 'target_system', 'target_component']
         fieldtypes = ['uint64_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<Q8fBBB'
         native_format = bytearray('<QfBBB', 'ascii')
         orders = [0, 2, 3, 4, 1]
@@ -6928,6 +7585,9 @@ class MAVLink_actuator_control_target_message(MAVLink_message):
         fieldnames = ['time_usec', 'group_mlx', 'controls']
         ordered_fieldnames = ['time_usec', 'controls', 'group_mlx']
         fieldtypes = ['uint64_t', 'uint8_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<Q8fB'
         native_format = bytearray('<QfB', 'ascii')
         orders = [0, 2, 1]
@@ -6955,6 +7615,9 @@ class MAVLink_altitude_message(MAVLink_message):
         fieldnames = ['time_usec', 'altitude_monotonic', 'altitude_amsl', 'altitude_local', 'altitude_relative', 'altitude_terrain', 'bottom_clearance']
         ordered_fieldnames = ['time_usec', 'altitude_monotonic', 'altitude_amsl', 'altitude_local', 'altitude_relative', 'altitude_terrain', 'bottom_clearance']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "altitude_monotonic": "m", "altitude_amsl": "m", "altitude_local": "m", "altitude_relative": "m", "altitude_terrain": "m", "bottom_clearance": "m"}
         format = '<Qffffff'
         native_format = bytearray('<Qffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -6987,6 +7650,9 @@ class MAVLink_resource_request_message(MAVLink_message):
         fieldnames = ['request_id', 'uri_type', 'uri', 'transfer_type', 'storage']
         ordered_fieldnames = ['request_id', 'uri_type', 'uri', 'transfer_type', 'storage']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<BB120BB120B'
         native_format = bytearray('<BBBBB', 'ascii')
         orders = [0, 1, 2, 3, 4]
@@ -7016,6 +7682,9 @@ class MAVLink_scaled_pressure3_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'press_abs', 'press_diff', 'temperature']
         ordered_fieldnames = ['time_boot_ms', 'press_abs', 'press_diff', 'temperature']
         fieldtypes = ['uint32_t', 'float', 'float', 'int16_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms", "press_abs": "hPa", "press_diff": "hPa", "temperature": "cdegC"}
         format = '<Iffh'
         native_format = bytearray('<Iffh', 'ascii')
         orders = [0, 1, 2, 3]
@@ -7044,6 +7713,9 @@ class MAVLink_follow_target_message(MAVLink_message):
         fieldnames = ['timestamp', 'est_capabilities', 'lat', 'lon', 'alt', 'vel', 'acc', 'attitude_q', 'rates', 'position_cov', 'custom_state']
         ordered_fieldnames = ['timestamp', 'custom_state', 'lat', 'lon', 'alt', 'vel', 'acc', 'attitude_q', 'rates', 'position_cov', 'est_capabilities']
         fieldtypes = ['uint64_t', 'uint8_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'uint64_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"timestamp": "ms", "lat": "degE7", "lon": "degE7", "alt": "m", "vel": "m/s", "acc": "m/s/s"}
         format = '<QQiif3f3f4f3f3fB'
         native_format = bytearray('<QQiiffffffB', 'ascii')
         orders = [0, 10, 2, 3, 4, 5, 6, 7, 8, 9, 1]
@@ -7080,6 +7752,9 @@ class MAVLink_control_system_state_message(MAVLink_message):
         fieldnames = ['time_usec', 'x_acc', 'y_acc', 'z_acc', 'x_vel', 'y_vel', 'z_vel', 'x_pos', 'y_pos', 'z_pos', 'airspeed', 'vel_variance', 'pos_variance', 'q', 'roll_rate', 'pitch_rate', 'yaw_rate']
         ordered_fieldnames = ['time_usec', 'x_acc', 'y_acc', 'z_acc', 'x_vel', 'y_vel', 'z_vel', 'x_pos', 'y_pos', 'z_pos', 'airspeed', 'vel_variance', 'pos_variance', 'q', 'roll_rate', 'pitch_rate', 'yaw_rate']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "x_acc": "m/s/s", "y_acc": "m/s/s", "z_acc": "m/s/s", "x_vel": "m/s", "y_vel": "m/s", "z_vel": "m/s", "x_pos": "m", "y_pos": "m", "z_pos": "m", "airspeed": "m/s", "roll_rate": "rad/s", "pitch_rate": "rad/s", "yaw_rate": "rad/s"}
         format = '<Qffffffffff3f3f4ffff'
         native_format = bytearray('<Qffffffffffffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
@@ -7121,6 +7796,9 @@ class MAVLink_battery_status_message(MAVLink_message):
         fieldnames = ['id', 'battery_function', 'type', 'temperature', 'voltages', 'current_battery', 'current_consumed', 'energy_consumed', 'battery_remaining']
         ordered_fieldnames = ['current_consumed', 'energy_consumed', 'temperature', 'voltages', 'current_battery', 'id', 'battery_function', 'type', 'battery_remaining']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int16_t', 'int32_t', 'int32_t', 'int8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"battery_function": "MAV_BATTERY_FUNCTION", "type": "MAV_BATTERY_TYPE"}
+        fieldunits_by_name = {"temperature": "cdegC", "voltages": "mV", "current_battery": "cA", "current_consumed": "mAh", "energy_consumed": "hJ", "battery_remaining": "%"}
         format = '<iih10HhBBBb'
         native_format = bytearray('<iihHhBBBb', 'ascii')
         orders = [5, 6, 7, 2, 3, 4, 0, 1, 8]
@@ -7154,6 +7832,9 @@ class MAVLink_autopilot_version_message(MAVLink_message):
         fieldnames = ['capabilities', 'flight_sw_version', 'middleware_sw_version', 'os_sw_version', 'board_version', 'flight_custom_version', 'middleware_custom_version', 'os_custom_version', 'vendor_id', 'product_id', 'uid']
         ordered_fieldnames = ['capabilities', 'uid', 'flight_sw_version', 'middleware_sw_version', 'os_sw_version', 'board_version', 'vendor_id', 'product_id', 'flight_custom_version', 'middleware_custom_version', 'os_custom_version']
         fieldtypes = ['uint64_t', 'uint32_t', 'uint32_t', 'uint32_t', 'uint32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint16_t', 'uint64_t']
+        fielddisplays_by_name = {"capabilities": "bitmask"}
+        fieldenums_by_name = {"capabilities": "MAV_PROTOCOL_CAPABILITY"}
+        fieldunits_by_name = {}
         format = '<QQIIIIHH8B8B8B'
         native_format = bytearray('<QQIIIIHHBBB', 'ascii')
         orders = [0, 2, 3, 4, 5, 8, 9, 10, 6, 7, 1]
@@ -7190,6 +7871,9 @@ class MAVLink_landing_target_message(MAVLink_message):
         fieldnames = ['time_usec', 'target_num', 'frame', 'angle_x', 'angle_y', 'distance', 'size_x', 'size_y']
         ordered_fieldnames = ['time_usec', 'angle_x', 'angle_y', 'distance', 'size_x', 'size_y', 'target_num', 'frame']
         fieldtypes = ['uint64_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"frame": "MAV_FRAME"}
+        fieldunits_by_name = {"time_usec": "us", "angle_x": "rad", "angle_y": "rad", "distance": "m", "size_x": "rad", "size_y": "rad"}
         format = '<QfffffBB'
         native_format = bytearray('<QfffffBB', 'ascii')
         orders = [0, 6, 7, 1, 2, 3, 4, 5]
@@ -7235,6 +7919,9 @@ class MAVLink_estimator_status_message(MAVLink_message):
         fieldnames = ['time_usec', 'flags', 'vel_ratio', 'pos_horiz_ratio', 'pos_vert_ratio', 'mag_ratio', 'hagl_ratio', 'tas_ratio', 'pos_horiz_accuracy', 'pos_vert_accuracy']
         ordered_fieldnames = ['time_usec', 'vel_ratio', 'pos_horiz_ratio', 'pos_vert_ratio', 'mag_ratio', 'hagl_ratio', 'tas_ratio', 'pos_horiz_accuracy', 'pos_vert_accuracy', 'flags']
         fieldtypes = ['uint64_t', 'uint16_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {"flags": "bitmask"}
+        fieldenums_by_name = {"flags": "ESTIMATOR_STATUS_FLAGS"}
+        fieldunits_by_name = {"time_usec": "us", "pos_horiz_accuracy": "m", "pos_vert_accuracy": "m"}
         format = '<QffffffffH'
         native_format = bytearray('<QffffffffH', 'ascii')
         orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -7269,6 +7956,9 @@ class MAVLink_wind_cov_message(MAVLink_message):
         fieldnames = ['time_usec', 'wind_x', 'wind_y', 'wind_z', 'var_horiz', 'var_vert', 'wind_alt', 'horiz_accuracy', 'vert_accuracy']
         ordered_fieldnames = ['time_usec', 'wind_x', 'wind_y', 'wind_z', 'var_horiz', 'var_vert', 'wind_alt', 'horiz_accuracy', 'vert_accuracy']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us", "wind_x": "m/s", "wind_y": "m/s", "wind_z": "m/s", "var_horiz": "m/s", "var_vert": "m/s", "wind_alt": "m", "horiz_accuracy": "m", "vert_accuracy": "m"}
         format = '<Qffffffff'
         native_format = bytearray('<Qffffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -7304,6 +7994,9 @@ class MAVLink_gps_input_message(MAVLink_message):
         fieldnames = ['time_usec', 'gps_id', 'ignore_flags', 'time_week_ms', 'time_week', 'fix_type', 'lat', 'lon', 'alt', 'hdop', 'vdop', 'vn', 've', 'vd', 'speed_accuracy', 'horiz_accuracy', 'vert_accuracy', 'satellites_visible']
         ordered_fieldnames = ['time_usec', 'time_week_ms', 'lat', 'lon', 'alt', 'hdop', 'vdop', 'vn', 've', 'vd', 'speed_accuracy', 'horiz_accuracy', 'vert_accuracy', 'ignore_flags', 'time_week', 'gps_id', 'fix_type', 'satellites_visible']
         fieldtypes = ['uint64_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint16_t', 'uint8_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'float', 'uint8_t']
+        fielddisplays_by_name = {"ignore_flags": "bitmask"}
+        fieldenums_by_name = {"ignore_flags": "GPS_INPUT_IGNORE_FLAGS"}
+        fieldunits_by_name = {"time_usec": "us", "time_week_ms": "ms", "lat": "degE7", "lon": "degE7", "alt": "m", "hdop": "m", "vdop": "m", "vn": "m/s", "ve": "m/s", "vd": "m/s", "speed_accuracy": "m/s", "horiz_accuracy": "m", "vert_accuracy": "m"}
         format = '<QIiifffffffffHHBBB'
         native_format = bytearray('<QIiifffffffffHHBBB', 'ascii')
         orders = [0, 15, 13, 1, 14, 16, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17]
@@ -7347,6 +8040,9 @@ class MAVLink_gps_rtcm_data_message(MAVLink_message):
         fieldnames = ['flags', 'len', 'data']
         ordered_fieldnames = ['flags', 'len', 'data']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"len": "bytes"}
         format = '<BB180B'
         native_format = bytearray('<BBB', 'ascii')
         orders = [0, 1, 2]
@@ -7374,6 +8070,9 @@ class MAVLink_high_latency_message(MAVLink_message):
         fieldnames = ['base_mode', 'custom_mode', 'landed_state', 'roll', 'pitch', 'heading', 'throttle', 'heading_sp', 'latitude', 'longitude', 'altitude_amsl', 'altitude_sp', 'airspeed', 'airspeed_sp', 'groundspeed', 'climb_rate', 'gps_nsat', 'gps_fix_type', 'battery_remaining', 'temperature', 'temperature_air', 'failsafe', 'wp_num', 'wp_distance']
         ordered_fieldnames = ['custom_mode', 'latitude', 'longitude', 'roll', 'pitch', 'heading', 'heading_sp', 'altitude_amsl', 'altitude_sp', 'wp_distance', 'base_mode', 'landed_state', 'throttle', 'airspeed', 'airspeed_sp', 'groundspeed', 'climb_rate', 'gps_nsat', 'gps_fix_type', 'battery_remaining', 'temperature', 'temperature_air', 'failsafe', 'wp_num']
         fieldtypes = ['uint8_t', 'uint32_t', 'uint8_t', 'int16_t', 'int16_t', 'uint16_t', 'int8_t', 'int16_t', 'int32_t', 'int32_t', 'int16_t', 'int16_t', 'uint8_t', 'uint8_t', 'uint8_t', 'int8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'int8_t', 'int8_t', 'uint8_t', 'uint8_t', 'uint16_t']
+        fielddisplays_by_name = {"base_mode": "bitmask", "custom_mode": "bitmask"}
+        fieldenums_by_name = {"base_mode": "MAV_MODE_FLAG", "landed_state": "MAV_LANDED_STATE", "gps_fix_type": "GPS_FIX_TYPE"}
+        fieldunits_by_name = {"roll": "cdeg", "pitch": "cdeg", "heading": "cdeg", "throttle": "%", "heading_sp": "cdeg", "latitude": "degE7", "longitude": "degE7", "altitude_amsl": "m", "altitude_sp": "m", "airspeed": "m/s", "airspeed_sp": "m/s", "groundspeed": "m/s", "climb_rate": "m/s", "battery_remaining": "%", "temperature": "degC", "temperature_air": "degC", "wp_distance": "m"}
         format = '<IiihhHhhhHBBbBBBbBBBbbBB'
         native_format = bytearray('<IiihhHhhhHBBbBBBbBBBbbBB', 'ascii')
         orders = [10, 0, 11, 3, 4, 5, 12, 6, 1, 2, 7, 8, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 9]
@@ -7423,6 +8122,9 @@ class MAVLink_high_latency2_message(MAVLink_message):
         fieldnames = ['timestamp', 'type', 'autopilot', 'custom_mode', 'latitude', 'longitude', 'altitude', 'target_altitude', 'heading', 'target_heading', 'target_distance', 'throttle', 'airspeed', 'airspeed_sp', 'groundspeed', 'windspeed', 'wind_heading', 'eph', 'epv', 'temperature_air', 'climb_rate', 'battery', 'wp_num', 'failure_flags', 'custom0', 'custom1', 'custom2']
         ordered_fieldnames = ['timestamp', 'latitude', 'longitude', 'custom_mode', 'altitude', 'target_altitude', 'target_distance', 'wp_num', 'failure_flags', 'type', 'autopilot', 'heading', 'target_heading', 'throttle', 'airspeed', 'airspeed_sp', 'groundspeed', 'windspeed', 'wind_heading', 'eph', 'epv', 'temperature_air', 'climb_rate', 'battery', 'custom0', 'custom1', 'custom2']
         fieldtypes = ['uint32_t', 'uint8_t', 'uint8_t', 'uint16_t', 'int32_t', 'int32_t', 'int16_t', 'int16_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'int8_t', 'int8_t', 'int8_t', 'uint16_t', 'uint16_t', 'int8_t', 'int8_t', 'int8_t']
+        fielddisplays_by_name = {"custom_mode": "bitmask", "failure_flags": "bitmask"}
+        fieldenums_by_name = {"type": "MAV_TYPE", "autopilot": "MAV_AUTOPILOT", "failure_flags": "HL_FAILURE_FLAG"}
+        fieldunits_by_name = {"timestamp": "ms", "latitude": "degE7", "longitude": "degE7", "altitude": "m", "target_altitude": "m", "heading": "deg/2", "target_heading": "deg/2", "target_distance": "dam", "throttle": "%", "airspeed": "m/s*5", "airspeed_sp": "m/s*5", "groundspeed": "m/s*5", "windspeed": "m/s*5", "wind_heading": "deg/2", "eph": "dm", "epv": "dm", "temperature_air": "degC", "climb_rate": "dm/s", "battery": "%"}
         format = '<IiiHhhHHHBBBBBBBBBBBBbbbbbb'
         native_format = bytearray('<IiiHhhHHHBBBBBBBBBBBBbbbbbb', 'ascii')
         orders = [0, 9, 10, 3, 1, 2, 4, 5, 11, 12, 6, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 7, 8, 24, 25, 26]
@@ -7474,6 +8176,9 @@ class MAVLink_vibration_message(MAVLink_message):
         fieldnames = ['time_usec', 'vibration_x', 'vibration_y', 'vibration_z', 'clipping_0', 'clipping_1', 'clipping_2']
         ordered_fieldnames = ['time_usec', 'vibration_x', 'vibration_y', 'vibration_z', 'clipping_0', 'clipping_1', 'clipping_2']
         fieldtypes = ['uint64_t', 'float', 'float', 'float', 'uint32_t', 'uint32_t', 'uint32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<QfffIII'
         native_format = bytearray('<QfffIII', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6]
@@ -7517,6 +8222,9 @@ class MAVLink_home_position_message(MAVLink_message):
         fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z']
         ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z']
         fieldtypes = ['int32_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"latitude": "degE7", "longitude": "degE7", "altitude": "mm", "x": "m", "y": "m", "z": "m", "approach_x": "m", "approach_y": "m", "approach_z": "m"}
         format = '<iiifff4ffff'
         native_format = bytearray('<iiifffffff', 'ascii')
         orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -7561,6 +8269,9 @@ class MAVLink_set_home_position_message(MAVLink_message):
         fieldnames = ['target_system', 'latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z']
         ordered_fieldnames = ['latitude', 'longitude', 'altitude', 'x', 'y', 'z', 'q', 'approach_x', 'approach_y', 'approach_z', 'target_system']
         fieldtypes = ['uint8_t', 'int32_t', 'int32_t', 'int32_t', 'float', 'float', 'float', 'float', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"latitude": "degE7", "longitude": "degE7", "altitude": "mm", "x": "m", "y": "m", "z": "m", "approach_x": "m", "approach_y": "m", "approach_z": "m"}
         format = '<iiifff4ffffB'
         native_format = bytearray('<iiifffffffB', 'ascii')
         orders = [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -7597,6 +8308,9 @@ class MAVLink_message_interval_message(MAVLink_message):
         fieldnames = ['message_id', 'interval_us']
         ordered_fieldnames = ['interval_us', 'message_id']
         fieldtypes = ['uint16_t', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"interval_us": "us"}
         format = '<iH'
         native_format = bytearray('<iH', 'ascii')
         orders = [1, 0]
@@ -7623,6 +8337,9 @@ class MAVLink_extended_sys_state_message(MAVLink_message):
         fieldnames = ['vtol_state', 'landed_state']
         ordered_fieldnames = ['vtol_state', 'landed_state']
         fieldtypes = ['uint8_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"vtol_state": "MAV_VTOL_STATE", "landed_state": "MAV_LANDED_STATE"}
+        fieldunits_by_name = {}
         format = '<BB'
         native_format = bytearray('<BB', 'ascii')
         orders = [0, 1]
@@ -7649,6 +8366,9 @@ class MAVLink_adsb_vehicle_message(MAVLink_message):
         fieldnames = ['ICAO_address', 'lat', 'lon', 'altitude_type', 'altitude', 'heading', 'hor_velocity', 'ver_velocity', 'callsign', 'emitter_type', 'tslc', 'flags', 'squawk']
         ordered_fieldnames = ['ICAO_address', 'lat', 'lon', 'altitude', 'heading', 'hor_velocity', 'ver_velocity', 'flags', 'squawk', 'altitude_type', 'callsign', 'emitter_type', 'tslc']
         fieldtypes = ['uint32_t', 'int32_t', 'int32_t', 'uint8_t', 'int32_t', 'uint16_t', 'uint16_t', 'int16_t', 'char', 'uint8_t', 'uint8_t', 'uint16_t', 'uint16_t']
+        fielddisplays_by_name = {"flags": "bitmask"}
+        fieldenums_by_name = {"altitude_type": "ADSB_ALTITUDE_TYPE", "emitter_type": "ADSB_EMITTER_TYPE", "flags": "ADSB_FLAGS"}
+        fieldunits_by_name = {"lat": "degE7", "lon": "degE7", "altitude": "mm", "heading": "cdeg", "hor_velocity": "cm/s", "ver_velocity": "cm/s", "tslc": "s"}
         format = '<IiiiHHhHHB9sBB'
         native_format = bytearray('<IiiiHHhHHBcBB', 'ascii')
         orders = [0, 1, 2, 9, 3, 4, 5, 6, 10, 11, 12, 7, 8]
@@ -7686,6 +8406,9 @@ class MAVLink_collision_message(MAVLink_message):
         fieldnames = ['src', 'id', 'action', 'threat_level', 'time_to_minimum_delta', 'altitude_minimum_delta', 'horizontal_minimum_delta']
         ordered_fieldnames = ['id', 'time_to_minimum_delta', 'altitude_minimum_delta', 'horizontal_minimum_delta', 'src', 'action', 'threat_level']
         fieldtypes = ['uint8_t', 'uint32_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"src": "MAV_COLLISION_SRC", "action": "MAV_COLLISION_ACTION", "threat_level": "MAV_COLLISION_THREAT_LEVEL"}
+        fieldunits_by_name = {"time_to_minimum_delta": "s", "altitude_minimum_delta": "m", "horizontal_minimum_delta": "m"}
         format = '<IfffBBB'
         native_format = bytearray('<IfffBBB', 'ascii')
         orders = [4, 0, 5, 6, 1, 2, 3]
@@ -7718,6 +8441,9 @@ class MAVLink_v2_extension_message(MAVLink_message):
         fieldnames = ['target_network', 'target_system', 'target_component', 'message_type', 'payload']
         ordered_fieldnames = ['message_type', 'target_network', 'target_system', 'target_component', 'payload']
         fieldtypes = ['uint8_t', 'uint8_t', 'uint8_t', 'uint16_t', 'uint8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<HBBB249B'
         native_format = bytearray('<HBBBB', 'ascii')
         orders = [1, 2, 3, 0, 4]
@@ -7749,6 +8475,9 @@ class MAVLink_memory_vect_message(MAVLink_message):
         fieldnames = ['address', 'ver', 'type', 'value']
         ordered_fieldnames = ['address', 'ver', 'type', 'value']
         fieldtypes = ['uint16_t', 'uint8_t', 'uint8_t', 'int8_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {}
         format = '<HBB32b'
         native_format = bytearray('<HBBb', 'ascii')
         orders = [0, 1, 2, 3]
@@ -7777,6 +8506,9 @@ class MAVLink_debug_vect_message(MAVLink_message):
         fieldnames = ['name', 'time_usec', 'x', 'y', 'z']
         ordered_fieldnames = ['time_usec', 'x', 'y', 'z', 'name']
         fieldtypes = ['char', 'uint64_t', 'float', 'float', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_usec": "us"}
         format = '<Qfff10s'
         native_format = bytearray('<Qfffc', 'ascii')
         orders = [4, 0, 1, 2, 3]
@@ -7808,6 +8540,9 @@ class MAVLink_named_value_float_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'name', 'value']
         ordered_fieldnames = ['time_boot_ms', 'value', 'name']
         fieldtypes = ['uint32_t', 'char', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms"}
         format = '<If10s'
         native_format = bytearray('<Ifc', 'ascii')
         orders = [0, 2, 1]
@@ -7837,6 +8572,9 @@ class MAVLink_named_value_int_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'name', 'value']
         ordered_fieldnames = ['time_boot_ms', 'value', 'name']
         fieldtypes = ['uint32_t', 'char', 'int32_t']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms"}
         format = '<Ii10s'
         native_format = bytearray('<Iic', 'ascii')
         orders = [0, 2, 1]
@@ -7869,6 +8607,9 @@ class MAVLink_statustext_message(MAVLink_message):
         fieldnames = ['severity', 'text']
         ordered_fieldnames = ['severity', 'text']
         fieldtypes = ['uint8_t', 'char']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {"severity": "MAV_SEVERITY"}
+        fieldunits_by_name = {}
         format = '<B50s'
         native_format = bytearray('<Bc', 'ascii')
         orders = [0, 1]
@@ -7897,6 +8638,9 @@ class MAVLink_debug_message(MAVLink_message):
         fieldnames = ['time_boot_ms', 'ind', 'value']
         ordered_fieldnames = ['time_boot_ms', 'value', 'ind']
         fieldtypes = ['uint32_t', 'uint8_t', 'float']
+        fielddisplays_by_name = {}
+        fieldenums_by_name = {}
+        fieldunits_by_name = {"time_boot_ms": "ms"}
         format = '<IfB'
         native_format = bytearray('<IfB', 'ascii')
         orders = [0, 2, 1]
@@ -7924,6 +8668,9 @@ mavlink_map = {
         MAVLINK_MSG_ID_DRONE_STATUS : MAVLink_drone_status_message,
         MAVLINK_MSG_ID_DRONE_ODOM_GT : MAVLink_drone_odom_gt_message,
         MAVLINK_MSG_ID_DRONE_POSE_GT : MAVLink_drone_pose_gt_message,
+        MAVLINK_MSG_ID_NODE_LOCAL_FUSED : MAVLink_node_local_fused_message,
+        MAVLINK_MSG_ID_NODE_BASED_FUSED : MAVLink_node_based_fused_message,
+        MAVLINK_MSG_ID_NODE_DETECTED_2D : MAVLink_node_detected_2d_message,
         MAVLINK_MSG_ID_HEARTBEAT : MAVLink_heartbeat_message,
         MAVLINK_MSG_ID_SYS_STATUS : MAVLink_sys_status_message,
         MAVLINK_MSG_ID_SYSTEM_TIME : MAVLink_system_time_message,
@@ -8236,7 +8983,7 @@ class MAVLink(object):
                 magic = self.buf[self.buf_index]
                 self.buf_index += 1
                 if self.robust_parsing:
-                    m = MAVLink_bad_data(chr(magic), 'Bad prefix')
+                    m = MAVLink_bad_data(bytearray([magic]), 'Bad prefix')
                     self.expected_length = header_len+2
                     self.total_receive_errors += 1
                     return m
@@ -8496,7 +9243,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.node_realtime_info_encode(lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance), force_mavlink1=force_mavlink1)
 
-        def node_relative_fused_encode(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset):
+        def node_relative_fused_encode(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw):
                 '''
                 
 
@@ -8506,11 +9253,15 @@ class MAVLink(object):
                 rel_y                     : Relative Y Position*1000 [m] (type:int16_t)
                 rel_z                     : Relative Z Position*1000 [m] (type:int16_t)
                 rel_yaw_offset            : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
+                cov_x                     : X Position Cov*1000 [m] (type:int16_t)
+                cov_y                     : Y Position Cov*1000 [m] (type:int16_t)
+                cov_z                     : Z Position Cov*1000 [m] (type:int16_t)
+                cov_yaw                   : Yaw Cov*1000 [rad] (type:int16_t)
 
                 '''
-                return MAVLink_node_relative_fused_message(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset)
+                return MAVLink_node_relative_fused_message(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw)
 
-        def node_relative_fused_send(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, force_mavlink1=False):
+        def node_relative_fused_send(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw, force_mavlink1=False):
                 '''
                 
 
@@ -8520,9 +9271,13 @@ class MAVLink(object):
                 rel_y                     : Relative Y Position*1000 [m] (type:int16_t)
                 rel_z                     : Relative Z Position*1000 [m] (type:int16_t)
                 rel_yaw_offset            : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
+                cov_x                     : X Position Cov*1000 [m] (type:int16_t)
+                cov_y                     : Y Position Cov*1000 [m] (type:int16_t)
+                cov_z                     : Z Position Cov*1000 [m] (type:int16_t)
+                cov_yaw                   : Yaw Cov*1000 [rad] (type:int16_t)
 
                 '''
-                return self.send(self.node_relative_fused_encode(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset), force_mavlink1=force_mavlink1)
+                return self.send(self.node_relative_fused_encode(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw), force_mavlink1=force_mavlink1)
 
         def swarm_remote_command_encode(self, lps_time, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10):
                 '''
@@ -8594,7 +9349,7 @@ class MAVLink(object):
                 '''
                 return self.send(self.node_detected_encode(lps_time, target_id, x, y, z, yaw), force_mavlink1=force_mavlink1)
 
-        def drone_status_encode(self, lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z):
+        def drone_status_encode(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw):
                 '''
                 
 
@@ -8602,6 +9357,7 @@ class MAVLink(object):
                 flight_status             : Flight status of drone (type:uint8_t)
                 control_auth              : Control AUTH of drone (type:uint8_t)
                 commander_mode            : COMMANDER MODE (type:uint8_t)
+                input_mode                : CTRL INPUT MODE (type:uint8_t)
                 rc_valid                  : RC VAILD (type:uint8_t)
                 onboard_cmd_valid         : ONBOARD CMD VALID (type:uint8_t)
                 sdk_valid                 : SDK VALID (type:uint8_t)
@@ -8610,11 +9366,12 @@ class MAVLink(object):
                 x                         : X Position [m] (type:float)
                 y                         : Y Position [m] (type:float)
                 z                         : Z Position [m] (type:float)
+                yaw                       : Yaw [deg] (type:float)
 
                 '''
-                return MAVLink_drone_status_message(lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z)
+                return MAVLink_drone_status_message(lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw)
 
-        def drone_status_send(self, lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, force_mavlink1=False):
+        def drone_status_send(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw, force_mavlink1=False):
                 '''
                 
 
@@ -8622,6 +9379,7 @@ class MAVLink(object):
                 flight_status             : Flight status of drone (type:uint8_t)
                 control_auth              : Control AUTH of drone (type:uint8_t)
                 commander_mode            : COMMANDER MODE (type:uint8_t)
+                input_mode                : CTRL INPUT MODE (type:uint8_t)
                 rc_valid                  : RC VAILD (type:uint8_t)
                 onboard_cmd_valid         : ONBOARD CMD VALID (type:uint8_t)
                 sdk_valid                 : SDK VALID (type:uint8_t)
@@ -8630,9 +9388,10 @@ class MAVLink(object):
                 x                         : X Position [m] (type:float)
                 y                         : Y Position [m] (type:float)
                 z                         : Z Position [m] (type:float)
+                yaw                       : Yaw [deg] (type:float)
 
                 '''
-                return self.send(self.drone_status_encode(lps_time, flight_status, control_auth, commander_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z), force_mavlink1=force_mavlink1)
+                return self.send(self.drone_status_encode(lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw), force_mavlink1=force_mavlink1)
 
         def drone_odom_gt_encode(self, lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz):
                 '''
@@ -8701,6 +9460,104 @@ class MAVLink(object):
 
                 '''
                 return self.send(self.drone_pose_gt_encode(lps_time, source_id, x, y, z, yaw), force_mavlink1=force_mavlink1)
+
+        def node_local_fused_encode(self, lps_time, target_id, x, y, z, yaw, cov_x, cov_y, cov_z, cov_yaw):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                target_id                 : Target ID of drone (type:uint8_t)
+                x                         : X Position*1000 [m] (type:int16_t)
+                y                         : Y Position*1000 [m] (type:int16_t)
+                z                         : Z Position*1000 [m] (type:int16_t)
+                yaw                       : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
+                cov_x                     : X Position Cov*1000 [m] (type:int16_t)
+                cov_y                     : Y Position Cov*1000 [m] (type:int16_t)
+                cov_z                     : Z Position Cov*1000 [m] (type:int16_t)
+                cov_yaw                   : Yaw Cov*1000 [rad] (type:int16_t)
+
+                '''
+                return MAVLink_node_local_fused_message(lps_time, target_id, x, y, z, yaw, cov_x, cov_y, cov_z, cov_yaw)
+
+        def node_local_fused_send(self, lps_time, target_id, x, y, z, yaw, cov_x, cov_y, cov_z, cov_yaw, force_mavlink1=False):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                target_id                 : Target ID of drone (type:uint8_t)
+                x                         : X Position*1000 [m] (type:int16_t)
+                y                         : Y Position*1000 [m] (type:int16_t)
+                z                         : Z Position*1000 [m] (type:int16_t)
+                yaw                       : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
+                cov_x                     : X Position Cov*1000 [m] (type:int16_t)
+                cov_y                     : Y Position Cov*1000 [m] (type:int16_t)
+                cov_z                     : Z Position Cov*1000 [m] (type:int16_t)
+                cov_yaw                   : Yaw Cov*1000 [rad] (type:int16_t)
+
+                '''
+                return self.send(self.node_local_fused_encode(lps_time, target_id, x, y, z, yaw, cov_x, cov_y, cov_z, cov_yaw), force_mavlink1=force_mavlink1)
+
+        def node_based_fused_encode(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                target_id                 : Target ID of drone (type:uint8_t)
+                rel_x                     : Relative X Position*1000 [m] (type:int16_t)
+                rel_y                     : Relative Y Position*1000 [m] (type:int16_t)
+                rel_z                     : Relative Z Position*1000 [m] (type:int16_t)
+                rel_yaw_offset            : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
+                cov_x                     : X Position Cov*1000 [m] (type:int16_t)
+                cov_y                     : Y Position Cov*1000 [m] (type:int16_t)
+                cov_z                     : Z Position Cov*1000 [m] (type:int16_t)
+                cov_yaw                   : Yaw Cov*1000 [rad] (type:int16_t)
+
+                '''
+                return MAVLink_node_based_fused_message(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw)
+
+        def node_based_fused_send(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw, force_mavlink1=False):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                target_id                 : Target ID of drone (type:uint8_t)
+                rel_x                     : Relative X Position*1000 [m] (type:int16_t)
+                rel_y                     : Relative Y Position*1000 [m] (type:int16_t)
+                rel_z                     : Relative Z Position*1000 [m] (type:int16_t)
+                rel_yaw_offset            : Relative Yaw coorinate offset *1000 [rad] (type:int16_t)
+                cov_x                     : X Position Cov*1000 [m] (type:int16_t)
+                cov_y                     : Y Position Cov*1000 [m] (type:int16_t)
+                cov_z                     : Z Position Cov*1000 [m] (type:int16_t)
+                cov_yaw                   : Yaw Cov*1000 [rad] (type:int16_t)
+
+                '''
+                return self.send(self.node_based_fused_encode(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw), force_mavlink1=force_mavlink1)
+
+        def node_detected_2d_encode(self, lps_time, target_id, DY, DZ, yaw):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                target_id                 : Target ID of drone (type:int8_t)
+                DY                        : Normalized DY [m] (type:int16_t)
+                DZ                        : Normalized DZ [m] (type:int16_t)
+                yaw                       : Detected Yaw [m] (type:int16_t)
+
+                '''
+                return MAVLink_node_detected_2d_message(lps_time, target_id, DY, DZ, yaw)
+
+        def node_detected_2d_send(self, lps_time, target_id, DY, DZ, yaw, force_mavlink1=False):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                target_id                 : Target ID of drone (type:int8_t)
+                DY                        : Normalized DY [m] (type:int16_t)
+                DZ                        : Normalized DZ [m] (type:int16_t)
+                yaw                       : Detected Yaw [m] (type:int16_t)
+
+                '''
+                return self.send(self.node_detected_2d_encode(lps_time, target_id, DY, DZ, yaw), force_mavlink1=force_mavlink1)
 
         def heartbeat_encode(self, type, autopilot, base_mode, custom_mode, system_status, mavlink_version=3):
                 '''
