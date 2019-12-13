@@ -1,13 +1,7 @@
 <launch>
-    <!-- <include file="$(find mocap_optitrack)/launch/mocap.launch">
-    </include> -->
-    
-<!--    <node pkg="swarm_station" name="swarm_station" type="swarm_display.py" output="screen">-->
-<!--    </node>-->
     <include file="$(find inf_uwb_ros)/launch/uwb_node.launch">
     </include>
-    <!-- <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find swarm_station)/gcs_frontend/swarm_station.rviz" /> -->
-    <!-- <node name="swarm_station_joy" pkg="swarm_station" type="swarm_station_joy.py" output="screen" /> -->
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
-    <!-- <node pkg="joy" type="joy_node" name="joy" /> -->
+    <node pkg="swarm_loop" type="swarm_loop_spy" name="swarm_loop_spy" output="screen" />
+    
 </launch>
