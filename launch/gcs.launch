@@ -2,6 +2,10 @@
     <include file="$(find inf_uwb_ros)/launch/uwb_node.launch">
     </include>
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
-    <node pkg="swarm_loop" type="swarm_loop_spy" name="swarm_loop_spy" output="screen" />
+    <!-- <node pkg="swarm_loop" type="swarm_loop_spy" name="swarm_loop_spy" output="screen">
+    <rosparam>
+        lcm_uri: udpm://224.0.0.251:7667?ttl=1
+    </rosparam>
+    <node/> -->
     
 </launch>
