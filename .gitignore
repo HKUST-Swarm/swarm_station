@@ -1,4 +1,3 @@
 gcs_frontend/node_modules
 build/
-scripts/*.pyc
-scripts/pymavlink4swarm.pyc
+.vscode
