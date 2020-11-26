@@ -10,33 +10,7 @@ from builtins import range
 from builtins import object
 import struct, array, time, json, os, sys, platform
 
-class x25crc(object):
-    '''x25 CRC - based on checksum.h from mavlink library'''
-    def __init__(self, buf=None):
-        self.crc = 0xffff
-        if buf is not None:
-            if isinstance(buf, str):
-                self.accumulate_str(buf)
-            else:
-                self.accumulate(buf)
-
-    def accumulate(self, buf):
-        '''add in some more bytes'''
-        accum = self.crc
-        for b in buf:
-            tmp = b ^ (accum & 0xff)
-            tmp = (tmp ^ (tmp<<4)) & 0xFF
-            accum = (accum>>8) ^ (tmp<<8) ^ (tmp<<3) ^ (tmp>>4)
-        self.crc = accum
-
-    def accumulate_str(self, buf):
-        '''add in some more bytes'''
-        accum = self.crc
-        import array
-        bytes = array.array('B')
-        bytes.fromstring(buf)
-        self.accumulate(bytes)
-
+from ...generator.mavcrc import x25crc
 import hashlib
 
 WIRE_PROTOCOL_VERSION = '1.0'
@@ -3163,7 +3137,6 @@ MAVLINK_MSG_ID_DRONE_ODOM_GT = 205
 MAVLINK_MSG_ID_DRONE_POSE_GT = 206
 MAVLINK_MSG_ID_NODE_LOCAL_FUSED = 207
 MAVLINK_MSG_ID_NODE_BASED_FUSED = 208
-MAVLINK_MSG_ID_NODE_DETECTED_2D = 209
 MAVLINK_MSG_ID_HEARTBEAT = 0
 MAVLINK_MSG_ID_SYS_STATUS = 1
 MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -3308,21 +3281,21 @@ class MAVLink_node_realtime_info_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_NODE_REALTIME_INFO
         name = 'NODE_REALTIME_INFO'
-        fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'yaw', 'remote_distance']
-        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'yaw', 'remote_distance', 'odom_vaild']
-        fieldtypes = ['int32_t', 'uint8_t', 'float', 'float', 'float', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t']
+        fieldnames = ['lps_time', 'odom_vaild', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'roll', 'pitch', 'yaw', 'remote_distance']
+        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'roll', 'pitch', 'yaw', 'remote_distance', 'odom_vaild']
+        fieldtypes = ['int32_t', 'uint8_t', 'float', 'float', 'float', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t']
         fielddisplays_by_name = {}
         fieldenums_by_name = {}
-        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "vx": "cm/s", "vy": "cm/s", "vz": "cm/x", "yaw": "rad", "remote_distance": "m"}
-        format = '<ifffhhhh10HB'
-        native_format = bytearray('<ifffhhhhHB', 'ascii')
-        orders = [0, 9, 1, 2, 3, 4, 5, 6, 7, 8]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 10, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
-        crc_extra = 61
-        unpacker = struct.Struct('<ifffhhhh10HB')
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "vx": "cm/s", "vy": "cm/s", "vz": "cm/x", "roll": "rad", "pitch": "rad", "yaw": "rad", "remote_distance": "m"}
+        format = '<ifffhhhhhh10HB'
+        native_format = bytearray('<ifffhhhhhhHB', 'ascii')
+        orders = [0, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
+        crc_extra = 161
+        unpacker = struct.Struct('<ifffhhhhhh10HB')
 
-        def __init__(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance):
+        def __init__(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, roll, pitch, yaw, remote_distance):
                 MAVLink_message.__init__(self, MAVLink_node_realtime_info_message.id, MAVLink_node_realtime_info_message.name)
                 self._fieldnames = MAVLink_node_realtime_info_message.fieldnames
                 self.lps_time = lps_time
@@ -3333,11 +3306,13 @@ class MAVLink_node_realtime_info_message(MAVLink_message):
                 self.vx = vx
                 self.vy = vy
                 self.vz = vz
+                self.roll = roll
+                self.pitch = pitch
                 self.yaw = yaw
                 self.remote_distance = remote_distance
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 61, struct.pack('<ifffhhhh10HB', self.lps_time, self.x, self.y, self.z, self.vx, self.vy, self.vz, self.yaw, self.remote_distance[0], self.remote_distance[1], self.remote_distance[2], self.remote_distance[3], self.remote_distance[4], self.remote_distance[5], self.remote_distance[6], self.remote_distance[7], self.remote_distance[8], self.remote_distance[9], self.odom_vaild), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 161, struct.pack('<ifffhhhhhh10HB', self.lps_time, self.x, self.y, self.z, self.vx, self.vy, self.vz, self.roll, self.pitch, self.yaw, self.remote_distance[0], self.remote_distance[1], self.remote_distance[2], self.remote_distance[3], self.remote_distance[4], self.remote_distance[5], self.remote_distance[6], self.remote_distance[7], self.remote_distance[8], self.remote_distance[9], self.odom_vaild), force_mavlink1=force_mavlink1)
 
 class MAVLink_node_relative_fused_message(MAVLink_message):
         '''
@@ -3422,21 +3397,21 @@ class MAVLink_node_detected_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_NODE_DETECTED
         name = 'NODE_DETECTED'
-        fieldnames = ['lps_time', 'target_id', 'x', 'y', 'z', 'yaw']
-        ordered_fieldnames = ['lps_time', 'x', 'y', 'z', 'yaw', 'target_id']
-        fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t']
+        fieldnames = ['lps_time', 'target_id', 'x', 'y', 'z', 'prob', 'inv_dep']
+        ordered_fieldnames = ['lps_time', 'target_id', 'x', 'y', 'z', 'prob', 'inv_dep']
+        fieldtypes = ['int32_t', 'int32_t', 'int16_t', 'int16_t', 'int16_t', 'int16_t', 'uint16_t']
         fielddisplays_by_name = {}
         fieldenums_by_name = {}
-        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "yaw": "rad"}
-        format = '<ihhhhb'
-        native_format = bytearray('<ihhhhb', 'ascii')
-        orders = [0, 5, 1, 2, 3, 4]
-        lengths = [1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0]
-        crc_extra = 94
-        unpacker = struct.Struct('<ihhhhb')
+        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "prob": "1", "inv_dep": "1/m"}
+        format = '<iihhhhH'
+        native_format = bytearray('<iihhhhH', 'ascii')
+        orders = [0, 1, 2, 3, 4, 5, 6]
+        lengths = [1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 75
+        unpacker = struct.Struct('<iihhhhH')
 
-        def __init__(self, lps_time, target_id, x, y, z, yaw):
+        def __init__(self, lps_time, target_id, x, y, z, prob, inv_dep):
                 MAVLink_message.__init__(self, MAVLink_node_detected_message.id, MAVLink_node_detected_message.name)
                 self._fieldnames = MAVLink_node_detected_message.fieldnames
                 self.lps_time = lps_time
@@ -3444,10 +3419,11 @@ class MAVLink_node_detected_message(MAVLink_message):
                 self.x = x
                 self.y = y
                 self.z = z
-                self.yaw = yaw
+                self.prob = prob
+                self.inv_dep = inv_dep
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 94, struct.pack('<ihhhhb', self.lps_time, self.x, self.y, self.z, self.yaw, self.target_id), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 75, struct.pack('<iihhhhH', self.lps_time, self.target_id, self.x, self.y, self.z, self.prob, self.inv_dep), force_mavlink1=force_mavlink1)
 
 class MAVLink_drone_status_message(MAVLink_message):
         '''
@@ -3455,21 +3431,21 @@ class MAVLink_drone_status_message(MAVLink_message):
         '''
         id = MAVLINK_MSG_ID_DRONE_STATUS
         name = 'DRONE_STATUS'
-        fieldnames = ['lps_time', 'flight_status', 'control_auth', 'commander_mode', 'input_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid', 'bat_vol', 'x', 'y', 'z', 'yaw']
-        ordered_fieldnames = ['lps_time', 'bat_vol', 'x', 'y', 'z', 'yaw', 'flight_status', 'control_auth', 'commander_mode', 'input_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid']
-        fieldtypes = ['int32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float']
+        fieldnames = ['lps_time', 'flight_status', 'control_auth', 'commander_mode', 'input_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid', 'bat_vol', 'bat_remain', 'x', 'y', 'z', 'yaw']
+        ordered_fieldnames = ['lps_time', 'bat_vol', 'bat_remain', 'x', 'y', 'z', 'yaw', 'flight_status', 'control_auth', 'commander_mode', 'input_mode', 'rc_valid', 'onboard_cmd_valid', 'sdk_valid', 'vo_valid']
+        fieldtypes = ['int32_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'uint8_t', 'float', 'float', 'float', 'float', 'float', 'float']
         fielddisplays_by_name = {}
         fieldenums_by_name = {}
-        fieldunits_by_name = {"lps_time": "ms", "x": "m", "y": "m", "z": "m", "yaw": "deg"}
-        format = '<ifffffBBBBBBBB'
-        native_format = bytearray('<ifffffBBBBBBBB', 'ascii')
-        orders = [0, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5]
-        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        crc_extra = 124
-        unpacker = struct.Struct('<ifffffBBBBBBBB')
+        fieldunits_by_name = {"lps_time": "ms", "bat_remain": "s", "x": "m", "y": "m", "z": "m", "yaw": "deg"}
+        format = '<iffffffBBBBBBBB'
+        native_format = bytearray('<iffffffBBBBBBBB', 'ascii')
+        orders = [0, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6]
+        lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        crc_extra = 244
+        unpacker = struct.Struct('<iffffffBBBBBBBB')
 
-        def __init__(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw):
+        def __init__(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, bat_remain, x, y, z, yaw):
                 MAVLink_message.__init__(self, MAVLink_drone_status_message.id, MAVLink_drone_status_message.name)
                 self._fieldnames = MAVLink_drone_status_message.fieldnames
                 self.lps_time = lps_time
@@ -3482,13 +3458,14 @@ class MAVLink_drone_status_message(MAVLink_message):
                 self.sdk_valid = sdk_valid
                 self.vo_valid = vo_valid
                 self.bat_vol = bat_vol
+                self.bat_remain = bat_remain
                 self.x = x
                 self.y = y
                 self.z = z
                 self.yaw = yaw
 
         def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 124, struct.pack('<ifffffBBBBBBBB', self.lps_time, self.bat_vol, self.x, self.y, self.z, self.yaw, self.flight_status, self.control_auth, self.commander_mode, self.input_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.vo_valid), force_mavlink1=force_mavlink1)
+                return MAVLink_message.pack(self, mav, 244, struct.pack('<iffffffBBBBBBBB', self.lps_time, self.bat_vol, self.bat_remain, self.x, self.y, self.z, self.yaw, self.flight_status, self.control_auth, self.commander_mode, self.input_mode, self.rc_valid, self.onboard_cmd_valid, self.sdk_valid, self.vo_valid), force_mavlink1=force_mavlink1)
 
 class MAVLink_drone_odom_gt_message(MAVLink_message):
         '''
@@ -3635,38 +3612,6 @@ class MAVLink_node_based_fused_message(MAVLink_message):
 
         def pack(self, mav, force_mavlink1=False):
                 return MAVLink_message.pack(self, mav, 216, struct.pack('<ihhhhhhhhB', self.lps_time, self.rel_x, self.rel_y, self.rel_z, self.rel_yaw_offset, self.cov_x, self.cov_y, self.cov_z, self.cov_yaw, self.target_id), force_mavlink1=force_mavlink1)
-
-class MAVLink_node_detected_2d_message(MAVLink_message):
-        '''
-
-        '''
-        id = MAVLINK_MSG_ID_NODE_DETECTED_2D
-        name = 'NODE_DETECTED_2D'
-        fieldnames = ['lps_time', 'target_id', 'DY', 'DZ', 'yaw']
-        ordered_fieldnames = ['lps_time', 'DY', 'DZ', 'yaw', 'target_id']
-        fieldtypes = ['int32_t', 'int8_t', 'int16_t', 'int16_t', 'int16_t']
-        fielddisplays_by_name = {}
-        fieldenums_by_name = {}
-        fieldunits_by_name = {"lps_time": "ms", "DY": "m", "DZ": "m", "yaw": "m"}
-        format = '<ihhhb'
-        native_format = bytearray('<ihhhb', 'ascii')
-        orders = [0, 4, 1, 2, 3]
-        lengths = [1, 1, 1, 1, 1]
-        array_lengths = [0, 0, 0, 0, 0]
-        crc_extra = 90
-        unpacker = struct.Struct('<ihhhb')
-
-        def __init__(self, lps_time, target_id, DY, DZ, yaw):
-                MAVLink_message.__init__(self, MAVLink_node_detected_2d_message.id, MAVLink_node_detected_2d_message.name)
-                self._fieldnames = MAVLink_node_detected_2d_message.fieldnames
-                self.lps_time = lps_time
-                self.target_id = target_id
-                self.DY = DY
-                self.DZ = DZ
-                self.yaw = yaw
-
-        def pack(self, mav, force_mavlink1=False):
-                return MAVLink_message.pack(self, mav, 90, struct.pack('<ihhhb', self.lps_time, self.DY, self.DZ, self.yaw, self.target_id), force_mavlink1=force_mavlink1)
 
 class MAVLink_heartbeat_message(MAVLink_message):
         '''
@@ -8670,7 +8615,6 @@ mavlink_map = {
         MAVLINK_MSG_ID_DRONE_POSE_GT : MAVLink_drone_pose_gt_message,
         MAVLINK_MSG_ID_NODE_LOCAL_FUSED : MAVLink_node_local_fused_message,
         MAVLINK_MSG_ID_NODE_BASED_FUSED : MAVLink_node_based_fused_message,
-        MAVLINK_MSG_ID_NODE_DETECTED_2D : MAVLink_node_detected_2d_message,
         MAVLINK_MSG_ID_HEARTBEAT : MAVLink_heartbeat_message,
         MAVLINK_MSG_ID_SYS_STATUS : MAVLink_sys_status_message,
         MAVLINK_MSG_ID_SYSTEM_TIME : MAVLink_system_time_message,
@@ -9207,7 +9151,7 @@ class MAVLink(object):
                 m._crc = crc
                 m._header = MAVLink_header(msgId, incompat_flags, compat_flags, mlen, seq, srcSystem, srcComponent)
                 return m
-        def node_realtime_info_encode(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance):
+        def node_realtime_info_encode(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, roll, pitch, yaw, remote_distance):
                 '''
                 
 
@@ -9219,13 +9163,15 @@ class MAVLink(object):
                 vx                        : X velocity [cm/s] (type:int16_t)
                 vy                        : Y Velocity [cm/s] (type:int16_t)
                 vz                        : Z Velocity [cm/x] (type:int16_t)
+                roll                      : rol angle rad*1000 [rad] (type:int16_t)
+                pitch                     : pitch angle rad*1000 [rad] (type:int16_t)
                 yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
                 remote_distance           : Distance to Remote Drone*1000 [m] (type:uint16_t)
 
                 '''
-                return MAVLink_node_realtime_info_message(lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance)
+                return MAVLink_node_realtime_info_message(lps_time, odom_vaild, x, y, z, vx, vy, vz, roll, pitch, yaw, remote_distance)
 
-        def node_realtime_info_send(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance, force_mavlink1=False):
+        def node_realtime_info_send(self, lps_time, odom_vaild, x, y, z, vx, vy, vz, roll, pitch, yaw, remote_distance, force_mavlink1=False):
                 '''
                 
 
@@ -9237,11 +9183,13 @@ class MAVLink(object):
                 vx                        : X velocity [cm/s] (type:int16_t)
                 vy                        : Y Velocity [cm/s] (type:int16_t)
                 vz                        : Z Velocity [cm/x] (type:int16_t)
+                roll                      : rol angle rad*1000 [rad] (type:int16_t)
+                pitch                     : pitch angle rad*1000 [rad] (type:int16_t)
                 yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
                 remote_distance           : Distance to Remote Drone*1000 [m] (type:uint16_t)
 
                 '''
-                return self.send(self.node_realtime_info_encode(lps_time, odom_vaild, x, y, z, vx, vy, vz, yaw, remote_distance), force_mavlink1=force_mavlink1)
+                return self.send(self.node_realtime_info_encode(lps_time, odom_vaild, x, y, z, vx, vy, vz, roll, pitch, yaw, remote_distance), force_mavlink1=force_mavlink1)
 
         def node_relative_fused_encode(self, lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw):
                 '''
@@ -9321,57 +9269,37 @@ class MAVLink(object):
                 '''
                 return self.send(self.swarm_remote_command_encode(lps_time, target_id, command_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10), force_mavlink1=force_mavlink1)
 
-        def node_detected_encode(self, lps_time, target_id, x, y, z, yaw):
+        def node_detected_encode(self, lps_time, target_id, x, y, z, prob, inv_dep):
                 '''
                 
 
                 lps_time                  : LPS_TIME [ms] (type:int32_t)
-                target_id                 : Target ID of drone (type:int8_t)
-                x                         : Relative X Position*1000 [m] (type:int16_t)
-                y                         : Relative Y Position*1000 [m] (type:int16_t)
-                z                         : Relative Z Position*1000 [m] (type:int16_t)
-                yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
+                target_id                 : Target ID of drone (type:int32_t)
+                x                         : Relative X Position*10000 [m] (type:int16_t)
+                y                         : Relative Y Position*10000 [m] (type:int16_t)
+                z                         : Relative Z Position*10000 [m] (type:int16_t)
+                prob                      : Prob*10000 [1] (type:int16_t)
+                inv_dep                   : inverse depth*10000;0 then unavailable [1/m] (type:uint16_t)
 
                 '''
-                return MAVLink_node_detected_message(lps_time, target_id, x, y, z, yaw)
+                return MAVLink_node_detected_message(lps_time, target_id, x, y, z, prob, inv_dep)
 
-        def node_detected_send(self, lps_time, target_id, x, y, z, yaw, force_mavlink1=False):
-                '''
-                
-
-                lps_time                  : LPS_TIME [ms] (type:int32_t)
-                target_id                 : Target ID of drone (type:int8_t)
-                x                         : Relative X Position*1000 [m] (type:int16_t)
-                y                         : Relative Y Position*1000 [m] (type:int16_t)
-                z                         : Relative Z Position*1000 [m] (type:int16_t)
-                yaw                       : Yaw angle rad*1000 [rad] (type:int16_t)
-
-                '''
-                return self.send(self.node_detected_encode(lps_time, target_id, x, y, z, yaw), force_mavlink1=force_mavlink1)
-
-        def drone_status_encode(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw):
+        def node_detected_send(self, lps_time, target_id, x, y, z, prob, inv_dep, force_mavlink1=False):
                 '''
                 
 
                 lps_time                  : LPS_TIME [ms] (type:int32_t)
-                flight_status             : Flight status of drone (type:uint8_t)
-                control_auth              : Control AUTH of drone (type:uint8_t)
-                commander_mode            : COMMANDER MODE (type:uint8_t)
-                input_mode                : CTRL INPUT MODE (type:uint8_t)
-                rc_valid                  : RC VAILD (type:uint8_t)
-                onboard_cmd_valid         : ONBOARD CMD VALID (type:uint8_t)
-                sdk_valid                 : SDK VALID (type:uint8_t)
-                vo_valid                  : VOO VALID (type:uint8_t)
-                bat_vol                   : BATTERY_VOL (type:float)
-                x                         : X Position [m] (type:float)
-                y                         : Y Position [m] (type:float)
-                z                         : Z Position [m] (type:float)
-                yaw                       : Yaw [deg] (type:float)
+                target_id                 : Target ID of drone (type:int32_t)
+                x                         : Relative X Position*10000 [m] (type:int16_t)
+                y                         : Relative Y Position*10000 [m] (type:int16_t)
+                z                         : Relative Z Position*10000 [m] (type:int16_t)
+                prob                      : Prob*10000 [1] (type:int16_t)
+                inv_dep                   : inverse depth*10000;0 then unavailable [1/m] (type:uint16_t)
 
                 '''
-                return MAVLink_drone_status_message(lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw)
+                return self.send(self.node_detected_encode(lps_time, target_id, x, y, z, prob, inv_dep), force_mavlink1=force_mavlink1)
 
-        def drone_status_send(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw, force_mavlink1=False):
+        def drone_status_encode(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, bat_remain, x, y, z, yaw):
                 '''
                 
 
@@ -9385,13 +9313,37 @@ class MAVLink(object):
                 sdk_valid                 : SDK VALID (type:uint8_t)
                 vo_valid                  : VOO VALID (type:uint8_t)
                 bat_vol                   : BATTERY_VOL (type:float)
+                bat_remain                : BATTERY_REMAIN [s] (type:float)
                 x                         : X Position [m] (type:float)
                 y                         : Y Position [m] (type:float)
                 z                         : Z Position [m] (type:float)
                 yaw                       : Yaw [deg] (type:float)
 
                 '''
-                return self.send(self.drone_status_encode(lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, x, y, z, yaw), force_mavlink1=force_mavlink1)
+                return MAVLink_drone_status_message(lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, bat_remain, x, y, z, yaw)
+
+        def drone_status_send(self, lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, bat_remain, x, y, z, yaw, force_mavlink1=False):
+                '''
+                
+
+                lps_time                  : LPS_TIME [ms] (type:int32_t)
+                flight_status             : Flight status of drone (type:uint8_t)
+                control_auth              : Control AUTH of drone (type:uint8_t)
+                commander_mode            : COMMANDER MODE (type:uint8_t)
+                input_mode                : CTRL INPUT MODE (type:uint8_t)
+                rc_valid                  : RC VAILD (type:uint8_t)
+                onboard_cmd_valid         : ONBOARD CMD VALID (type:uint8_t)
+                sdk_valid                 : SDK VALID (type:uint8_t)
+                vo_valid                  : VOO VALID (type:uint8_t)
+                bat_vol                   : BATTERY_VOL (type:float)
+                bat_remain                : BATTERY_REMAIN [s] (type:float)
+                x                         : X Position [m] (type:float)
+                y                         : Y Position [m] (type:float)
+                z                         : Z Position [m] (type:float)
+                yaw                       : Yaw [deg] (type:float)
+
+                '''
+                return self.send(self.drone_status_encode(lps_time, flight_status, control_auth, commander_mode, input_mode, rc_valid, onboard_cmd_valid, sdk_valid, vo_valid, bat_vol, bat_remain, x, y, z, yaw), force_mavlink1=force_mavlink1)
 
         def drone_odom_gt_encode(self, lps_time, source_id, x, y, z, q0, q1, q2, q3, vx, vy, vz):
                 '''
@@ -9532,32 +9484,6 @@ class MAVLink(object):
 
                 '''
                 return self.send(self.node_based_fused_encode(lps_time, target_id, rel_x, rel_y, rel_z, rel_yaw_offset, cov_x, cov_y, cov_z, cov_yaw), force_mavlink1=force_mavlink1)
-
-        def node_detected_2d_encode(self, lps_time, target_id, DY, DZ, yaw):
-                '''
-                
-
-                lps_time                  : LPS_TIME [ms] (type:int32_t)
-                target_id                 : Target ID of drone (type:int8_t)
-                DY                        : Normalized DY [m] (type:int16_t)
-                DZ                        : Normalized DZ [m] (type:int16_t)
-                yaw                       : Detected Yaw [m] (type:int16_t)
-
-                '''
-                return MAVLink_node_detected_2d_message(lps_time, target_id, DY, DZ, yaw)
-
-        def node_detected_2d_send(self, lps_time, target_id, DY, DZ, yaw, force_mavlink1=False):
-                '''
-                
-
-                lps_time                  : LPS_TIME [ms] (type:int32_t)
-                target_id                 : Target ID of drone (type:int8_t)
-                DY                        : Normalized DY [m] (type:int16_t)
-                DZ                        : Normalized DZ [m] (type:int16_t)
-                yaw                       : Detected Yaw [m] (type:int16_t)
-
-                '''
-                return self.send(self.node_detected_2d_encode(lps_time, target_id, DY, DZ, yaw), force_mavlink1=force_mavlink1)
 
         def heartbeat_encode(self, type, autopilot, base_mode, custom_mode, system_status, mavlink_version=3):
                 '''

@@ -30,7 +30,7 @@ class fifo(object):
 
 _ALIGN_PARAM_2DRONE = {
     "pos": np.array([-0.37586, 0.1145, 0.1454]),
-    "yaw": -0.04
+    "yaw": -0.01
 }
 
 _ALIGN_PARAM_3DRONE = {
