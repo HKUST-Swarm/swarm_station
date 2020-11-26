@@ -1,5 +1,5 @@
 <launch>
-    <include file="$(find inf_uwb_ros)/launch/uwb_node.launch">
+    <include file="$(find inf_uwb_ros)/launch/uwb_node_gcs.launch">
     </include>
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
     <!-- <node pkg="swarm_loop" type="swarm_loop_spy" name="swarm_loop_spy" output="screen">
